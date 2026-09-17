@@ -1,0 +1,49 @@
+# Tests
+
+## Test 1 - Approved-reference homepage journey [sanity]
+Viewport: desktop
+Covers: reference-style header, photographic hero, sector cards, impact strip, Lagos East block, lower content grid, footer, membership modal
+Description: Verifies the revised homepage follows the approved content hierarchy and opens the join flow.
+
+Steps:
+1. Load the homepage and scroll through the hero, four sector cards, impact goals, Lagos East presence and leadership/news/join sections
+2. Scroll to the dark green footer
+3. Click "Join ICGTMP" and confirm the modal opens
+
+Expected: The homepage displays the compact reference-style layout and the membership form opens with Full Name, Phone, Email, LGA, LCDA, Ward, Profession/Trade, Market/Association, Membership Category and Volunteer Interest.
+
+## Test 2 - Header navigation reaches the matching sections
+Viewport: desktop
+Covers: sticky header, in-page navigation, section anchors
+Description: Verifies key navigation items move to the corresponding homepage sections.
+
+Steps:
+1. Click "Leadership"
+2. Click "Our Structure"
+3. Click "News & Events"
+
+Expected: Each navigation item moves to a visible matching section without leaving the site.
+
+## Test 3 - Membership form blocks incomplete submission
+Viewport: desktop
+Covers: required membership fields, validation guardrail
+Description: Verifies the prototype join flow does not submit empty required fields.
+
+Steps:
+1. Open "Join ICGTMP"
+2. Leave all form fields blank
+3. Click "Continue"
+
+Expected: Client-side validation prevents submission, field errors appear, and the modal remains open.
+
+## Test 4 - Mobile reference layout remains usable
+Viewport: mobile
+Covers: responsive header, mobile menu, stacked reference sections, mobile join flow
+Description: Verifies the redesigned homepage adapts cleanly to mobile.
+
+Steps:
+1. Open the mobile menu
+2. Select "About" and confirm the menu closes
+3. Reopen the menu and choose "Join ICGTMP"
+
+Expected: The mobile layout has no horizontal overflow, the content stacks cleanly and the join modal fits within the viewport.
