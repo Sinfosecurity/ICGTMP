@@ -1,42 +1,114 @@
 import { MapPin, Mail } from 'lucide-react';
-import { useState, type FormEvent } from 'react';
+import { useCallback, useState, type FormEvent } from 'react';
 import { mapsUrl, org } from '../data/content';
 import { mailtoHref } from '../lib/form';
 import { submitMessage } from '../lib/formTransport';
 import { PageShell } from '../components/PageShell';
+import { useToast } from '../components/Toaster';
 import { WhatsAppJoinLink } from '../components/WhatsAppJoinLink';
 
-export function ContactPage() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [honeypot, setHoneypot] = useState('');
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'pending' | 'failed'>('idle');
-  const [error, setError] = useState('');
+type ContactDraft = { name: string; email: string; message: string };
+type ContactErrors = Partial<Record<keyof ContactDraft, string>>;
 
-  const payload = { name, email, message, company_website: honeypot };
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const FIELD_ORDER: (keyof ContactDraft)[] = ['name', 'email', 'message'];
+
+function validate(draft: ContactDraft): ContactErrors {
+  const errors: ContactErrors = {};
+  if (draft.name.trim().length < 3) errors.name = 'Enter your full name.';
+  if (!emailPattern.test(draft.email.trim())) errors.email = 'Enter a valid email address.';
+  if (draft.message.trim().length < 8) errors.message = 'Enter a short message.';
+  return errors;
+}
+
+export function ContactPage() {
+  const toast = useToast();
+  const [draft, setDraft] = useState<ContactDraft>({ name: '', email: '', message: '' });
+  const [errors, setErrors] = useState<ContactErrors>({});
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [honeypot, setHoneypot] = useState('');
+
+  const payload = { name: draft.name, email: draft.email, message: draft.message };
+
+  const setField = (key: keyof ContactDraft, value: string) => {
+    setDraft((current) => ({ ...current, [key]: value }));
+    setErrors((current) => (current[key] ? { ...current, [key]: undefined } : current));
+  };
+
+  const send = useCallback(
+    async (values: ContactDraft, website: string) => {
+      setSending(true);
+      setSubmitError('');
+      const result = await submitMessage({
+        fullName: values.name,
+        email: values.email,
+        message: values.message,
+        website,
+        source: 'website',
+      });
+      setSending(false);
+
+      if (result.ok) {
+        setSent(true);
+        setDraft({ name: '', email: '', message: '' });
+        toast.success('Message sent', {
+          description: `Thank you. ICGTMP will reply to ${values.email}.`,
+          dedupeKey: 'contact',
+        });
+        if (result.warning) {
+          toast.warning('Saved by email only', {
+            description: result.warning,
+            dedupeKey: 'contact-warning',
+          });
+        }
+        return;
+      }
+
+      if (result.emailPendingConfirm) {
+        setSubmitError(`The inbox needs a one-time confirmation. Please email ${org.email} directly as well.`);
+        toast.warning('One more step needed', {
+          description: `The inbox needs a one-time confirmation. Please email ${org.email} directly as well.`,
+          dedupeKey: 'contact',
+        });
+        return;
+      }
+
+      const message = result.error ?? 'We could not reach the form service.';
+      setSubmitError(message);
+      toast.error('Message not sent', {
+        description: message,
+        dedupeKey: 'contact',
+        action:
+          result.failure === 'rejected'
+            ? undefined
+            : { label: 'Try again', onClick: () => void send(values, website) },
+      });
+    },
+    [toast],
+  );
 
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    if (name.trim().length < 3 || !email.includes('@') || message.trim().length < 8) {
-      setError('Enter your name, a valid email and a short message.');
+    if (sending) return;
+    const nextErrors = validate(draft);
+    setErrors(nextErrors);
+
+    const firstInvalid = FIELD_ORDER.find((name) => nextErrors[name]);
+    if (firstInvalid) {
+      document.getElementById(`contact-${firstInvalid}`)?.focus();
+      toast.error('Check the highlighted fields', {
+        description: nextErrors[firstInvalid],
+        dedupeKey: 'contact',
+        duration: 8000,
+      });
       return;
     }
-    setError('');
-    setStatus('sending');
-    const result = await submitMessage({
-      fullName: name,
-      email,
-      message,
-      website: honeypot,
-      source: 'website',
-    });
-    if (result.ok) setStatus('sent');
-    else if (result.emailPendingConfirm) setStatus('pending');
-    else {
-      setStatus('failed');
-      setError(result.error ?? `We could not reach the form service. Email ${org.email} directly.`);
-    }
+
+    setSent(false);
+    await send(draft, honeypot);
   };
 
   return (
@@ -63,7 +135,7 @@ export function ContactPage() {
           </p>
           <p className="quietNote">Office visits are by arrangement through email.</p>
         </div>
-        <form className="contactForm" onSubmit={onSubmit} noValidate>
+        <form className="contactForm" onSubmit={onSubmit} noValidate aria-busy={sending}>
           <label className="hpField" aria-hidden="true">
             Company website
             <input
@@ -73,37 +145,74 @@ export function ContactPage() {
               onChange={(e) => setHoneypot(e.target.value)}
             />
           </label>
-          <label>
+          <label htmlFor="contact-name">
             Full name
-            <input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" required />
-          </label>
-          <label>
-            Email
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
+              id="contact-name"
+              value={draft.name}
+              onChange={(e) => setField('name', e.target.value)}
+              autoComplete="name"
+              aria-invalid={errors.name ? true : undefined}
+              aria-describedby={errors.name ? 'contact-name-error' : undefined}
               required
             />
+            {errors.name ? (
+              <span className="fieldError" id="contact-name-error">
+                {errors.name}
+              </span>
+            ) : null}
           </label>
-          <label>
+          <label htmlFor="contact-email">
+            Email
+            <input
+              id="contact-email"
+              type="email"
+              value={draft.email}
+              onChange={(e) => setField('email', e.target.value)}
+              autoComplete="email"
+              aria-invalid={errors.email ? true : undefined}
+              aria-describedby={errors.email ? 'contact-email-error' : undefined}
+              required
+            />
+            {errors.email ? (
+              <span className="fieldError" id="contact-email-error">
+                {errors.email}
+              </span>
+            ) : null}
+          </label>
+          <label htmlFor="contact-message">
             Message
-            <textarea rows={5} value={message} onChange={(e) => setMessage(e.target.value)} required />
+            <textarea
+              id="contact-message"
+              rows={5}
+              value={draft.message}
+              onChange={(e) => setField('message', e.target.value)}
+              aria-invalid={errors.message ? true : undefined}
+              aria-describedby={errors.message ? 'contact-message-error' : undefined}
+              required
+            />
+            {errors.message ? (
+              <span className="fieldError" id="contact-message-error">
+                {errors.message}
+              </span>
+            ) : null}
           </label>
           <p className="formPrivacy">
             This message is sent to {org.email}. Read the <a href="#privacy">Privacy Policy</a>.
           </p>
-          {error ? <p className="fieldError">{error}</p> : null}
-          {status === 'sent' && <p>Thank you. Your message has been sent to {org.email}.</p>}
-          {status === 'pending' && (
-            <p>
-              The inbox needs a one-time confirmation. Please email{' '}
-              <a href={mailtoHref('ICGTMP contact form', payload)}>{org.email}</a> directly as well.
+          {submitError ? (
+            <p className="formAlert" role="alert">
+              {submitError} You can email{' '}
+              <a href={mailtoHref('ICGTMP contact form', payload)}>{org.email}</a> instead.
             </p>
-          )}
-          <button className="goldPill" type="submit" disabled={status === 'sending'}>
-            {status === 'sending' ? 'Sending…' : 'Send message'}
+          ) : null}
+          {sent ? (
+            <p className="formNotice" role="status">
+              Thank you. Your message has been sent to {org.email}.
+            </p>
+          ) : null}
+          <button className="goldPill" type="submit" disabled={sending}>
+            {sending ? 'Sending…' : submitError ? 'Try again' : 'Send message'}
           </button>
         </form>
       </div>

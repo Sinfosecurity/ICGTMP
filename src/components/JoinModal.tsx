@@ -1,11 +1,20 @@
 import { ArrowRight, X } from 'lucide-react';
-import { cloneElement, useEffect, useId, useRef, useState, type FormEvent, type ReactElement } from 'react';
+import {
+  cloneElement,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactElement,
+} from 'react';
 import { membershipCategories, type MembershipCategory } from '../data/content';
 import { lgaDirectory, lgaNames, type LgaName } from '../data/locations';
 import { org } from '../data/content';
 import { mailtoHref } from '../lib/form';
 import { focusables, lockPageScroll, trapTab } from '../lib/scrollLock';
 import { submitMembership } from '../lib/formTransport';
+import { useToast } from './Toaster';
 import { WhatsAppJoinLink } from './WhatsAppJoinLink';
 import {
   clearMembershipDraft,
@@ -22,15 +31,34 @@ type Props = {
   onClose: () => void;
 };
 
+/** Visual order, so the first reported error is the first one on screen. */
+const FIELD_ORDER: (keyof MembershipDraft)[] = [
+  'fullName',
+  'phone',
+  'email',
+  'lga',
+  'lcda',
+  'ward',
+  'profession',
+  'marketAssociation',
+  'category',
+  'volunteerInterest',
+];
+
+const fieldId = (name: string) => `join-${name}`;
+const errorId = (name: string) => `join-${name}-error`;
+
 export function JoinModal({ open, preset, onClose }: Props) {
-  const titleId = useId();
+  const titleId = 'join-modal-title';
   const closeRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const toast = useToast();
   const [draft, setDraft] = useState<MembershipDraft>(loadMembershipDraft);
   const [errors, setErrors] = useState<FieldErrors>({});
-  const [submitted, setSubmitted] = useState<'idle' | 'sent' | 'pending' | 'failed'>('idle');
+  const [submitted, setSubmitted] = useState<'idle' | 'sent' | 'pending'>('idle');
   const [submitError, setSubmitError] = useState('');
   const [sending, setSending] = useState(false);
+  const [duplicate, setDuplicate] = useState(false);
   const [honeypot, setHoneypot] = useState('');
 
   useEffect(() => {
@@ -46,6 +74,7 @@ export function JoinModal({ open, preset, onClose }: Props) {
     setSubmitted('idle');
     setSubmitError('');
     setSending(false);
+    setDuplicate(false);
     setHoneypot('');
     const t = window.setTimeout(() => {
       const first = dialogRef.current ? focusables(dialogRef.current)[0] : null;
@@ -64,6 +93,92 @@ export function JoinModal({ open, preset, onClose }: Props) {
     return () => window.removeEventListener('keydown', onKey);
   }, [open, onClose]);
 
+  const send = useCallback(
+    async (values: MembershipDraft, website: string) => {
+      setSending(true);
+      setSubmitError('');
+      const result = await submitMembership({
+        fullName: values.fullName,
+        phone: values.phone,
+        email: values.email,
+        lga: values.lga,
+        lcda: values.lcda,
+        ward: values.ward,
+        profession: values.profession,
+        marketAssociation: values.marketAssociation,
+        category: values.category,
+        volunteerInterest: values.volunteerInterest,
+        website,
+        source: 'website',
+      });
+      setSending(false);
+
+      if (result.ok) {
+        clearMembershipDraft();
+        setDuplicate(Boolean(result.duplicate));
+        setSubmitted('sent');
+        toast.success(
+          result.duplicate ? 'You are already registered' : 'Registration received',
+          {
+            description: result.duplicate
+              ? 'We already have this phone number on file, so nothing was duplicated.'
+              : `A coordinator will follow up with ${values.fullName.split(' ')[0] || 'you'}.`,
+            dedupeKey: 'membership',
+          },
+        );
+        if (result.warning) {
+          toast.warning('Saved by email only', {
+            description: `${result.warning} A coordinator will add you to the register by hand.`,
+            dedupeKey: 'membership-warning',
+          });
+        }
+        return;
+      }
+
+      if (result.emailPendingConfirm) {
+        setSubmitted('pending');
+        toast.warning('One more step needed', {
+          description: `The inbox needs a one-time confirmation. Please also email ${org.email}.`,
+          dedupeKey: 'membership',
+        });
+        return;
+      }
+
+      const message = result.error ?? 'We could not reach the form service.';
+      setSubmitError(message);
+      toast.error('Registration not sent', {
+        description: message,
+        dedupeKey: 'membership',
+        // A rejection is about the data, so retrying the same values is pointless.
+        action:
+          result.failure === 'rejected'
+            ? undefined
+            : { label: 'Try again', onClick: () => void send(values, website) },
+      });
+    },
+    [toast],
+  );
+
+  const onSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    if (sending) return;
+    const nextErrors = validateMembership(draft);
+    setErrors(nextErrors);
+
+    const firstInvalid = FIELD_ORDER.find((name) => nextErrors[name]);
+    if (firstInvalid) {
+      document.getElementById(fieldId(firstInvalid))?.focus();
+      toast.error('Check the highlighted fields', {
+        description: nextErrors[firstInvalid],
+        dedupeKey: 'membership',
+        duration: 8000,
+      });
+      return;
+    }
+
+    await send(draft, honeypot);
+  };
+
   if (!open) return null;
 
   const lcdas = draft.lga ? lgaDirectory[draft.lga] : [];
@@ -74,38 +189,8 @@ export function JoinModal({ open, preset, onClose }: Props) {
       saveMembershipDraft(next);
       return next;
     });
-  };
-
-  const onSubmit = async (event: FormEvent) => {
-    event.preventDefault();
-    const nextErrors = validateMembership(draft);
-    setErrors(nextErrors);
-    if (Object.keys(nextErrors).length) return;
-    setSending(true);
-    const result = await submitMembership({
-      fullName: draft.fullName,
-      phone: draft.phone,
-      email: draft.email,
-      lga: draft.lga,
-      lcda: draft.lcda,
-      ward: draft.ward,
-      profession: draft.profession,
-      marketAssociation: draft.marketAssociation,
-      category: draft.category,
-      volunteerInterest: draft.volunteerInterest,
-      website: honeypot,
-      source: 'website',
-    });
-    setSending(false);
-    if (result.ok) {
-      clearMembershipDraft();
-      setSubmitted('sent');
-    } else if (result.emailPendingConfirm) {
-      setSubmitted('pending');
-    } else {
-      setSubmitted('failed');
-      setSubmitError(result.error ?? `We could not reach the form service. Email ${org.email} directly.`);
-    }
+    // Clear a field's error as soon as the visitor edits it.
+    setErrors((current) => (current[key] ? { ...current, [key]: undefined } : current));
   };
 
   return (
@@ -125,12 +210,18 @@ export function JoinModal({ open, preset, onClose }: Props) {
           <div className="joinSuccess">
             <p className="modalKicker">THANK YOU</p>
             <h2 id={titleId}>
-              {submitted === 'sent' ? 'Your interest has been sent' : 'We still need a follow-up'}
+              {submitted === 'sent'
+                ? duplicate
+                  ? 'You are already registered'
+                  : 'Your interest has been recorded'
+                : 'We still need a follow-up'}
             </h2>
             {submitted === 'sent' && (
               <p>
-                Your details were emailed to {org.email}. A coordinator will follow up from that
-                inbox. You can also <WhatsAppJoinLink icon={false} label="join the WhatsApp group" />.
+                {duplicate
+                  ? 'This phone number is already on the ICGTMP register, so we did not add a second entry. '
+                  : 'Your details are with the ICGTMP coordinators and a member of the team will follow up. '}
+                You can also <WhatsAppJoinLink icon={false} label="join the WhatsApp group" />.
               </p>
             )}
             {submitted === 'pending' && (
@@ -142,15 +233,6 @@ export function JoinModal({ open, preset, onClose }: Props) {
                 .
               </p>
             )}
-            {submitted === 'failed' && (
-              <p>
-                {submitError} You can email{' '}
-                <a href={mailtoHref('ICGTMP membership interest', { name: draft.fullName, email: draft.email, phone: draft.phone })}>
-                  {org.email}
-                </a>{' '}
-                now.
-              </p>
-            )}
             <button type="button" className="goldPill" onClick={onClose}>
               Close
             </button>
@@ -160,10 +242,10 @@ export function JoinModal({ open, preset, onClose }: Props) {
             <p className="modalKicker">JOIN ICGTMP</p>
             <h2 id={titleId}>Register your interest</h2>
             <p>
-              Complete the form below. Your details are sent to {org.email} so coordinators can
-              follow up. Read the <a href="#privacy" onClick={onClose}>Privacy Policy</a>.
+              Complete the form below. Your details go to the ICGTMP membership register so
+              coordinators can follow up. Read the <a href="#privacy" onClick={onClose}>Privacy Policy</a>.
             </p>
-            <form onSubmit={onSubmit} noValidate>
+            <form onSubmit={onSubmit} noValidate aria-busy={sending}>
               <label className="hpField" aria-hidden="true">
                 Company website
                 <input
@@ -173,7 +255,7 @@ export function JoinModal({ open, preset, onClose }: Props) {
                   onChange={(e) => setHoneypot(e.target.value)}
                 />
               </label>
-              <Field label="Full Name" error={errors.fullName}>
+              <Field name="fullName" label="Full Name" error={errors.fullName}>
                 <input
                   value={draft.fullName}
                   onChange={(e) => setField('fullName', e.target.value)}
@@ -181,7 +263,7 @@ export function JoinModal({ open, preset, onClose }: Props) {
                   required
                 />
               </Field>
-              <Field label="Phone" error={errors.phone}>
+              <Field name="phone" label="Phone" error={errors.phone}>
                 <input
                   value={draft.phone}
                   onChange={(e) => setField('phone', e.target.value)}
@@ -191,7 +273,7 @@ export function JoinModal({ open, preset, onClose }: Props) {
                   required
                 />
               </Field>
-              <Field label="Email" error={errors.email}>
+              <Field name="email" label="Email" error={errors.email}>
                 <input
                   type="email"
                   value={draft.email}
@@ -200,7 +282,7 @@ export function JoinModal({ open, preset, onClose }: Props) {
                   required
                 />
               </Field>
-              <Field label="LGA" error={errors.lga}>
+              <Field name="lga" label="LGA" error={errors.lga}>
                 <select
                   value={draft.lga}
                   onChange={(e) => {
@@ -217,7 +299,7 @@ export function JoinModal({ open, preset, onClose }: Props) {
                   ))}
                 </select>
               </Field>
-              <Field label="LCDA" error={errors.lcda}>
+              <Field name="lcda" label="LCDA" error={errors.lcda}>
                 <select
                   value={draft.lcda}
                   onChange={(e) => setField('lcda', e.target.value)}
@@ -232,27 +314,27 @@ export function JoinModal({ open, preset, onClose }: Props) {
                   ))}
                 </select>
               </Field>
-              <Field label="Ward">
+              <Field name="ward" label="Ward">
                 <input
                   value={draft.ward}
                   onChange={(e) => setField('ward', e.target.value)}
                   placeholder="Your ward"
                 />
               </Field>
-              <Field label="Profession / Trade">
+              <Field name="profession" label="Profession / Trade">
                 <input
                   value={draft.profession}
                   onChange={(e) => setField('profession', e.target.value)}
                   placeholder="e.g. trader, tailor, engineer"
                 />
               </Field>
-              <Field label="Market / Association">
+              <Field name="marketAssociation" label="Market / Association">
                 <input
                   value={draft.marketAssociation}
                   onChange={(e) => setField('marketAssociation', e.target.value)}
                 />
               </Field>
-              <Field label="Membership Category" error={errors.category}>
+              <Field name="category" label="Membership Category" error={errors.category}>
                 <select
                   value={draft.category}
                   onChange={(e) => setField('category', e.target.value as MembershipCategory | '')}
@@ -266,7 +348,12 @@ export function JoinModal({ open, preset, onClose }: Props) {
                   ))}
                 </select>
               </Field>
-              <Field label="Volunteer Interest" error={errors.volunteerInterest} wide>
+              <Field
+                name="volunteerInterest"
+                label="Volunteer Interest"
+                error={errors.volunteerInterest}
+                wide
+              >
                 <textarea
                   rows={3}
                   value={draft.volunteerInterest}
@@ -274,12 +361,28 @@ export function JoinModal({ open, preset, onClose }: Props) {
                   placeholder="Skills, time or support you can offer"
                 />
               </Field>
+              {submitError ? (
+                <p className="formAlert wideField" role="alert">
+                  {submitError} You can email{' '}
+                  <a
+                    href={mailtoHref('ICGTMP membership interest', {
+                      name: draft.fullName,
+                      email: draft.email,
+                      phone: draft.phone,
+                    })}
+                  >
+                    {org.email}
+                  </a>{' '}
+                  instead. Your answers are kept on this device.
+                </p>
+              ) : null}
               <p className="formPrivacy wideField">
                 By submitting, you agree that ICGTMP may contact you about membership, volunteering
                 or partnership. We do not sell this information.
               </p>
               <button className="goldPill" type="submit" disabled={sending}>
-                {sending ? 'Sending…' : 'Submit interest'} <ArrowRight size={17} />
+                {sending ? 'Sending…' : submitError ? 'Try again' : 'Submit interest'}{' '}
+                <ArrowRight size={17} />
               </button>
             </form>
           </>
@@ -290,23 +393,33 @@ export function JoinModal({ open, preset, onClose }: Props) {
 }
 
 function Field({
+  name,
   label,
   error,
   children,
   wide,
 }: {
+  name: string;
   label: string;
   error?: string;
-  children: ReactElement<{ id?: string }>;
+  children: ReactElement<{ id?: string; 'aria-invalid'?: boolean; 'aria-describedby'?: string }>;
   wide?: boolean;
 }) {
-  const id = useId();
+  const id = fieldId(name);
   return (
     <label className={wide ? 'wideField' : undefined} htmlFor={id}>
       {label}
       <span className="fieldControl">
-        {cloneElement(children, { id })}
-        {error ? <em className="fieldError">{error}</em> : null}
+        {cloneElement(children, {
+          id,
+          'aria-invalid': error ? true : undefined,
+          'aria-describedby': error ? errorId(name) : undefined,
+        })}
+        {error ? (
+          <em className="fieldError" id={errorId(name)}>
+            {error}
+          </em>
+        ) : null}
       </span>
     </label>
   );

@@ -10,6 +10,7 @@ import { LeadershipSection } from './components/LeadershipSection';
 import { NewsSection } from './components/NewsSection';
 import { ProgramsStrip } from './components/ProgramsStrip';
 import { SectorCards } from './components/SectorCards';
+import { ToastProvider } from './components/Toaster';
 import type { MembershipCategory } from './data/content';
 import { currentHash, parseHash, type RouteState } from './lib/routing';
 import { scrollToIdWhenReady } from './lib/scroll';
@@ -96,36 +97,38 @@ export default function App() {
   };
 
   return (
-    <div className="app">
-      <a className="skipLink" href="#main">
-        Skip to content
-      </a>
-      <Header route={route} onJoin={() => openJoin()} />
-      <div id="main">
-        {route.view === 'home' && (
-          <main>
-            <Hero onJoin={() => openJoin()} />
-            <SectorCards />
-            <ImpactGoals />
-            <LagosEastPresence />
-            <section id="home-lower" className="lowerGrid" aria-label="Leadership, news and membership">
-              <LeadershipSection />
-              <NewsSection />
-              <JoinPanel onJoin={openJoin} />
-            </section>
-            <ProgramsStrip />
-          </main>
-        )}
-        {route.view === 'about' && <AboutPage />}
-        {route.view === 'programs' && <ProgramsPage />}
-        {route.view === 'resources' && <ResourcesPage />}
-        {route.view === 'structure' && <StructurePage />}
-        {route.view === 'contact' && <ContactPage />}
-        {route.view === 'legal' && route.legal && <LegalPage slug={route.legal} />}
-        {route.view === 'notfound' && <NotFoundPage />}
+    <ToastProvider>
+      <div className="app">
+        <a className="skipLink" href="#main">
+          Skip to content
+        </a>
+        <Header route={route} onJoin={() => openJoin()} />
+        <div id="main">
+          {route.view === 'home' && (
+            <main>
+              <Hero onJoin={() => openJoin()} />
+              <SectorCards />
+              <ImpactGoals />
+              <LagosEastPresence />
+              <section id="home-lower" className="lowerGrid" aria-label="Leadership, news and membership">
+                <LeadershipSection />
+                <NewsSection />
+                <JoinPanel onJoin={openJoin} />
+              </section>
+              <ProgramsStrip />
+            </main>
+          )}
+          {route.view === 'about' && <AboutPage />}
+          {route.view === 'programs' && <ProgramsPage />}
+          {route.view === 'resources' && <ResourcesPage />}
+          {route.view === 'structure' && <StructurePage />}
+          {route.view === 'contact' && <ContactPage />}
+          {route.view === 'legal' && route.legal && <LegalPage slug={route.legal} />}
+          {route.view === 'notfound' && <NotFoundPage />}
+        </div>
+        <Footer />
+        <JoinModal open={joinOpen} preset={joinPreset} onClose={() => setJoinOpen(false)} />
       </div>
-      <Footer />
-      <JoinModal open={joinOpen} preset={joinPreset} onClose={() => setJoinOpen(false)} />
-    </div>
+    </ToastProvider>
   );
 }
