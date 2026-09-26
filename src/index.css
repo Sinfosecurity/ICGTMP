@@ -1227,6 +1227,92 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 12
   .contactLayout, .programPageCard { grid-template-columns: 1fr; }
 }
 
+/* Form field furniture */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.fieldLabel { display: block; }
+.req {
+  color: #9b2c2c;
+  margin-left: 2px;
+  font-weight: 700;
+}
+.fieldHint {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.joinModal input[aria-invalid="true"],
+.joinModal select[aria-invalid="true"],
+.joinModal textarea[aria-invalid="true"],
+.contactForm input[aria-invalid="true"],
+.contactForm textarea[aria-invalid="true"] {
+  border-color: #c25b5b;
+  background: #fffafa;
+}
+
+/* Error summary */
+.errorSummary {
+  border: 1px solid #e3b7b7;
+  border-left: 4px solid #9b2c2c;
+  background: #fdf2f2;
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin-bottom: 4px;
+}
+.errorSummary:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+.errorSummary p {
+  margin: 0 0 6px;
+  font-size: 13px;
+  color: #7f2323;
+}
+.errorSummary ul {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 3px;
+}
+.errorSummary li { font-size: 12.5px; }
+.errorSummary a {
+  color: #7f2323;
+  text-underline-offset: 2px;
+}
+
+/* Submission receipt */
+.referenceNote {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+  background: var(--paper);
+  font-size: 13px;
+}
+.referenceNote strong {
+  font-family: ui-monospace, "SFMono-Regular", "Consolas", monospace;
+  letter-spacing: 0.04em;
+  color: var(--green);
+}
+.referenceNote span {
+  display: block;
+  margin-top: 2px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
 /* Toasts */
 .toastViewport {
   position: fixed;

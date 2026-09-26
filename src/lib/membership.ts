@@ -1,7 +1,12 @@
 import type { MembershipCategory } from '../data/content';
-import type { LgaName } from '../data/locations';
-import type { FormResult } from './form';
-import { submitMembership } from './formTransport';
+import { lgaDirectory, type LgaName } from '../data/locations';
+import {
+  LIMITS,
+  checkEmail,
+  checkFullName,
+  checkLength,
+  checkPhone,
+} from './validation';
 
 export const MEMBERSHIP_DRAFT_KEY = 'icgtmp.membershipDraft';
 
@@ -18,6 +23,33 @@ export type MembershipDraft = {
   volunteerInterest: string;
 };
 
+export type MembershipField = keyof MembershipDraft;
+
+export type FieldErrors = Partial<Record<MembershipField, string>>;
+
+/** Visual order, so the first reported error is the first one on screen. */
+export const MEMBERSHIP_FIELD_ORDER: MembershipField[] = [
+  'fullName',
+  'phone',
+  'email',
+  'lga',
+  'lcda',
+  'ward',
+  'profession',
+  'marketAssociation',
+  'category',
+  'volunteerInterest',
+];
+
+export const MEMBERSHIP_REQUIRED: MembershipField[] = [
+  'fullName',
+  'phone',
+  'email',
+  'lga',
+  'lcda',
+  'category',
+];
+
 export const emptyMembershipDraft = (): MembershipDraft => ({
   fullName: '',
   phone: '',
@@ -31,31 +63,53 @@ export const emptyMembershipDraft = (): MembershipDraft => ({
   volunteerInterest: '',
 });
 
-export type FieldErrors = Partial<Record<keyof MembershipDraft, string>>;
-
-const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const phonePattern = /^(\+?234|0)[0-9]{10}$/;
+/**
+ * One field's rule, so blur-time and submit-time validation can never disagree.
+ * Mirrors apps-script/Code.gs, which has the final say.
+ */
+export function validateField(
+  field: MembershipField,
+  draft: MembershipDraft,
+): string | undefined {
+  switch (field) {
+    case 'fullName':
+      return checkFullName(draft.fullName);
+    case 'phone':
+      return checkPhone(draft.phone);
+    case 'email':
+      return checkEmail(draft.email);
+    case 'lga':
+      return draft.lga ? undefined : 'Select your LGA.';
+    case 'lcda':
+      if (!draft.lcda) return 'Select your LCDA.';
+      if (draft.lga && !lgaDirectory[draft.lga].includes(draft.lcda)) {
+        return 'That LCDA is not in the selected LGA.';
+      }
+      return undefined;
+    case 'category':
+      return draft.category ? undefined : 'Select a membership category.';
+    case 'volunteerInterest':
+      if (draft.category === 'Volunteer' && draft.volunteerInterest.trim().length < 4) {
+        return 'Tell us how you would like to volunteer.';
+      }
+      return checkLength(draft.volunteerInterest, LIMITS.volunteerInterest);
+    case 'ward':
+      return checkLength(draft.ward, LIMITS.ward);
+    case 'profession':
+      return checkLength(draft.profession, LIMITS.profession);
+    case 'marketAssociation':
+      return checkLength(draft.marketAssociation, LIMITS.marketAssociation);
+    default:
+      return undefined;
+  }
+}
 
 export function validateMembership(draft: MembershipDraft): FieldErrors {
   const errors: FieldErrors = {};
-
-  if (!draft.fullName.trim() || draft.fullName.trim().length < 3) {
-    errors.fullName = 'Enter your full name.';
+  for (const field of MEMBERSHIP_FIELD_ORDER) {
+    const error = validateField(field, draft);
+    if (error) errors[field] = error;
   }
-  const phone = draft.phone.replace(/[\s-]/g, '');
-  if (!phonePattern.test(phone)) {
-    errors.phone = 'Enter a valid Nigerian phone number.';
-  }
-  if (!emailPattern.test(draft.email.trim())) {
-    errors.email = 'Enter a valid email address.';
-  }
-  if (!draft.lga) errors.lga = 'Select your LGA.';
-  if (!draft.lcda) errors.lcda = 'Select your LCDA.';
-  if (!draft.category) errors.category = 'Select a membership category.';
-  if (draft.category === 'Volunteer' && draft.volunteerInterest.trim().length < 4) {
-    errors.volunteerInterest = 'Tell us how you would like to volunteer.';
-  }
-
   return errors;
 }
 
@@ -83,33 +137,17 @@ export function loadMembershipDraft(): MembershipDraft {
 }
 
 export function saveMembershipDraft(draft: MembershipDraft): void {
-  localStorage.setItem(MEMBERSHIP_DRAFT_KEY, JSON.stringify(draft));
+  try {
+    localStorage.setItem(MEMBERSHIP_DRAFT_KEY, JSON.stringify(draft));
+  } catch {
+    // Private browsing and full quotas must not break typing.
+  }
 }
 
 export function clearMembershipDraft(): void {
-  localStorage.removeItem(MEMBERSHIP_DRAFT_KEY);
-}
-
-export async function submitMembershipDraft(
-  draft: MembershipDraft,
-  honeypot = '',
-): Promise<FormResult> {
-  const result = await submitMembership({
-    fullName: draft.fullName,
-    phone: draft.phone,
-    email: draft.email,
-    lga: draft.lga,
-    lcda: draft.lcda,
-    ward: draft.ward,
-    profession: draft.profession,
-    marketAssociation: draft.marketAssociation,
-    category: draft.category,
-    volunteerInterest: draft.volunteerInterest,
-    website: honeypot,
-    source: 'website',
-  });
-
-  if (result.ok) return { status: 'sent' };
-  if (result.emailPendingConfirm) return { status: 'pending-confirm' };
-  return { status: 'failed', message: result.error ?? 'The form service could not accept this submission.' };
+  try {
+    localStorage.removeItem(MEMBERSHIP_DRAFT_KEY);
+  } catch {
+    // Nothing to recover from; the draft is a convenience.
+  }
 }

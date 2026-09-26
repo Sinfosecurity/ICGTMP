@@ -1,90 +1,139 @@
 import { MapPin, Mail } from 'lucide-react';
-import { useCallback, useState, type FormEvent } from 'react';
+import { useCallback, useRef, useState, type FormEvent } from 'react';
 import { mapsUrl, org } from '../data/content';
 import { mailtoHref } from '../lib/form';
 import { submitMessage } from '../lib/formTransport';
+import { checkCooldown, clearAttempts, describeWait, recordAttempt } from '../lib/rateLimit';
+import { LIMITS, checkEmail, checkFullName, checkLength, newSubmissionId } from '../lib/validation';
+import { ErrorSummary } from '../components/ErrorSummary';
+import { FormField } from '../components/FormField';
 import { PageShell } from '../components/PageShell';
 import { useToast } from '../components/Toaster';
 import { WhatsAppJoinLink } from '../components/WhatsAppJoinLink';
 
 type ContactDraft = { name: string; email: string; message: string };
-type ContactErrors = Partial<Record<keyof ContactDraft, string>>;
+type ContactField = keyof ContactDraft;
+type ContactErrors = Partial<Record<ContactField, string>>;
 
-const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const FIELD_ORDER: ContactField[] = ['name', 'email', 'message'];
 
-const FIELD_ORDER: (keyof ContactDraft)[] = ['name', 'email', 'message'];
+const COOLDOWN_KEY = 'contact';
+const COOLDOWN_MAX = 3;
+const COOLDOWN_WINDOW_MS = 10 * 60 * 1000;
+
+const fieldId = (name: ContactField) => `contact-${name}`;
+
+function validateField(field: ContactField, draft: ContactDraft): string | undefined {
+  switch (field) {
+    case 'name':
+      return checkFullName(draft.name);
+    case 'email':
+      return checkEmail(draft.email);
+    case 'message':
+      if (draft.message.trim().length < 8) return 'Enter a short message.';
+      return checkLength(draft.message, LIMITS.message);
+    default:
+      return undefined;
+  }
+}
 
 function validate(draft: ContactDraft): ContactErrors {
   const errors: ContactErrors = {};
-  if (draft.name.trim().length < 3) errors.name = 'Enter your full name.';
-  if (!emailPattern.test(draft.email.trim())) errors.email = 'Enter a valid email address.';
-  if (draft.message.trim().length < 8) errors.message = 'Enter a short message.';
+  for (const field of FIELD_ORDER) {
+    const error = validateField(field, draft);
+    if (error) errors[field] = error;
+  }
   return errors;
 }
 
+const emptyDraft = (): ContactDraft => ({ name: '', email: '', message: '' });
+
 export function ContactPage() {
   const toast = useToast();
-  const [draft, setDraft] = useState<ContactDraft>({ name: '', email: '', message: '' });
+  const summaryRef = useRef<HTMLDivElement>(null);
+  const submissionId = useRef(newSubmissionId());
+  const openedAt = useRef(Date.now());
+
+  const [draft, setDraft] = useState<ContactDraft>(emptyDraft);
   const [errors, setErrors] = useState<ContactErrors>({});
+  const [touched, setTouched] = useState<Partial<Record<ContactField, boolean>>>({});
+  const [showSummary, setShowSummary] = useState(false);
   const [sending, setSending] = useState(false);
+  const [reference, setReference] = useState('');
   const [sent, setSent] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [honeypot, setHoneypot] = useState('');
 
-  const payload = { name: draft.name, email: draft.email, message: draft.message };
+  const invalidFields = FIELD_ORDER.filter((field) => errors[field]);
 
-  const setField = (key: keyof ContactDraft, value: string) => {
+  const setField = (key: ContactField, value: string) => {
     setDraft((current) => ({ ...current, [key]: value }));
     setErrors((current) => (current[key] ? { ...current, [key]: undefined } : current));
+  };
+
+  const blur = (key: ContactField) => {
+    setTouched((current) => ({ ...current, [key]: true }));
+    setErrors((current) => ({ ...current, [key]: validateField(key, draft) }));
   };
 
   const send = useCallback(
     async (values: ContactDraft, website: string) => {
       setSending(true);
       setSubmitError('');
+      recordAttempt(COOLDOWN_KEY, COOLDOWN_WINDOW_MS);
+
       const result = await submitMessage({
-        fullName: values.name,
-        email: values.email,
-        message: values.message,
+        fullName: values.name.trim(),
+        email: values.email.trim().toLowerCase(),
+        message: values.message.trim(),
         website,
         source: 'website',
+        submissionId: submissionId.current,
+        elapsedMs: Date.now() - openedAt.current,
       });
       setSending(false);
 
       if (result.ok) {
         setSent(true);
-        setDraft({ name: '', email: '', message: '' });
+        setReference(result.reference ?? '');
+        setDraft(emptyDraft());
+        setTouched({});
+        clearAttempts(COOLDOWN_KEY);
+        // A fresh message is a new submission, not a retry of this one.
+        submissionId.current = newSubmissionId();
+        openedAt.current = Date.now();
         toast.success('Message sent', {
-          description: `Thank you. ICGTMP will reply to ${values.email}.`,
-          dedupeKey: 'contact',
+          description: result.reference
+            ? `Your reference is ${result.reference}.`
+            : `ICGTMP will reply to ${values.email}.`,
+          dedupeKey: COOLDOWN_KEY,
         });
-        if (result.warning) {
-          toast.warning('Saved by email only', {
-            description: result.warning,
-            dedupeKey: 'contact-warning',
-          });
-        }
         return;
       }
 
-      if (result.emailPendingConfirm) {
-        setSubmitError(`The inbox needs a one-time confirmation. Please email ${org.email} directly as well.`);
-        toast.warning('One more step needed', {
-          description: `The inbox needs a one-time confirmation. Please email ${org.email} directly as well.`,
-          dedupeKey: 'contact',
-        });
-        return;
+      if (result.code === 'INVALID_FIELD' && result.field) {
+        const field = (result.field === 'fullName' ? 'name' : result.field) as ContactField;
+        if (FIELD_ORDER.includes(field)) {
+          setErrors((current) => ({ ...current, [field]: result.error }));
+          setTouched((current) => ({ ...current, [field]: true }));
+          document.getElementById(fieldId(field))?.focus();
+          toast.error('Check the highlighted field', {
+            description: result.error,
+            dedupeKey: COOLDOWN_KEY,
+            duration: 8000,
+          });
+          return;
+        }
       }
 
       const message = result.error ?? 'We could not reach the form service.';
       setSubmitError(message);
       toast.error('Message not sent', {
         description: message,
-        dedupeKey: 'contact',
-        action:
-          result.failure === 'rejected'
-            ? undefined
-            : { label: 'Try again', onClick: () => void send(values, website) },
+        dedupeKey: COOLDOWN_KEY,
+        action: result.retryable
+          ? { label: 'Try again', onClick: () => void send(values, website) }
+          : undefined,
       });
     },
     [toast],
@@ -93,17 +142,23 @@ export function ContactPage() {
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
     if (sending) return;
+
     const nextErrors = validate(draft);
     setErrors(nextErrors);
+    setTouched({ name: true, email: true, message: true });
 
-    const firstInvalid = FIELD_ORDER.find((name) => nextErrors[name]);
-    if (firstInvalid) {
-      document.getElementById(`contact-${firstInvalid}`)?.focus();
-      toast.error('Check the highlighted fields', {
-        description: nextErrors[firstInvalid],
-        dedupeKey: 'contact',
-        duration: 8000,
-      });
+    if (FIELD_ORDER.some((field) => nextErrors[field])) {
+      setShowSummary(true);
+      window.setTimeout(() => summaryRef.current?.focus(), 20);
+      return;
+    }
+    setShowSummary(false);
+
+    const cooldown = checkCooldown(COOLDOWN_KEY, COOLDOWN_MAX, COOLDOWN_WINDOW_MS);
+    if (cooldown.blocked) {
+      const message = `You have sent ${COOLDOWN_MAX} messages already. Try again in ${describeWait(cooldown.secondsLeft)}.`;
+      setSubmitError(message);
+      toast.error('Too many attempts', { description: message, dedupeKey: COOLDOWN_KEY });
       return;
     }
 
@@ -135,7 +190,18 @@ export function ContactPage() {
           </p>
           <p className="quietNote">Office visits are by arrangement through email.</p>
         </div>
+
         <form className="contactForm" onSubmit={onSubmit} noValidate aria-busy={sending}>
+          {showSummary ? (
+            <ErrorSummary
+              summaryRef={summaryRef}
+              items={invalidFields.map((field) => ({
+                id: fieldId(field),
+                message: errors[field] ?? '',
+              }))}
+            />
+          ) : null}
+
           <label className="hpField" aria-hidden="true">
             Company website
             <input
@@ -145,72 +211,83 @@ export function ContactPage() {
               onChange={(e) => setHoneypot(e.target.value)}
             />
           </label>
-          <label htmlFor="contact-name">
-            Full name
+
+          <FormField
+            id={fieldId('name')}
+            label="Full name"
+            required
+            error={touched.name ? errors.name : undefined}
+          >
             <input
-              id="contact-name"
               value={draft.name}
               onChange={(e) => setField('name', e.target.value)}
+              onBlur={() => blur('name')}
               autoComplete="name"
-              aria-invalid={errors.name ? true : undefined}
-              aria-describedby={errors.name ? 'contact-name-error' : undefined}
+              autoCapitalize="words"
+              maxLength={LIMITS.fullName}
               required
             />
-            {errors.name ? (
-              <span className="fieldError" id="contact-name-error">
-                {errors.name}
-              </span>
-            ) : null}
-          </label>
-          <label htmlFor="contact-email">
-            Email
+          </FormField>
+
+          <FormField
+            id={fieldId('email')}
+            label="Email"
+            required
+            error={touched.email ? errors.email : undefined}
+          >
             <input
-              id="contact-email"
               type="email"
               value={draft.email}
               onChange={(e) => setField('email', e.target.value)}
+              onBlur={() => blur('email')}
               autoComplete="email"
-              aria-invalid={errors.email ? true : undefined}
-              aria-describedby={errors.email ? 'contact-email-error' : undefined}
+              inputMode="email"
+              autoCapitalize="off"
+              spellCheck={false}
+              maxLength={LIMITS.email}
               required
             />
-            {errors.email ? (
-              <span className="fieldError" id="contact-email-error">
-                {errors.email}
-              </span>
-            ) : null}
-          </label>
-          <label htmlFor="contact-message">
-            Message
+          </FormField>
+
+          <FormField
+            id={fieldId('message')}
+            label="Message"
+            required
+            error={touched.message ? errors.message : undefined}
+            hint={
+              draft.message.length > LIMITS.message * 0.8
+                ? `${draft.message.length}/${LIMITS.message} characters`
+                : undefined
+            }
+          >
             <textarea
-              id="contact-message"
               rows={5}
               value={draft.message}
               onChange={(e) => setField('message', e.target.value)}
-              aria-invalid={errors.message ? true : undefined}
-              aria-describedby={errors.message ? 'contact-message-error' : undefined}
+              onBlur={() => blur('message')}
+              maxLength={LIMITS.message}
               required
             />
-            {errors.message ? (
-              <span className="fieldError" id="contact-message-error">
-                {errors.message}
-              </span>
-            ) : null}
-          </label>
+          </FormField>
+
           <p className="formPrivacy">
             This message is sent to {org.email}. Read the <a href="#privacy">Privacy Policy</a>.
           </p>
+
           {submitError ? (
             <p className="formAlert" role="alert">
               {submitError} You can email{' '}
-              <a href={mailtoHref('ICGTMP contact form', payload)}>{org.email}</a> instead.
+              <a href={mailtoHref('ICGTMP contact form', draft)}>{org.email}</a> instead.
             </p>
           ) : null}
+
           {sent ? (
             <p className="formNotice" role="status">
-              Thank you. Your message has been sent to {org.email}.
+              Thank you. Your message has reached {org.email}.
+              {reference ? ` Your reference is ${reference}.` : ''}
             </p>
           ) : null}
+
           <button className="goldPill" type="submit" disabled={sending}>
             {sending ? 'Sending…' : submitError ? 'Try again' : 'Send message'}
           </button>

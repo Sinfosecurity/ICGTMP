@@ -1,19 +1,40 @@
 import { submitPublicForm, type FormPayload } from './form';
 
-/** Why a submission could not be stored. `rejected` means the server said no. */
-export type FailureKind = 'offline' | 'timeout' | 'network' | 'rejected' | 'unknown';
+/**
+ * The stable contract with apps-script/Code.gs, plus the transport-level
+ * outcomes the script never gets to answer.
+ */
+export type SubmitCode =
+  // from the server
+  | 'CREATED'
+  | 'DUPLICATE'
+  | 'INVALID_FIELD'
+  | 'RATE_LIMITED'
+  | 'BUSY'
+  | 'SERVER_ERROR'
+  | 'UNKNOWN_FORM'
+  // decided here
+  | 'OFFLINE'
+  | 'TIMEOUT'
+  | 'NETWORK'
+  | 'BAD_RESPONSE'
+  | 'NOT_CONFIGURED';
 
 export type TransportResult = {
   ok: boolean;
-  storedInSheet: boolean;
-  emailSent: boolean;
-  emailPendingConfirm?: boolean;
-  /** The sheet already holds a matching entry, so no new row was written. */
-  duplicate?: boolean;
-  /** Set when the submission succeeded but something still needs attention. */
-  warning?: string;
-  failure?: FailureKind;
+  code: SubmitCode;
+  /** The field the server rejected, matching the client's field names. */
+  field?: string;
   error?: string;
+  /** Short receipt the visitor can quote back to a coordinator. */
+  reference?: string;
+  /** Seconds to wait before a rate-limited submission is worth retrying. */
+  retryAfter?: number;
+  /** Whether resending the same values could plausibly succeed. */
+  retryable: boolean;
+  /** The email notification also went out. */
+  notified: boolean;
+  emailPendingConfirm?: boolean;
 };
 
 export type MembershipPayload = {
@@ -29,6 +50,8 @@ export type MembershipPayload = {
   volunteerInterest?: string;
   website?: string;
   source?: string;
+  submissionId: string;
+  elapsedMs: number;
 };
 
 export type MessagePayload = {
@@ -37,34 +60,52 @@ export type MessagePayload = {
   message: string;
   website?: string;
   source?: string;
+  submissionId: string;
+  elapsedMs: number;
 };
 
 type SheetResponse = {
   ok?: boolean;
-  duplicate?: boolean;
+  code?: string;
+  field?: string;
   error?: string;
+  reference?: string;
+  retryAfter?: number;
 };
-
-type SheetOutcome =
-  | { kind: 'ok'; duplicate: boolean }
-  /** No endpoint is configured, so the sheet leg never ran. */
-  | { kind: 'skipped' }
-  | { kind: 'rejected'; message: string }
-  | { kind: 'unreachable'; failure: Exclude<FailureKind, 'rejected'> };
 
 const TIMEOUT_MS = 12_000;
 
 /**
- * Plain statements of what went wrong. The fallback the visitor should take
- * next is UI copy, so callers append it rather than baking it in here.
+ * Plain statements of what went wrong. What the visitor should do instead is
+ * UI copy, so callers append it rather than it being baked in here.
  */
-const FAILURE_MESSAGES: Record<FailureKind, string> = {
-  offline: 'You appear to be offline. Check your connection and try again.',
-  timeout: 'The form service did not respond in time.',
-  network: 'We could not reach the form service.',
-  rejected: 'The form service could not accept this submission.',
-  unknown: 'We could not reach the form service.',
+const MESSAGES: Record<SubmitCode, string> = {
+  CREATED: '',
+  DUPLICATE: 'These details are already on the register.',
+  INVALID_FIELD: 'Please check the highlighted field.',
+  RATE_LIMITED: 'Too many attempts. Please wait a little before trying again.',
+  BUSY: 'The register is busy right now.',
+  SERVER_ERROR: 'Something went wrong on our side.',
+  UNKNOWN_FORM: 'This form could not be processed.',
+  OFFLINE: 'You appear to be offline. Check your connection and try again.',
+  TIMEOUT: 'The form service did not respond in time.',
+  NETWORK: 'We could not reach the form service.',
+  BAD_RESPONSE: 'The form service returned an unexpected response.',
+  NOT_CONFIGURED: 'The form is not connected to the register yet.',
 };
+
+/** Resending identical values only helps when the failure was transport-level. */
+const RETRYABLE: SubmitCode[] = ['OFFLINE', 'TIMEOUT', 'NETWORK', 'BAD_RESPONSE', 'BUSY', 'SERVER_ERROR'];
+
+const SERVER_CODES: SubmitCode[] = [
+  'CREATED',
+  'DUPLICATE',
+  'INVALID_FIELD',
+  'RATE_LIMITED',
+  'BUSY',
+  'SERVER_ERROR',
+  'UNKNOWN_FORM',
+];
 
 function sheetEndpoint(): string {
   return (import.meta.env.VITE_SHEET_ENDPOINT || '').trim();
@@ -93,10 +134,10 @@ async function fetchWithTimeout(url: string, init: RequestInit): Promise<Respons
  * redirect: 'follow' is required so script.google.com -> googleusercontent.com
  * resolves and the JSON body is readable. Do not "fix" this to application/json.
  */
-async function postSheet(body: Record<string, string>): Promise<SheetOutcome> {
+async function postSheet(body: Record<string, string | number>): Promise<SheetResponse & { code: SubmitCode }> {
   const url = sheetEndpoint();
-  if (!url) return { kind: 'skipped' };
-  if (isOffline()) return { kind: 'unreachable', failure: 'offline' };
+  if (!url) return { code: 'NOT_CONFIGURED' };
+  if (isOffline()) return { code: 'OFFLINE' };
 
   let response: Response;
   try {
@@ -107,21 +148,26 @@ async function postSheet(body: Record<string, string>): Promise<SheetOutcome> {
       redirect: 'follow',
     });
   } catch (error) {
-    return { kind: 'unreachable', failure: isAbort(error) ? 'timeout' : 'network' };
+    return { code: isAbort(error) ? 'TIMEOUT' : 'NETWORK' };
   }
 
-  if (!response.ok) return { kind: 'unreachable', failure: 'network' };
+  if (!response.ok) return { code: 'NETWORK' };
 
   let data: SheetResponse;
   try {
     data = (await response.json()) as SheetResponse;
   } catch {
     // A missing or misconfigured deployment answers with an HTML error page.
-    return { kind: 'unreachable', failure: 'unknown' };
+    return { code: 'BAD_RESPONSE' };
   }
 
-  if (data.ok) return { kind: 'ok', duplicate: Boolean(data.duplicate) };
-  return { kind: 'rejected', message: data.error?.trim() || FAILURE_MESSAGES.rejected };
+  const code = SERVER_CODES.includes(data.code as SubmitCode)
+    ? (data.code as SubmitCode)
+    : data.ok
+      ? 'CREATED'
+      : 'BAD_RESPONSE';
+
+  return { ...data, code };
 }
 
 async function postEmail(payload: FormPayload, subject: string): Promise<'sent' | 'pending' | 'failed'> {
@@ -131,57 +177,60 @@ async function postEmail(payload: FormPayload, subject: string): Promise<'sent' 
   return 'failed';
 }
 
+/**
+ * The spreadsheet decides the outcome; the email is a notification, not a
+ * second chance. Reporting success because an email went out while the register
+ * rejected the row is how people end up believing they are members when no row
+ * exists. The one exception is a site with no endpoint configured, where the
+ * email is all there is.
+ */
 function settle(
-  sheetSettled: PromiseSettledResult<SheetOutcome>,
+  sheetSettled: PromiseSettledResult<SheetResponse & { code: SubmitCode }>,
   emailSettled: PromiseSettledResult<'sent' | 'pending' | 'failed'>,
 ): TransportResult {
-  const sheet: SheetOutcome =
+  const sheet =
     sheetSettled.status === 'fulfilled'
       ? sheetSettled.value
-      : { kind: 'unreachable', failure: 'unknown' };
+      : ({ code: 'NETWORK' } as SheetResponse & { code: SubmitCode });
   const emailState = emailSettled.status === 'fulfilled' ? emailSettled.value : 'failed';
 
-  const storedInSheet = sheet.kind === 'ok';
-  const duplicate = sheet.kind === 'ok' && sheet.duplicate;
-  const emailSent = emailState === 'sent';
+  const notified = emailState === 'sent';
   const emailPendingConfirm = emailState === 'pending';
+  const base = { notified, emailPendingConfirm };
 
-  if (storedInSheet || emailSent) {
-    return {
-      ok: true,
-      storedInSheet,
-      emailSent,
-      emailPendingConfirm,
-      duplicate,
-      // The email got through but the spreadsheet - the system of record -
-      // refused the data, so a coordinator has to enter this one by hand.
-      warning: !storedInSheet && sheet.kind === 'rejected' ? sheet.message : undefined,
-    };
+  if (sheet.code === 'NOT_CONFIGURED') {
+    return notified
+      ? { ...base, ok: true, code: 'CREATED', retryable: false }
+      : {
+          ...base,
+          ok: false,
+          code: 'NETWORK',
+          error: MESSAGES.NETWORK,
+          retryable: true,
+        };
   }
 
-  // Nothing landed anywhere. A rejection explains more than a transport error.
-  if (sheet.kind === 'rejected') {
-    return {
-      ok: false,
-      storedInSheet: false,
-      emailSent: false,
-      emailPendingConfirm,
-      failure: 'rejected',
-      error: sheet.message,
-    };
-  }
-
-  const failure: FailureKind = sheet.kind === 'unreachable' ? sheet.failure : 'unknown';
+  const ok = sheet.code === 'CREATED' || sheet.code === 'DUPLICATE';
 
   return {
-    ok: false,
-    storedInSheet: false,
-    emailSent: false,
-    emailPendingConfirm,
-    failure,
-    error: FAILURE_MESSAGES[failure],
+    ...base,
+    ok,
+    code: sheet.code,
+    field: sheet.field,
+    reference: sheet.reference,
+    retryAfter: sheet.retryAfter,
+    retryable: RETRYABLE.includes(sheet.code),
+    error: ok ? undefined : sheet.error?.trim() || MESSAGES[sheet.code],
   };
 }
+
+/** A bot that filled the honeypot is told nothing useful. */
+const HONEYPOT_RESULT: TransportResult = {
+  ok: true,
+  code: 'CREATED',
+  retryable: false,
+  notified: false,
+};
 
 export async function submitMembership(payload: MembershipPayload): Promise<TransportResult> {
   const website = payload.website?.trim() ?? '';
@@ -199,6 +248,8 @@ export async function submitMembership(payload: MembershipPayload): Promise<Tran
     volunteerInterest: payload.volunteerInterest ?? '',
     website,
     source: payload.source ?? 'website',
+    submissionId: payload.submissionId,
+    elapsedMs: payload.elapsedMs,
   };
 
   if (website) {
@@ -207,7 +258,7 @@ export async function submitMembership(payload: MembershipPayload): Promise<Tran
     } catch {
       // Honeypot: still report success so a bot is not given a signal.
     }
-    return { ok: true, storedInSheet: false, emailSent: false };
+    return HONEYPOT_RESULT;
   }
 
   const emailPayload: FormPayload = {
@@ -240,6 +291,8 @@ export async function submitMessage(payload: MessagePayload): Promise<TransportR
     message: payload.message,
     website,
     source: payload.source ?? 'website',
+    submissionId: payload.submissionId,
+    elapsedMs: payload.elapsedMs,
   };
 
   if (website) {
@@ -248,7 +301,7 @@ export async function submitMessage(payload: MessagePayload): Promise<TransportR
     } catch {
       // Honeypot: still report success so a bot is not given a signal.
     }
-    return { ok: true, storedInSheet: false, emailSent: false };
+    return HONEYPOT_RESULT;
   }
 
   const [sheet, email] = await Promise.allSettled([
