@@ -27,8 +27,26 @@ export type HeroSlide = {
   backdrop: string;
   objectFit: 'cover' | 'contain';
   objectPosition: string;
+  /**
+   * Where to anchor the crop on phones. Each slide is aimed at the
+   * photographic part of the artwork, away from its densest lettering.
+   */
   objectPositionMobile: string;
+  /**
+   * How hard to soften the artwork behind the phone copy. Slides with a clean
+   * photographic region need only a touch; the dense composed posters need
+   * enough to stop their own lettering competing with the real headline.
+   */
+  mobileBlur: string;
   hits?: HeroHit[];
+  /**
+   * The artwork's own words, transcribed so phones can render real text
+   * instead of shrinking a 1024px composition down to an illegible strip.
+   * Desktop still shows the artwork exactly as approved.
+   */
+  kicker?: string;
+  title: string;
+  subtitle?: string;
 };
 
 export const HERO_INTERVAL_MS = 5500;
@@ -44,7 +62,12 @@ export const heroSlides: HeroSlide[] = [
     backdrop: '#06180f',
     objectFit: 'cover',
     objectPosition: '50% 50%',
-    objectPositionMobile: '50% 50%',
+    objectPositionMobile: '92% 46%',
+    mobileBlur: '5px',
+    kicker: 'People | Opportunity | Progress',
+    title: 'A Stronger Lagos Through Its People',
+    subtitle:
+      'Mobilizing traders, market communities, artisans, entrepreneurs and professionals across Lagos East.',
     hits: [
       { id: 'join', label: 'Join ICGTMP', action: 'join', box: { left: '4.4%', top: '71.2%', width: '13.6%', height: '11%' } },
       { id: 'about', label: 'Learn More', action: 'hash', href: '#about', box: { left: '18.6%', top: '71.2%', width: '12.4%', height: '11%' } },
@@ -66,7 +89,11 @@ export const heroSlides: HeroSlide[] = [
     backdrop: '#041018',
     objectFit: 'cover',
     objectPosition: '50% 50%',
-    objectPositionMobile: '50% 50%',
+    objectPositionMobile: '90% 45%',
+    mobileBlur: '5px',
+    kicker: 'Innovation · Investment · Opportunities',
+    title: 'A Brighter Lagos Tomorrow',
+    subtitle: 'Modern Infrastructure. Inclusive Growth. Real Opportunities. Stronger Communities.',
     hits: [
       {
         id: 'join',
@@ -85,7 +112,11 @@ export const heroSlides: HeroSlide[] = [
     backdrop: '#f4f7f4',
     objectFit: 'cover',
     objectPosition: '50% 50%',
-    objectPositionMobile: '38% 50%',
+    objectPositionMobile: '6% 45%',
+    mobileBlur: '5px',
+    kicker: 'People • Markets • Businesses • Communities',
+    title: 'Lagos Thrives When People Prosper',
+    subtitle: 'Supporting Traders. Empowering Markets. Building Stronger Communities.',
     hits: [
       {
         id: 'join',
@@ -104,7 +135,11 @@ export const heroSlides: HeroSlide[] = [
     backdrop: '#e8f0ea',
     objectFit: 'cover',
     objectPosition: '50% 50%',
-    objectPositionMobile: '50% 50%',
+    objectPositionMobile: '88% 62%',
+    mobileBlur: '9px',
+    kicker: 'Together for a',
+    title: 'Stronger Lagos',
+    subtitle: 'Mobilizing Tradesmen. Empowering Markets. Supporting Professionals.',
     hits: [
       {
         id: 'join',
@@ -130,7 +165,11 @@ export const heroSlides: HeroSlide[] = [
     backdrop: '#f3d2ae',
     objectFit: 'cover',
     objectPosition: '50% 50%',
-    objectPositionMobile: '58% 50%',
+    objectPositionMobile: '70% 34%',
+    mobileBlur: '9px',
+    kicker: 'Leadership • Service • Development',
+    title: 'Lagos Rising',
+    subtitle: 'Dr. Kadri Obafemi Hamzat for Governor of Lagos State.',
   },
   {
     id: 'continuity',
@@ -141,6 +180,10 @@ export const heroSlides: HeroSlide[] = [
     backdrop: '#e8d7b4',
     objectFit: 'cover',
     objectPosition: '50% 50%',
-    objectPositionMobile: '54% 50%',
+    objectPositionMobile: '88% 36%',
+    mobileBlur: '9px',
+    kicker: 'A Stronger Nigeria | A Brighter Tomorrow',
+    title: 'Continuity 2027',
+    subtitle: 'President Bola Ahmed Tinubu for a second term.',
   },
 ];

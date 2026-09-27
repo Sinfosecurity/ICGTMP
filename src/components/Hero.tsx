@@ -119,6 +119,7 @@ export function Hero({ onJoin }: Props) {
                   '--hero-fit': slide.objectFit,
                   '--photo-pos': slide.objectPosition,
                   '--photo-pos-mobile': slide.objectPositionMobile,
+                  '--hero-blur': slide.mobileBlur,
                 } as CSSProperties
               }
             >
@@ -133,6 +134,59 @@ export function Hero({ onJoin }: Props) {
                 fetchPriority={slideIndex === 0 ? 'high' : 'low'}
                 decoding={slideIndex === 0 ? 'sync' : 'async'}
               />
+              {/*
+                Phones get real text and real buttons over the photograph; the
+                artwork's own lettering is unreadable at 390px. CSS shows one or
+                the other, so neither is duplicated in the accessibility tree.
+                The copy is aria-hidden because the image alt already carries it.
+              */}
+              <div className="heroContent">
+                <div className="heroCopy" aria-hidden="true">
+                  {slide.kicker ? <p className="heroKicker">{slide.kicker}</p> : null}
+                  <p className="heroTitle">{slide.title}</p>
+                  {slide.subtitle ? <p className="heroSub">{slide.subtitle}</p> : null}
+                </div>
+                {slide.hits?.length ? (
+                  <div className="heroActions">
+                    {slide.hits.map((hit, hitIndex) =>
+                      hit.action === 'hash' && hit.href ? (
+                        <a
+                          key={hit.id}
+                          className={hitIndex === 0 ? 'goldPill' : 'ghostPill'}
+                          href={hit.href}
+                          tabIndex={isActive ? undefined : -1}
+                          onClick={(event) => {
+                            // A swipe that began on the button is not a tap.
+                            if (skipClick.current) {
+                              event.preventDefault();
+                              skipClick.current = false;
+                            }
+                          }}
+                        >
+                          {hit.label}
+                        </a>
+                      ) : (
+                        <button
+                          key={hit.id}
+                          type="button"
+                          className={hitIndex === 0 ? 'goldPill' : 'ghostPill'}
+                          data-join-trigger={hit.id === 'join' ? true : undefined}
+                          tabIndex={isActive ? undefined : -1}
+                          onClick={() => {
+                            if (skipClick.current) {
+                              skipClick.current = false;
+                              return;
+                            }
+                            onHit(hit);
+                          }}
+                        >
+                          {hit.label}
+                        </button>
+                      ),
+                    )}
+                  </div>
+                ) : null}
+              </div>
               {isActive && slide.hits ? (
                 <div className="heroHits">
                   {slide.hits.map((hit) =>
