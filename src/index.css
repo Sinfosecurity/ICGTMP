@@ -1150,16 +1150,13 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 12
   }
   .heroSlide .heroImage {
     object-position: var(--photo-pos-mobile, var(--photo-pos, 50% 50%));
-    /*
-      A portrait crop always shows the poster's full height, so its lettering
-      cannot be panned away from. Softening it turns the artwork into a genuine
-      backdrop instead of a second, competing headline. The slight scale hides
-      the transparent edge blur leaves behind.
-    */
-    filter: blur(var(--hero-blur, 4px));
-    transform: scale(1.12);
+    transform: scale(var(--hero-zoom, 1));
+    transform-origin: var(--hero-origin, 50% 50%);
   }
-  /* Sinks whatever lettering the crop catches behind the real copy. */
+  /*
+    Bottom-weighted so the photograph stays visible through the top two thirds
+    and the copy, which sits at the bottom, still has something solid behind it.
+  */
   .heroSlide::after {
     content: '';
     position: absolute;
@@ -1167,9 +1164,10 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 12
     z-index: 1;
     background: linear-gradient(
       180deg,
-      rgba(0, 26, 17, 0.6) 0%,
-      rgba(0, 26, 17, 0.78) 40%,
-      rgba(0, 26, 17, 0.95) 100%
+      rgba(0, 22, 14, 0.2) 0%,
+      rgba(0, 22, 14, 0.34) 36%,
+      rgba(0, 22, 14, 0.7) 66%,
+      rgba(0, 22, 14, 0.93) 100%
     );
   }
   /* The invisible tap targets only line up with the uncropped artwork. */
@@ -1185,7 +1183,10 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 12
     padding: 24px 20px 52px;
     pointer-events: none;
   }
-  .heroCopy { max-width: 30ch; }
+  .heroCopy {
+    max-width: 30ch;
+    text-shadow: 0 1px 14px rgba(0, 16, 10, 0.6);
+  }
   .heroKicker {
     margin: 0 0 8px;
     font-size: 10px;

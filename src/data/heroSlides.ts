@@ -33,11 +33,13 @@ export type HeroSlide = {
    */
   objectPositionMobile: string;
   /**
-   * How hard to soften the artwork behind the phone copy. Slides with a clean
-   * photographic region need only a touch; the dense composed posters need
-   * enough to stop their own lettering competing with the real headline.
+   * Phones show the poster's full height, which is where its lettering lives.
+   * Zooming past `cover` creates vertical overflow to pan into, so a dense
+   * slide can be framed on its photograph alone. 1 leaves the crop as-is.
    */
-  mobileBlur: string;
+  mobileZoom?: number;
+  /** Which point the zoom holds still; only the vertical part usually matters. */
+  mobileOrigin?: string;
   hits?: HeroHit[];
   /**
    * The artwork's own words, transcribed so phones can render real text
@@ -62,8 +64,7 @@ export const heroSlides: HeroSlide[] = [
     backdrop: '#06180f',
     objectFit: 'cover',
     objectPosition: '50% 50%',
-    objectPositionMobile: '92% 46%',
-    mobileBlur: '5px',
+    objectPositionMobile: '79% 46%',
     kicker: 'People | Opportunity | Progress',
     title: 'A Stronger Lagos Through Its People',
     subtitle:
@@ -89,8 +90,7 @@ export const heroSlides: HeroSlide[] = [
     backdrop: '#041018',
     objectFit: 'cover',
     objectPosition: '50% 50%',
-    objectPositionMobile: '90% 45%',
-    mobileBlur: '5px',
+    objectPositionMobile: '77% 45%',
     kicker: 'Innovation · Investment · Opportunities',
     title: 'A Brighter Lagos Tomorrow',
     subtitle: 'Modern Infrastructure. Inclusive Growth. Real Opportunities. Stronger Communities.',
@@ -112,8 +112,7 @@ export const heroSlides: HeroSlide[] = [
     backdrop: '#f4f7f4',
     objectFit: 'cover',
     objectPosition: '50% 50%',
-    objectPositionMobile: '6% 45%',
-    mobileBlur: '5px',
+    objectPositionMobile: '2% 45%',
     kicker: 'People • Markets • Businesses • Communities',
     title: 'Lagos Thrives When People Prosper',
     subtitle: 'Supporting Traders. Empowering Markets. Building Stronger Communities.',
@@ -135,8 +134,9 @@ export const heroSlides: HeroSlide[] = [
     backdrop: '#e8f0ea',
     objectFit: 'cover',
     objectPosition: '50% 50%',
-    objectPositionMobile: '88% 62%',
-    mobileBlur: '9px',
+    objectPositionMobile: '100% 62%',
+    mobileZoom: 2.2,
+    mobileOrigin: '50% 78%',
     kicker: 'Together for a',
     title: 'Stronger Lagos',
     subtitle: 'Mobilizing Tradesmen. Empowering Markets. Supporting Professionals.',
@@ -165,8 +165,9 @@ export const heroSlides: HeroSlide[] = [
     backdrop: '#f3d2ae',
     objectFit: 'cover',
     objectPosition: '50% 50%',
-    objectPositionMobile: '70% 34%',
-    mobileBlur: '9px',
+    objectPositionMobile: '76% 34%',
+    mobileZoom: 1.5,
+    mobileOrigin: '50% 10%',
     kicker: 'Leadership • Service • Development',
     title: 'Lagos Rising',
     subtitle: 'Dr. Kadri Obafemi Hamzat for Governor of Lagos State.',
@@ -181,7 +182,8 @@ export const heroSlides: HeroSlide[] = [
     objectFit: 'cover',
     objectPosition: '50% 50%',
     objectPositionMobile: '88% 36%',
-    mobileBlur: '9px',
+    mobileZoom: 1.6,
+    mobileOrigin: '50% 45%',
     kicker: 'A Stronger Nigeria | A Brighter Tomorrow',
     title: 'Continuity 2027',
     subtitle: 'President Bola Ahmed Tinubu for a second term.',

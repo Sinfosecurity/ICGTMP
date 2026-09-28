@@ -119,7 +119,8 @@ export function Hero({ onJoin }: Props) {
                   '--hero-fit': slide.objectFit,
                   '--photo-pos': slide.objectPosition,
                   '--photo-pos-mobile': slide.objectPositionMobile,
-                  '--hero-blur': slide.mobileBlur,
+                  '--hero-zoom': slide.mobileZoom ?? 1,
+                  '--hero-origin': slide.mobileOrigin ?? '50% 50%',
                 } as CSSProperties
               }
             >
