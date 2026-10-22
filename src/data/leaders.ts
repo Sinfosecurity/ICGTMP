@@ -99,12 +99,12 @@ export const leaders: Leader[] = [
     photo: '/leaders/saheed-lawal.webp',
   },
   {
-    slug: 'bola-foriletie',
-    name: 'Hon. Barr. Bola Foriletie',
+    slug: 'bidemi-balogun',
+    name: 'Hon. Barr. Bidemi Balogun',
     role: 'Diaspora Coordinator, United Kingdom',
     group: 'diaspora',
     order: 8,
-    photo: '/leaders/bola-foriletie.webp',
+    photo: '/leaders/bidemi-balogun.webp',
   },
 ];
 
