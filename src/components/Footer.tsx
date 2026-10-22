@@ -1,4 +1,4 @@
-import { MapPin } from 'lucide-react';
+import { MapPin, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { mapsUrl, navigation, org } from '../data/site';
 import { Brand } from './Brand';
@@ -36,6 +36,16 @@ export function Footer() {
                   {line}
                   <br />
                 </span>
+              ))}
+            </span>
+          </p>
+          <p className="footerPhones">
+            <Phone size={15} aria-hidden="true" />
+            <span>
+              {org.phones.map((phone) => (
+                <a key={phone.tel} href={`tel:${phone.tel}`}>
+                  {phone.display}
+                </a>
               ))}
             </span>
           </p>

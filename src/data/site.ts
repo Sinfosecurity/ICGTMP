@@ -5,9 +5,13 @@ export const org = {
   banner: 'For a Greater Lagos and a Renewed Nigeria',
   affiliation: 'In support of APC Lagos stakeholders & leadership',
   email: 'info@icgtmp.org',
+  phones: [
+    { display: '0703 652 1422', tel: '+2347036521422' },
+    { display: '0802 757 1429', tel: '+2348027571429' },
+  ],
   whatsappGroup: 'https://chat.whatsapp.com/EujQVqVv4N6HcsTkYbtm8V',
   addressLines: [
-    '1 Akeusola Street',
+    '5 Akeusola Street',
     "Ita'le Market",
     'Epe Waterfront',
     'Lagos State, Nigeria',
@@ -15,7 +19,7 @@ export const org = {
 };
 
 export const mapsUrl =
-  "https://www.google.com/maps/search/?api=1&query=1%20Akeusola%20Street%20Ita'le%20Market%20Epe%20Waterfront%20Lagos";
+  "https://www.google.com/maps/search/?api=1&query=5%20Akeusola%20Street%20Ita'le%20Market%20Epe%20Waterfront%20Lagos";
 
 export const membershipCategories = [
   'Markets & Traders',
@@ -62,7 +66,7 @@ export const navigation: NavItem[] = [
     label: 'Leadership',
     to: '/leadership',
     title: 'Leadership | ICGTMP',
-    description: 'Hon. Farihuddin Arebi, Convener, and Hon. Jamiu Arowosegbe, Director-General.',
+    description: 'Conveners, Director-General, Secretary, and diaspora coordinators of ICGTMP.',
     header: true,
     footer: true,
   },

@@ -26,7 +26,7 @@ export function leaderInitials(name: string): string {
   const words = name
     .split(/\s+/)
     .map((word) => word.replace(/\./g, ''))
-    .filter((word) => word && !/^(hon|engr|barr)$/i.test(word));
+    .filter((word) => word && !/^(hon|engr|barr|mr|alhaji)$/i.test(word));
   const first = words[0]?.[0] ?? '';
   const last = words.length > 1 ? words[words.length - 1][0] : (words[0]?.[1] ?? '');
   return `${first}${last}`.toUpperCase();
@@ -49,19 +49,27 @@ export const leaders: Leader[] = [
     objectPositionMobile: '50% 50%',
   },
   {
-    slug: 'paul-sola-ogini',
-    name: 'Paul Sola Ogini',
+    slug: 'mujaid-adeyemi',
+    name: 'Alhaji Mujaid Adeyemi',
     role: 'Convener',
     group: 'leadership',
     order: 2,
-    photo: '/leaders/paul-sola-ogini.webp',
+    photo: '/leaders/mujaid-adeyemi.webp',
+  },
+  {
+    slug: 'paul-sola-oginni',
+    name: 'Mr. Paul Sola Oginni',
+    role: 'Convener',
+    group: 'leadership',
+    order: 3,
+    photo: '/leaders/paul-sola-oginni.webp',
   },
   {
     slug: 'jamiu-arowosegbe',
     name: 'Hon. Jamiu Arowosegbe',
     role: 'Director-General',
     group: 'leadership',
-    order: 3,
+    order: 4,
     photo: '/leaders/jamiu-arowosegbe.webp',
     objectPosition: '50% 18%',
     objectPositionMobile: '50% 16%',
@@ -71,7 +79,7 @@ export const leaders: Leader[] = [
     name: 'Hon. Akeem Keshinro',
     role: 'Secretary',
     group: 'leadership',
-    order: 4,
+    order: 5,
     photo: '/leaders/akeem-keshinro.webp',
   },
   {
@@ -79,7 +87,7 @@ export const leaders: Leader[] = [
     name: 'Engr. Adebayo Shobaloju',
     role: 'Deputy Director-General, Diaspora',
     group: 'diaspora',
-    order: 5,
+    order: 6,
     photo: '/leaders/adebayo-shobaloju.webp',
   },
   {
@@ -87,7 +95,7 @@ export const leaders: Leader[] = [
     name: 'Hon. Saheed Lawal',
     role: 'Diaspora Coordinator, Canada',
     group: 'diaspora',
-    order: 6,
+    order: 7,
     photo: '/leaders/saheed-lawal.webp',
   },
   {
@@ -95,7 +103,7 @@ export const leaders: Leader[] = [
     name: 'Hon. Barr. Bola Foriletie',
     role: 'Diaspora Coordinator, United Kingdom',
     group: 'diaspora',
-    order: 7,
+    order: 8,
     photo: '/leaders/bola-foriletie.webp',
   },
 ];

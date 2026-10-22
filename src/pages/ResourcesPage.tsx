@@ -37,7 +37,7 @@ export function ResourcesPage() {
         <article>
           <h2>Contact</h2>
           <p>
-            1 Akeusola Street, Ita&apos;le Market, Epe Waterfront. Email info@icgtmp.org, or{' '}
+            {org.addressLines.slice(0, 3).join(', ')}. Email info@icgtmp.org, or{' '}
             <a href={org.whatsappGroup} target="_blank" rel="noopener noreferrer">
               join the WhatsApp group
             </a>

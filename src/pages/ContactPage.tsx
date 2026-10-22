@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MapPin, Mail } from 'lucide-react';
+import { MapPin, Mail, Phone } from 'lucide-react';
 import { useCallback, useRef, useState, type FormEvent } from 'react';
 import { mapsUrl, org } from '../data/site';
 import { mailtoHref } from '../lib/form';
@@ -177,6 +177,14 @@ export function ContactPage() {
           </p>
           <p>
             <MapPin size={16} aria-hidden="true" /> {org.addressLines.join(', ')}
+          </p>
+          <p className="contactPhones">
+            <Phone size={16} aria-hidden="true" />
+            {org.phones.map((phone) => (
+              <a key={phone.tel} href={`tel:${phone.tel}`}>
+                {phone.display}
+              </a>
+            ))}
           </p>
           <p>
             <Mail size={16} aria-hidden="true" /> <a href={`mailto:${org.email}`}>{org.email}</a>

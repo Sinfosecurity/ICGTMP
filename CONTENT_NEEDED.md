@@ -11,7 +11,8 @@ Items marked for confirmation in the programme-page copy. They are not published
 
 These files are not in the site. The cards show a monogram until the portrait is added. Do not substitute a stock photo or another person's image.
 
-- `/leaders/paul-sola-ogini.webp` — Paul Sola Ogini, Convener
+- `/leaders/mujaid-adeyemi.webp` — Alhaji Mujaid Adeyemi, Convener
+- `/leaders/paul-sola-oginni.webp` — Mr. Paul Sola Oginni, Convener
 - `/leaders/akeem-keshinro.webp` — Hon. Akeem Keshinro, Secretary
 - `/leaders/saheed-lawal.webp` — Hon. Saheed Lawal, Diaspora Coordinator, Canada
 - `/leaders/bola-foriletie.webp` — Hon. Barr. Bola Foriletie, Diaspora Coordinator, United Kingdom
