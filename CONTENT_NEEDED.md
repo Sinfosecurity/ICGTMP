@@ -13,6 +13,5 @@ These files are not in the site. The cards show a monogram until the portrait is
 
 - `/leaders/paul-sola-ogini.webp` — Paul Sola Ogini, Convener
 - `/leaders/akeem-keshinro.webp` — Hon. Akeem Keshinro, Secretary
-- `/leaders/adebayo-shobaloju.webp` — Engr. Adebayo Shobaloju, Deputy Director-General, Diaspora
 - `/leaders/saheed-lawal.webp` — Hon. Saheed Lawal, Diaspora Coordinator, Canada
 - `/leaders/bola-foriletie.webp` — Hon. Barr. Bola Foriletie, Diaspora Coordinator, United Kingdom
