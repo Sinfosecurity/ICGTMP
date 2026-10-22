@@ -1,5 +1,5 @@
 import { MessageCircle } from 'lucide-react';
-import { org } from '../data/content';
+import { org } from '../data/site';
 
 type Props = {
   className?: string;

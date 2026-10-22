@@ -4,10 +4,10 @@ function headerOffset(): number {
 }
 
 function resolveScrollId(id: string): string {
-  if (id !== 'leadership' && id !== 'news-and-events') return id;
+  if (id !== 'home-leadership' && id !== 'home-news') return id;
   const row = document.getElementById('home-lower');
-  const news = document.getElementById('news-and-events');
-  const lead = document.getElementById('leadership');
+  const news = document.getElementById('home-news');
+  const lead = document.getElementById('home-leadership');
   if (!row || !news || !lead) return id;
   const sameRow = Math.abs(news.getBoundingClientRect().top - lead.getBoundingClientRect().top) < 48;
   return sameRow ? 'home-lower' : id;

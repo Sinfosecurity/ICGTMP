@@ -1,13 +1,10 @@
 import { ArrowRight, HeartHandshake, Store, Users } from 'lucide-react';
-import type { MembershipCategory } from '../data/content';
 import { imageAlts, images } from '../data/images';
+import { useJoin } from '../routes/JoinProvider';
 import { CoverImage } from './CoverImage';
 
-type Props = {
-  onJoin: (category?: MembershipCategory) => void;
-};
-
-export function JoinPanel({ onJoin }: Props) {
+export function JoinPanel() {
+  const onJoin = useJoin();
   return (
     <aside className="joinPanel">
       <CoverImage

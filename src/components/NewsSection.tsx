@@ -1,9 +1,9 @@
-import { newsItems } from '../data/content';
+import { newsItems } from '../data/news';
 import { CoverImage } from './CoverImage';
 
 export function NewsSection() {
   return (
-    <section id="news-and-events" className="newsPanel">
+    <section id="home-news" className="newsPanel">
       <div className="panelTitle">
         <h2>LATEST NEWS &amp; ACTIVITIES</h2>
       </div>
@@ -23,7 +23,7 @@ export function NewsSection() {
           </div>
           <div>
             <h3>{item.title}</h3>
-            <p className="newsMeta">{item.dateLabel}</p>
+            {item.date ? <p className="newsMeta">{item.date}</p> : null}
             <p>{item.summary}</p>
           </div>
         </article>

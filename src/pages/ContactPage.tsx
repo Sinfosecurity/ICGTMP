@@ -1,6 +1,7 @@
+import { Link } from 'react-router-dom';
 import { MapPin, Mail } from 'lucide-react';
 import { useCallback, useRef, useState, type FormEvent } from 'react';
-import { mapsUrl, org } from '../data/content';
+import { mapsUrl, org } from '../data/site';
 import { mailtoHref } from '../lib/form';
 import { submitMessage } from '../lib/formTransport';
 import { checkCooldown, clearAttempts, describeWait, recordAttempt } from '../lib/rateLimit';
@@ -271,7 +272,7 @@ export function ContactPage() {
           </FormField>
 
           <p className="formPrivacy">
-            This message is sent to {org.email}. Read the <a href="#privacy">Privacy Policy</a>.
+            This message is sent to {org.email}. Read the <Link to="/privacy">Privacy Policy</Link>.
           </p>
 
           {submitError ? (

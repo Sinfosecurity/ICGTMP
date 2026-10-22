@@ -1,62 +1,34 @@
-import type { RouteState } from './routing';
+import { newsArticle } from '../data/news';
+import { programById } from '../data/programs';
+import { navigation, notFoundMeta, type NavItem } from '../data/site';
 
-const baseTitle = 'ICGTMP | Strength. Stability. Support.';
-const baseDescription =
-  'Independent Campaign Group for Tradesmen, Markets & Professionals — connecting grassroots communities, markets, artisans, entrepreneurs and professionals across Lagos East.';
+export type PageMeta = Pick<NavItem, 'title' | 'description'>;
 
-const pages: Record<string, { title: string; description: string }> = {
-  home: { title: baseTitle, description: baseDescription },
-  about: {
-    title: 'About | ICGTMP',
-    description: 'Who ICGTMP is and who the group serves across Lagos East.',
-  },
-  programs: {
-    title: 'Programs | ICGTMP',
-    description: 'Markets, artisans, professionals, and women and youth programmes across Lagos East.',
-  },
-  resources: {
-    title: 'Resources | ICGTMP',
-    description: 'How to join ICGTMP, find the Lagos East structure, and contact the group.',
-  },
-  structure: {
-    title: 'Our Structure | ICGTMP',
-    description: 'Lagos East LGAs and LCDAs where ICGTMP organizes at the grassroots.',
-  },
-  contact: {
-    title: 'Contact | ICGTMP',
-    description:
-      'Write to ICGTMP at Ita’le Market, Epe Waterfront, email info@icgtmp.org, or join the WhatsApp group.',
-  },
-  privacy: {
-    title: 'Privacy Policy | ICGTMP',
-    description: 'How ICGTMP handles membership and contact form submissions.',
-  },
-  terms: {
-    title: 'Terms of Use | ICGTMP',
-    description: 'Terms for using the ICGTMP public website.',
-  },
-  sitemap: {
-    title: 'Site Map | ICGTMP',
-    description: 'All public pages on the ICGTMP website.',
-  },
-  notfound: {
-    title: 'Page not found | ICGTMP',
-    description: 'That address is not a page on the ICGTMP website.',
-  },
-};
+export function metaForPath(pathname: string): PageMeta {
+  const path = pathname.length > 1 ? pathname.replace(/\/+$/, '') : '/';
+  const nav = navigation.find((item) => item.to === path);
+  if (nav) return { title: nav.title, description: nav.description };
 
-export function metaForRoute(route: RouteState) {
-  if (route.view === 'legal' && route.legal) return pages[route.legal] ?? pages.home;
-  return pages[route.view] ?? pages.home;
+  const programMatch = /^\/programs\/([^/]+)$/.exec(path);
+  if (programMatch) {
+    const program = programById(decodeURIComponent(programMatch[1]));
+    if (!program) return notFoundMeta;
+    return { title: `${program.title} | ICGTMP`, description: program.aim };
+  }
+
+  const newsMatch = /^\/news\/([^/]+)$/.exec(path);
+  if (newsMatch) {
+    const article = newsArticle(decodeURIComponent(newsMatch[1]));
+    if (!article) return notFoundMeta;
+    return { title: `${article.title} | ICGTMP`, description: article.summary };
+  }
+
+  return notFoundMeta;
 }
 
-export function applyDocumentMeta(route: RouteState) {
-  const meta = metaForRoute(route);
+export function applyDocumentMeta(meta: PageMeta) {
   document.title = meta.title;
-  const description = document.querySelector('meta[name="description"]');
-  if (description) description.setAttribute('content', meta.description);
-  const ogTitle = document.querySelector('meta[property="og:title"]');
-  if (ogTitle) ogTitle.setAttribute('content', meta.title);
-  const ogDescription = document.querySelector('meta[property="og:description"]');
-  if (ogDescription) ogDescription.setAttribute('content', meta.description);
+  document.querySelector('meta[name="description"]')?.setAttribute('content', meta.description);
+  document.querySelector('meta[property="og:title"]')?.setAttribute('content', meta.title);
+  document.querySelector('meta[property="og:description"]')?.setAttribute('content', meta.description);
 }

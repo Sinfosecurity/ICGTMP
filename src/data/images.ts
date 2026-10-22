@@ -2,33 +2,33 @@
  * Optimized local images. Display size ×2, WebP first.
  */
 export const images = {
-  logo: './resources/icgtmp-logo.webp',
-  emblem: './resources/icgtmp-emblem.webp',
-  og: './resources/og-image.webp',
-  hero: './resources/hero-05.webp',
-  hero05: './resources/hero-05.webp',
-  hero00: './resources/hero-00.webp',
-  hero01: './resources/hero-01.webp',
-  hero02: './resources/hero-02.webp',
-  hero03: './resources/hero-03.webp',
-  hero04: './resources/hero-04.webp',
-  markets: './resources/sector-markets-800.webp',
-  artisans: './resources/sector-artisans-800.webp',
-  professionals: './resources/sector-professionals-800.webp',
-  womenYouth: './resources/sector-women-youth-800.webp',
-  community: './resources/community-800.webp',
-  communitySrcSet: './resources/community-800.webp 800w, ./resources/community-1200.webp 1200w',
-  leaderArebi: './resources/leader-arebi-official.webp',
-  leaderArowosegbe: './resources/leader-arowosegbe.webp',
+  logo: '/resources/icgtmp-logo.webp',
+  emblem: '/resources/icgtmp-emblem.webp',
+  og: '/resources/og-image.webp',
+  hero: '/resources/hero-05.webp',
+  hero05: '/resources/hero-05.webp',
+  hero00: '/resources/hero-00.webp',
+  hero01: '/resources/hero-01.webp',
+  hero02: '/resources/hero-02.webp',
+  hero03: '/resources/hero-03.webp',
+  hero04: '/resources/hero-04.webp',
+  markets: '/resources/sector-markets-800.webp',
+  artisans: '/resources/sector-artisans-800.webp',
+  professionals: '/resources/sector-professionals-800.webp',
+  womenYouth: '/resources/sector-women-youth-800.webp',
+  community: '/resources/community-800.webp',
+  communitySrcSet: '/resources/community-800.webp 800w, /resources/community-1200.webp 1200w',
+  leaderArebi: '/resources/leader-arebi-official.webp',
+  leaderArowosegbe: '/resources/leader-arowosegbe.webp',
 } as const;
 
 export const sectorSrcSet = {
-  markets: './resources/sector-markets-480.webp 480w, ./resources/sector-markets-800.webp 800w',
-  artisans: './resources/sector-artisans-480.webp 480w, ./resources/sector-artisans-800.webp 800w',
+  markets: '/resources/sector-markets-480.webp 480w, /resources/sector-markets-800.webp 800w',
+  artisans: '/resources/sector-artisans-480.webp 480w, /resources/sector-artisans-800.webp 800w',
   professionals:
-    './resources/sector-professionals-480.webp 480w, ./resources/sector-professionals-800.webp 800w',
+    '/resources/sector-professionals-480.webp 480w, /resources/sector-professionals-800.webp 800w',
   womenYouth:
-    './resources/sector-women-youth-480.webp 480w, ./resources/sector-women-youth-800.webp 800w',
+    '/resources/sector-women-youth-480.webp 480w, /resources/sector-women-youth-800.webp 800w',
 } as const;
 
 export const imageAlts = {

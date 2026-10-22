@@ -1,4 +1,4 @@
-import { org } from './content';
+import { org } from './site';
 import { imageAlts, images } from './images';
 
 export type HeroHitAction = 'join' | 'hash' | 'external';
@@ -71,7 +71,7 @@ export const heroSlides: HeroSlide[] = [
       'Mobilizing traders, market communities, artisans, entrepreneurs and professionals across Lagos East.',
     hits: [
       { id: 'join', label: 'Join ICGTMP', action: 'join', box: { left: '4.4%', top: '71.2%', width: '13.6%', height: '11%' } },
-      { id: 'about', label: 'Learn More', action: 'hash', href: '#about', box: { left: '18.6%', top: '71.2%', width: '12.4%', height: '11%' } },
+      { id: 'about', label: 'Learn More', action: 'hash', href: '/about', box: { left: '18.6%', top: '71.2%', width: '12.4%', height: '11%' } },
       {
         id: 'whatsapp',
         label: 'Join WhatsApp group',
@@ -151,7 +151,7 @@ export const heroSlides: HeroSlide[] = [
         id: 'about',
         label: 'Learn More',
         action: 'hash',
-        href: '#about',
+        href: '/about',
         box: { left: '33.2%', top: '75.6%', width: '14%', height: '9.4%' },
       },
     ],

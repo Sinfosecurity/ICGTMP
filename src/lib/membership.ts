@@ -1,4 +1,4 @@
-import type { MembershipCategory } from '../data/content';
+import type { MembershipCategory } from '../data/site';
 import { lgaDirectory, type LgaName } from '../data/locations';
 import {
   LIMITS,

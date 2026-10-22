@@ -1,5 +1,5 @@
 import { BarChart3, IdCard, Network, ShieldCheck, Users } from 'lucide-react';
-import { impactGoals } from '../data/content';
+import { goals } from '../data/goals';
 
 const icons = {
   users: Users,
@@ -17,12 +17,12 @@ export function ImpactGoals() {
         <br />
         GOALS
       </div>
-      {impactGoals.map((item) => {
+      {goals.map((item) => {
         const Icon = icons[item.icon];
         return (
           <div className="impactItem" key={item.id}>
             <Icon size={24} strokeWidth={1.6} aria-hidden="true" />
-            {item.value ? <b>{item.value}</b> : null}
+            {item.figure ? <b>{item.figure}</b> : null}
             <strong>{item.title}</strong>
             <small>{item.detail}</small>
           </div>

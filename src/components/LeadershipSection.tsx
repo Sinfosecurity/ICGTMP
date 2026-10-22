@@ -1,10 +1,11 @@
+import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { leaders } from '../data/content';
+import { leaders } from '../data/leaders';
 import { CoverImage } from './CoverImage';
 
 export function LeadershipSection() {
   return (
-    <section id="leadership" className="leadersPanel">
+    <section id="home-leadership" className="leadersPanel">
       <h2>OUR LEADERSHIP</h2>
       <p>Committed. Experienced. Grassroots focused.</p>
       <div className="leaders">
@@ -30,9 +31,9 @@ export function LeadershipSection() {
       <p className="leadershipNote">
         Women and youth coordinators will be listed here when those appointments are published.
       </p>
-      <a className="goldOutline" href="#leadership">
+      <Link className="goldOutline" to="/leadership">
         Meet the Leadership Team <ArrowRight size={15} />
-      </a>
+      </Link>
     </section>
   );
 }

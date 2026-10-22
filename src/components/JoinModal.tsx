@@ -1,6 +1,7 @@
+import { Link } from 'react-router-dom';
 import { ArrowRight, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
-import { membershipCategories, org, type MembershipCategory } from '../data/content';
+import { membershipCategories, org, type MembershipCategory } from '../data/site';
 import { lgaDirectory, lgaNames, type LgaName } from '../data/locations';
 import { mailtoHref } from '../lib/form';
 import { focusables, lockPageScroll, trapTab } from '../lib/scrollLock';
@@ -277,7 +278,7 @@ export function JoinModal({ open, preset, onClose }: Props) {
               Your details go to the ICGTMP membership register so coordinators can follow up.
               Fields marked <span aria-hidden="true">*</span>
               <span className="srOnly">with an asterisk</span> are required. Read the{' '}
-              <a href="#privacy" onClick={onClose}>Privacy Policy</a>.
+              <Link to="/privacy" onClick={onClose}>Privacy Policy</Link>.
             </p>
             <form onSubmit={onSubmit} noValidate aria-busy={sending}>
               {showSummary ? (

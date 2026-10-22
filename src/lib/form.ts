@@ -1,4 +1,4 @@
-import { org } from '../data/content';
+import { org } from '../data/site';
 
 export type FormPayload = Record<string, string>;
 

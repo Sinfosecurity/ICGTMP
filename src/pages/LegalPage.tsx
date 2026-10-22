@@ -1,12 +1,10 @@
-import { navItems, org } from '../data/content';
-import type { LegalSlug } from '../lib/routing';
+import { Link } from 'react-router-dom';
+import { navigation, org } from '../data/site';
 import { PageShell } from '../components/PageShell';
 
-type Props = {
-  slug: LegalSlug;
-};
+export type LegalSlug = 'privacy' | 'terms' | 'sitemap';
 
-const copy: Record<LegalSlug, { title: string; body: string[] }> = {
+const copy: Record<Exclude<LegalSlug, 'sitemap'>, { title: string; body: string[] }> = {
   privacy: {
     title: 'Privacy Policy',
     body: [
@@ -23,37 +21,33 @@ const copy: Record<LegalSlug, { title: string; body: string[] }> = {
       'Content on this site may be updated as official materials are supplied. Do not treat unpublished programme details as final policy.',
     ],
   },
-  sitemap: {
-    title: 'Site Map',
-    body: [],
-  },
+};
+
+type Props = {
+  slug: LegalSlug;
 };
 
 export function LegalPage({ slug }: Props) {
+  if (slug === 'sitemap') {
+    return (
+      <PageShell kicker="ICGTMP" title="Site Map">
+        <ul className="plainList">
+          {navigation.map((item) => (
+            <li key={item.to}>
+              <Link to={item.to}>{item.label}</Link>
+            </li>
+          ))}
+        </ul>
+      </PageShell>
+    );
+  }
+
   const page = copy[slug];
   return (
     <PageShell kicker="ICGTMP" title={page.title}>
       {page.body.map((paragraph) => (
         <p key={paragraph}>{paragraph}</p>
       ))}
-      {slug === 'sitemap' && (
-        <ul className="plainList">
-          {navItems.map((item) => (
-            <li key={item.id}>
-              <a href={`#${item.id}`}>{item.label}</a>
-            </li>
-          ))}
-          <li>
-            <a href="#structure">LGAs &amp; LCDAs</a>
-          </li>
-          <li>
-            <a href="#privacy">Privacy Policy</a>
-          </li>
-          <li>
-            <a href="#terms">Terms of Use</a>
-          </li>
-        </ul>
-      )}
     </PageShell>
   );
 }

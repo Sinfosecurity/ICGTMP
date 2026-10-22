@@ -1,4 +1,6 @@
-import { leaders, org, sectors } from '../data/content';
+import { leaders } from '../data/leaders';
+import { programs } from '../data/programs';
+import { org } from '../data/site';
 import { PageShell } from '../components/PageShell';
 
 export function AboutPage() {
@@ -15,7 +17,7 @@ export function AboutPage() {
       </p>
       <h2>Who we serve</h2>
       <ul className="plainList">
-        {sectors.map((sector) => (
+        {programs.map((sector) => (
           <li key={sector.id}>
             <strong>{sector.title}.</strong> {sector.description}
           </li>

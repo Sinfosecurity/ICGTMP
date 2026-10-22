@@ -1,5 +1,6 @@
 import { MapPin } from 'lucide-react';
-import { mapsUrl, org } from '../data/content';
+import { Link } from 'react-router-dom';
+import { mapsUrl, navigation, org } from '../data/site';
 import { Brand } from './Brand';
 import { WhatsAppJoinLink } from './WhatsAppJoinLink';
 
@@ -17,13 +18,13 @@ export function Footer() {
         </div>
         <div className="footerLinks">
           <h2>Quick Links</h2>
-          <a href="#about">About</a>
-          <a href="#leadership">Leadership</a>
-          <a href="#programs">Programs</a>
-          <a href="#news-and-events">News &amp; Events</a>
-          <a href="#resources">Resources</a>
-          <a href="#structure">LGAs &amp; LCDAs</a>
-          <a href="#contact">Contact</a>
+          {navigation
+            .filter((item) => item.footer)
+            .map((item) => (
+              <Link key={item.to} to={item.to}>
+                {item.label}
+              </Link>
+            ))}
         </div>
         <div className="footerContact">
           <h2>Contact Us</h2>
@@ -54,9 +55,13 @@ export function Footer() {
       <div className="footerBottom">
         <span>© 2026 {org.shortName}. All rights reserved.</span>
         <nav aria-label="Legal">
-          <a href="#privacy">Privacy Policy</a>
-          <a href="#terms">Terms of Use</a>
-          <a href="#sitemap">Site Map</a>
+          {navigation
+            .filter((item) => item.legal)
+            .map((item) => (
+              <Link key={item.to} to={item.to}>
+                {item.label}
+              </Link>
+            ))}
         </nav>
       </div>
     </footer>

@@ -1,16 +1,14 @@
 import { Menu, X } from 'lucide-react';
 import { useEffect, useId, useRef, useState } from 'react';
-import { navItems, org } from '../data/content';
-import type { RouteState } from '../lib/routing';
+import { NavLink, useLocation } from 'react-router-dom';
+import { navigation, org } from '../data/site';
 import { focusables, lockPageScroll, trapTab } from '../lib/scrollLock';
+import { useJoin } from '../routes/JoinProvider';
 import { Brand } from './Brand';
 
-type Props = {
-  route: RouteState;
-  onJoin: () => void;
-};
-
-export function Header({ route, onJoin }: Props) {
+export function Header() {
+  const onJoin = useJoin();
+  const { pathname } = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuId = useId();
   const menuBtnRef = useRef<HTMLButtonElement>(null);
@@ -20,7 +18,7 @@ export function Header({ route, onJoin }: Props) {
 
   useEffect(() => {
     setMenuOpen(false);
-  }, [route]);
+  }, [pathname]);
 
   useEffect(() => {
     if (!menuOpen) {
@@ -49,18 +47,6 @@ export function Header({ route, onJoin }: Props) {
     };
   }, [menuOpen]);
 
-  const isActive = (id: string) => {
-    if (id === 'home') return route.view === 'home' && (route.section === 'home' || route.section === '');
-    if (id === 'about') return route.view === 'about';
-    if (id === 'resources') return route.view === 'resources';
-    if (id === 'programs') return route.view === 'programs';
-    if (id === 'contact') return route.view === 'contact';
-    if (id === 'our-structure') {
-      return route.view === 'structure' || (route.view === 'home' && route.section === 'our-structure');
-    }
-    return route.view === 'home' && route.section === id;
-  };
-
   return (
     <header ref={headerRef} className="siteHeader">
       <div className="headerTop">
@@ -75,16 +61,23 @@ export function Header({ route, onJoin }: Props) {
           aria-controls={menuId}
           onClick={() => setMenuOpen((open) => !open)}
         >
-          {menuOpen ? <X size={22} /> : <Menu size={22} />}
+          {menuOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
         </button>
       </div>
       <nav ref={navRef} id={menuId} className={menuOpen ? 'mainNav open' : 'mainNav'} aria-label="Primary">
-        {navItems.map((item) => (
-          <a key={item.id} className={isActive(item.id) ? 'active' : undefined} href={`#${item.id}`}>
-            {item.label}
-          </a>
-        ))}
-        <button type="button" className="goldCta" data-join-trigger onClick={onJoin}>
+        {navigation
+          .filter((item) => item.header)
+          .map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === '/'}
+              className={({ isActive }) => (isActive ? 'active' : undefined)}
+            >
+              {item.label}
+            </NavLink>
+          ))}
+        <button type="button" className="goldCta" data-join-trigger onClick={() => onJoin()}>
           Join ICGTMP
         </button>
       </nav>

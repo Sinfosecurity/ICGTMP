@@ -8,17 +8,17 @@ import {
   type KeyboardEvent,
   type PointerEvent,
 } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { HERO_FADE_MS, HERO_INTERVAL_MS, heroSlides, type HeroHit } from '../data/heroSlides';
-
-type Props = {
-  onJoin: () => void;
-};
+import { useJoin } from '../routes/JoinProvider';
 
 function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-export function Hero({ onJoin }: Props) {
+export function Hero() {
+  const onJoin = useJoin();
+  const navigate = useNavigate();
   const [index, setIndex] = useState(0);
   const [hidden, setHidden] = useState(() => document.hidden);
   const [reducedMotion, setReducedMotion] = useState(prefersReducedMotion);
@@ -58,7 +58,7 @@ export function Hero({ onJoin }: Props) {
       return;
     }
     if (hit.action === 'hash' && hit.href) {
-      window.location.hash = hit.href;
+      navigate(hit.href);
       return;
     }
     if (hit.action === 'external' && hit.href) {
@@ -151,10 +151,10 @@ export function Hero({ onJoin }: Props) {
                   <div className="heroActions">
                     {slide.hits.map((hit, hitIndex) =>
                       hit.action === 'hash' && hit.href ? (
-                        <a
+                        <Link
                           key={hit.id}
                           className={hitIndex === 0 ? 'goldPill' : 'ghostPill'}
-                          href={hit.href}
+                          to={hit.href}
                           tabIndex={isActive ? undefined : -1}
                           onClick={(event) => {
                             // A swipe that began on the button is not a tap.
@@ -165,7 +165,7 @@ export function Hero({ onJoin }: Props) {
                           }}
                         >
                           {hit.label}
-                        </a>
+                        </Link>
                       ) : (
                         <button
                           key={hit.id}
@@ -192,11 +192,11 @@ export function Hero({ onJoin }: Props) {
                 <div className="heroHits">
                   {slide.hits.map((hit) =>
                     hit.action === 'hash' && hit.href ? (
-                      <a
+                      <Link
                         key={hit.id}
                         className="heroHit"
                         style={hit.box}
-                        href={hit.href}
+                        to={hit.href}
                         aria-label={hit.label}
                         data-join-trigger={hit.id === 'join' ? true : undefined}
                         onClick={(event) => {
@@ -207,7 +207,7 @@ export function Hero({ onJoin }: Props) {
                         }}
                       >
                         {hit.label}
-                      </a>
+                      </Link>
                     ) : (
                       <button
                         key={hit.id}

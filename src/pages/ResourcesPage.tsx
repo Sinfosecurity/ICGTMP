@@ -1,4 +1,5 @@
-import { org } from '../data/content';
+import { Link } from 'react-router-dom';
+import { org } from '../data/site';
 import { PageShell } from '../components/PageShell';
 
 export function ResourcesPage() {
@@ -16,21 +17,21 @@ export function ResourcesPage() {
             info@icgtmp.org.
           </p>
           <p>
-            <a href="#contact">Open the contact page</a> or use Join ICGTMP in the header.
+            <Link to="/contact">Open the contact page</Link> or use Join ICGTMP in the header.
           </p>
         </article>
         <article>
           <h2>Lagos East structure</h2>
           <p>5 LGAs and 11 LCDAs. Use this directory when filling the membership form.</p>
           <p>
-            <a href="#structure">View LGAs and LCDAs</a>
+            <Link to="/structure">View LGAs and LCDAs</Link>
           </p>
         </article>
         <article>
           <h2>Programmes</h2>
           <p>Markets, artisans, professionals, and women and youth each have a live organising track.</p>
           <p>
-            <a href="#programs">Read the programme notes</a>
+            <Link to="/programs">Read the programme notes</Link>
           </p>
         </article>
         <article>
@@ -43,7 +44,7 @@ export function ResourcesPage() {
             .
           </p>
           <p>
-            <a href="#contact">Contact ICGTMP</a>
+            <Link to="/contact">Contact ICGTMP</Link>
           </p>
         </article>
       </div>

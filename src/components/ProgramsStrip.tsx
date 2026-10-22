@@ -1,14 +1,15 @@
-import { programStrip } from '../data/content';
+import { Link } from 'react-router-dom';
+import { programPath, programs } from '../data/programs';
 import { SectorIcon } from './SectorIcon';
 
 export function ProgramsStrip() {
   return (
     <nav className="programStrip" aria-label="Programme shortcuts">
-      {programStrip.map((item) => (
-        <a key={item.label} href={item.href}>
+      {programs.map((item) => (
+        <Link key={item.id} to={programPath(item.id)}>
           <SectorIcon name={item.icon} />
-          <b>{item.label}</b>
-        </a>
+          <b>{item.stripLabel}</b>
+        </Link>
       ))}
     </nav>
   );

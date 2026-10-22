@@ -1,5 +1,6 @@
 import { ArrowRight } from 'lucide-react';
-import { sectors } from '../data/content';
+import { Link } from 'react-router-dom';
+import { programPath, programs } from '../data/programs';
 import { CoverImage } from './CoverImage';
 import { SectorIcon } from './SectorIcon';
 
@@ -10,7 +11,7 @@ export function SectorCards() {
         Who we serve
       </h2>
       <div className="sectorGrid">
-        {sectors.map((sector) => (
+        {programs.map((sector) => (
           <article key={sector.id} className="sectorCard">
             <div className="sectorPhoto">
               <CoverImage
@@ -30,9 +31,9 @@ export function SectorCards() {
             <div className="sectorBody">
               <h3>{sector.title}</h3>
               <p>{sector.description}</p>
-              <a href={sector.href}>
+              <Link to={programPath(sector.id)}>
                 Learn More <ArrowRight size={14} />
-              </a>
+              </Link>
             </div>
           </article>
         ))}

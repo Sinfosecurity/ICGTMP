@@ -1,10 +1,11 @@
+import { Link } from 'react-router-dom';
 import { ArrowRight, Handshake, MapPin, Users } from 'lucide-react';
 import { eastLgaNames } from '../data/lagosLgas';
 import { LagosMap } from './LagosMap';
 
 export function LagosEastPresence() {
   return (
-    <section id="our-structure" className="presenceSection">
+    <section id="home-structure" className="presenceSection">
       <div className="presenceIntro">
         <h2>
           OUR PRESENCE
@@ -15,9 +16,9 @@ export function LagosEastPresence() {
           Working across 5 Local Government Areas and associated LCDAs, building strong grassroots
           networks across communities in Lagos East.
         </p>
-        <a className="goldSmall" href="#structure">
+        <Link className="goldSmall" to="/structure">
           View LGAs &amp; LCDAs <ArrowRight size={15} />
-        </a>
+        </Link>
       </div>
       <div className="presenceMap">
         <LagosMap />
@@ -44,9 +45,9 @@ export function LagosEastPresence() {
             <small>At the grassroots</small>
           </p>
         </div>
-        <a className="greenPill" href="#structure">
+        <Link className="greenPill" to="/structure">
           Explore Our Structure <ArrowRight size={15} />
-        </a>
+        </Link>
       </div>
     </section>
   );
