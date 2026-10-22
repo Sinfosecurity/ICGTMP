@@ -71,7 +71,7 @@ button { cursor: pointer; }
 }
 .skipLink:focus { top: 12px; }
 
-section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 124px; }
+section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 200px; }
 
 /* Header */
 .siteHeader {
@@ -82,11 +82,11 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 12
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.06);
 }
 .headerTop {
-  min-height: 78px;
+  min-height: 148px;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  padding: 8px 4vw;
+  padding: 10px 4vw;
   gap: 16px;
 }
 .brand {
@@ -98,8 +98,8 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 12
   min-width: 0;
 }
 .brandEmblem {
-  width: 62px;
-  height: 62px;
+  width: auto;
+  height: 128px;
   object-fit: contain;
   object-position: center;
   flex: 0 0 auto;
@@ -1018,18 +1018,24 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 12
   z-index: 1;
 }
 .brandLogoPlate {
-  display: inline-block;
+  display: grid;
+  place-items: center;
+  width: 152px;
+  height: 152px;
   background: #fff;
   border-radius: 10px;
-  padding: 8px 10px;
+  overflow: hidden;
 }
-.brandLogoPlate img {
-  width: 168px;
-  height: auto;
+.brandLogoPlate img,
+.fortMark {
+  width: 152px;
+  height: 152px;
+  object-fit: contain;
+  display: block;
 }
 .footerBrand { display: flex; flex-direction: column; gap: 14px; }
-.footerMarks { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.fortMark { width: 112px; height: auto; border-radius: 8px; display: block; }
+.footerMarks { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.fortMark { border-radius: 10px; }
 .footerMotto { display: flex; flex-direction: column; justify-content: center; }
 .footerMotto em {
   font-family: var(--font-serif);
@@ -1294,7 +1300,7 @@ main h1:focus-visible {
   .mainNav {
     display: none;
     position: absolute;
-    top: 78px;
+    top: 100%;
     left: 0;
     right: 0;
     background: #fff;
@@ -1439,6 +1445,7 @@ main h1:focus-visible {
 @media (max-width: 640px) {
   .brandText strong { font-size: 22px; }
   .brandText small { font-size: 7px; }
+  .brandEmblem { height: 84px; }
   .leaderSectionHead { flex-direction: column; align-items: flex-start; }
   .leaderRowLeadership,
   .leaderRowDiaspora { grid-template-columns: 1fr; }
@@ -1512,7 +1519,7 @@ main h1:focus-visible {
   background: #dce4df;
 }
 .programPagePhoto .coverImage { position: absolute; inset: 0; }
-.programPageCard h2 { scroll-margin-top: 124px; }
+.programPageCard h2 { scroll-margin-top: 200px; }
 .whereWeWork a {
   color: var(--green);
   font-weight: 700;

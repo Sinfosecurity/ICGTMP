@@ -12,17 +12,17 @@ export function Brand({ variant = 'header' }: Props) {
       <div className="footerMarks">
         <Link className="brand brandFooter" to="/">
           <span className="brandLogoPlate">
-            <img src={images.logo} alt={imageAlts.logo} width={180} height={194} />
+            <img src={images.logo} alt={imageAlts.logo} width={152} height={164} />
           </span>
         </Link>
-        <img className="fortMark" src={images.fortGroup} alt={imageAlts.fortGroup} width={112} height={112} />
+        <img className="fortMark" src={images.fortGroup} alt={imageAlts.fortGroup} width={152} height={152} />
       </div>
     );
   }
 
   return (
     <Link className="brand" to="/">
-      <img className="brandEmblem" src={images.emblem} alt={imageAlts.emblem} width={62} height={62} />
+      <img className="brandEmblem" src={images.logo} alt="" width={128} height={138} />
       <span className="brandText">
         <strong>{org.shortName}</strong>
         <small>INDEPENDENT CAMPAIGN GROUP FOR TRADESMEN, MARKETS &amp; PROFESSIONALS</small>
