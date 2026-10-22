@@ -739,11 +739,11 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 12
   gap: var(--leader-gap);
   align-items: stretch;
 }
-.leaderRowLeadership { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-.leaderRowDiaspora {
-  grid-template-columns: repeat(3, calc((100% - 4 * var(--leader-gap)) / 5));
-  justify-content: center;
-}
+.leaderRowLeadership { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.leaderRowLeadership .leaderCard { grid-column: span 2; }
+.leaderRowLeadership .leaderCard:nth-child(1) { grid-column: 2 / span 2; }
+.leaderRowLeadership .leaderCard:nth-child(2) { grid-column: 4 / span 2; }
+.leaderRowDiaspora { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .leaderCard {
   background: #fff;
   border-radius: 6px;
@@ -1024,10 +1024,12 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 12
   padding: 8px 10px;
 }
 .brandLogoPlate img {
-  width: 132px;
+  width: 168px;
   height: auto;
 }
 .footerBrand { display: flex; flex-direction: column; gap: 14px; }
+.footerMarks { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.fortMark { width: 112px; height: auto; border-radius: 8px; display: block; }
 .footerMotto { display: flex; flex-direction: column; justify-content: center; }
 .footerMotto em {
   font-family: var(--font-serif);
@@ -1433,13 +1435,6 @@ main h1:focus-visible {
   }
 }
 
-@media (max-width: 1279px) {
-  .leaderRowLeadership { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-  .leaderRowLeadership .leaderCard { grid-column: span 2; }
-  .leaderRowLeadership .leaderCard:nth-child(4) { grid-column: 2 / span 2; }
-  .leaderRowLeadership .leaderCard:nth-child(5) { grid-column: 4 / span 2; }
-  .leaderRowDiaspora { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
 
 @media (max-width: 640px) {
   .brandText strong { font-size: 22px; }
@@ -1448,8 +1443,8 @@ main h1:focus-visible {
   .leaderRowLeadership,
   .leaderRowDiaspora { grid-template-columns: 1fr; }
   .leaderRowLeadership .leaderCard,
-  .leaderRowLeadership .leaderCard:nth-child(4),
-  .leaderRowLeadership .leaderCard:nth-child(5) { grid-column: auto; }
+  .leaderRowLeadership .leaderCard:nth-child(1),
+  .leaderRowLeadership .leaderCard:nth-child(2) { grid-column: auto; }
   .sectorGrid { grid-template-columns: 1fr; }
   .impactStrip { grid-template-columns: 1fr 1fr; }
   .impactTitle, .impactStrip blockquote { grid-column: span 2; }

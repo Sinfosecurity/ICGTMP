@@ -9,11 +9,14 @@ type Props = {
 export function Brand({ variant = 'header' }: Props) {
   if (variant === 'footer') {
     return (
-      <Link className="brand brandFooter" to="/">
-        <span className="brandLogoPlate">
-          <img src={images.logo} alt={imageAlts.logo} width={148} height={154} />
-        </span>
-      </Link>
+      <div className="footerMarks">
+        <Link className="brand brandFooter" to="/">
+          <span className="brandLogoPlate">
+            <img src={images.logo} alt={imageAlts.logo} width={180} height={194} />
+          </span>
+        </Link>
+        <img className="fortMark" src={images.fortGroup} alt={imageAlts.fortGroup} width={112} height={112} />
+      </div>
     );
   }
 

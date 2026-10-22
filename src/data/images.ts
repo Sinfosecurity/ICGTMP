@@ -4,6 +4,7 @@
 export const images = {
   logo: '/resources/icgtmp-logo.webp',
   emblem: '/resources/icgtmp-emblem.webp',
+  fortGroup: '/resources/fort-group-logo.webp',
   og: '/resources/og-image.webp',
   hero: '/resources/hero-05.webp',
   hero05: '/resources/hero-05.webp',
@@ -33,7 +34,8 @@ export const sectorSrcSet = {
 
 export const imageAlts = {
   logo: 'ICGTMP logo — Independent Campaign Group for Tradesmen, Markets & Professionals',
-  emblem: 'ICGTMP emblem showing Lagos landmarks and community figures',
+  emblem: '',
+  fortGroup: 'The Fort Group',
   hero: 'A Stronger Lagos Through Its People — ICGTMP hero with the Lekki-Ikoyi Link Bridge at dusk',
   hero05: 'A Stronger Lagos Through Its People — ICGTMP hero with the Lekki-Ikoyi Link Bridge at dusk',
   hero00: 'A Brighter Lagos Tomorrow — modern infrastructure and inclusive growth',
