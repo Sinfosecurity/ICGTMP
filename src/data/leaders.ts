@@ -99,6 +99,8 @@ export const leaders: Leader[] = [
     group: 'diaspora',
     order: 7,
     photo: '/leaders/saheed-lawal.webp',
+    objectPosition: '50% 42%',
+    objectPositionMobile: '50% 40%',
   },
   {
     slug: 'bidemi-balogun',

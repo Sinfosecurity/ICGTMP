@@ -13,4 +13,3 @@ These files are not in the site. The cards show a monogram until the portrait is
 
 - `/leaders/mujaid-adeyemi.webp` — Alhaji Mujaid Mercury Adeyemi, Conveyor
 - `/leaders/akeem-keshinro.webp` — Hon. Akeem Keshinro, Secretary
-- `/leaders/saheed-lawal.webp` — Hon. Saheed Lawal, Diaspora Coordinator, Canada
