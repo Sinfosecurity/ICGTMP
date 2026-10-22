@@ -1,39 +1,20 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { leaders } from '../data/leaders';
-import { CoverImage } from './CoverImage';
+import { LeaderGroups } from './LeaderRoster';
 
 export function LeadershipSection() {
   return (
-    <section id="home-leadership" className="leadersPanel">
-      <h2>OUR LEADERSHIP</h2>
-      <p>Committed. Experienced. Grassroots focused.</p>
-      <div className="leaders">
-        {leaders.map((leader) => (
-          <article className="leaderCard" key={leader.name}>
-            <div className="leaderPhoto">
-              <CoverImage
-                src={leader.image}
-                alt={leader.alt}
-                objectPosition={leader.objectPosition}
-                objectPositionMobile={leader.objectPositionMobile}
-                width={880}
-                height={1100}
-              />
-            </div>
-            <div className="leaderMeta">
-              <h3>{leader.name}</h3>
-              <small>{leader.title}</small>
-            </div>
-          </article>
-        ))}
+    <section id="home-leadership" className="leadersPanel" aria-labelledby="home-leadership-title">
+      <div className="leaderSectionHead">
+        <div>
+          <h2 id="home-leadership-title">OUR LEADERSHIP</h2>
+          <p>Committed. Experienced. Grassroots focused.</p>
+        </div>
+        <Link className="goldOutline" to="/leadership">
+          Meet the full team <ArrowRight size={15} aria-hidden="true" />
+        </Link>
       </div>
-      <p className="leadershipNote">
-        Women and youth coordinators will be listed here when those appointments are published.
-      </p>
-      <Link className="goldOutline" to="/leadership">
-        Meet the Leadership Team <ArrowRight size={15} />
-      </Link>
+      <LeaderGroups heading="h3" />
     </section>
   );
 }

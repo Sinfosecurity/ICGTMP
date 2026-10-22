@@ -26,14 +26,13 @@ export function AboutPage() {
       <h2>Leadership</h2>
       <ul className="plainList">
         {leaders.map((leader) => (
-          <li key={leader.name}>
-            <strong>{leader.name}</strong> — {leader.title}
+          <li key={leader.slug}>
+            <strong>{leader.name}</strong> — {leader.role}
           </li>
         ))}
       </ul>
       <p className="quietNote">
-        Full biographies, and the women and youth coordinators, will be published when those
-        materials are supplied.
+        Full biographies will be published when those materials are supplied.
       </p>
     </PageShell>
   );

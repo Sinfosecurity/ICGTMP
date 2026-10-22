@@ -16,8 +16,8 @@ export function HomePage() {
       <SectorCards />
       <ImpactGoals />
       <LagosEastPresence />
-      <section id="home-lower" className="lowerGrid" aria-label="Leadership, news and membership">
-        <LeadershipSection />
+      <LeadershipSection />
+      <section id="home-lower" className="lowerGrid" aria-label="News and membership">
         <NewsSection />
         <JoinPanel />
       </section>

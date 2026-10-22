@@ -12,6 +12,7 @@ type Props = {
   height?: number;
   loading?: 'lazy' | 'eager';
   fetchPriority?: 'high' | 'low' | 'auto';
+  onError?: () => void;
 };
 
 export function CoverImage({
@@ -26,6 +27,7 @@ export function CoverImage({
   height,
   loading = 'lazy',
   fetchPriority,
+  onError,
 }: Props) {
   const style = {
     '--photo-pos': objectPosition,
@@ -45,6 +47,7 @@ export function CoverImage({
       fetchPriority={fetchPriority}
       decoding="async"
       style={style}
+      onError={onError}
     />
   );
 }
