@@ -449,9 +449,8 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 12
 .sectorBody p {
   margin: 0 0 10px;
   color: #4c5550;
-  font-size: 13px;
-  line-height: 1.4;
-  min-height: 54px;
+  font-size: 16px;
+  line-height: 1.5;
 }
 .sectorBody a {
   color: var(--gold-text);
@@ -1130,7 +1129,7 @@ main h1:focus-visible {
   font-size: 1.15rem;
   color: var(--green);
 }
-.plainList { padding-left: 18px; }
+.plainList { padding-left: 18px; font-size: 16px; }
 .plainList li { margin: 8px 0; line-height: 1.5; }
 .quietNote { color: var(--muted); font-size: 14px; }
 .resourceGrid, .structureGrid {
@@ -1383,6 +1382,59 @@ main h1:focus-visible {
 }
 .programPagePhoto .coverImage { position: absolute; inset: 0; }
 .programPageCard h2 { scroll-margin-top: 124px; }
+.whereWeWork a {
+  color: var(--green);
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+.programAction {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--green);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+.programMovement {
+  margin-top: 36px;
+  background: var(--green);
+  color: #fff;
+  padding: 28px 24px;
+}
+.innerBody .programMovement h2 {
+  margin: 0 0 10px;
+  color: #fff;
+}
+.innerBody .programMovement p {
+  color: #fff;
+}
+.programMovementActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.programMovementActions a,
+.programMovementActions button {
+  min-height: 44px;
+}
+.movementProgrammes {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--gold);
+  border-radius: 22px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  text-decoration: none;
+}
 .joinOptions button { min-height: 48px; }
 
 @media (max-width: 760px) {

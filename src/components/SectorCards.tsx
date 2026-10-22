@@ -30,7 +30,7 @@ export function SectorCards() {
             </div>
             <div className="sectorBody">
               <h3>{sector.title}</h3>
-              <p>{sector.description}</p>
+              <p>{sector.cardText}</p>
               <Link to={programPath(sector.id)}>
                 Learn More <ArrowRight size={14} />
               </Link>

@@ -29,7 +29,7 @@ export function ProgramsPage() {
               <h2>
                 <Link to={programPath(program.id)}>{program.title}</Link>
               </h2>
-              <p>{program.description}</p>
+              <p>{program.cardText}</p>
               <p>
                 <Link to={programPath(program.id)}>Learn More</Link>
               </p>

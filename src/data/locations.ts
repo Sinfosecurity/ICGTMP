@@ -16,6 +16,10 @@ export const lgaDirectory: Record<LgaName, string[]> = {
 
 export const lgaNames = Object.keys(lgaDirectory) as LgaName[];
 
+export function lgaSectionId(name: LgaName): string {
+  return name.toLowerCase();
+}
+
 export const lgaNotes: Record<LgaName, string> = {
   Shomolu: 'Mainland communities and market corridors.',
   Kosofe: 'Trading hubs connecting the mainland and the lagoon edge.',

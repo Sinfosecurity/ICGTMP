@@ -19,15 +19,26 @@ function RouteEffects() {
 
   useEffect(() => {
     applyDocumentMeta(metaForPath(pathname));
-    window.scrollTo(0, 0);
     const frame = window.requestAnimationFrame(() => {
+      const id = hash.startsWith('#') ? decodeURIComponent(hash.slice(1)) : '';
+      const target = id && id !== 'main' ? document.getElementById(id) : null;
+      if (target) {
+        target.scrollIntoView();
+        const heading = target.querySelector('h1, h2');
+        if (heading instanceof HTMLElement) {
+          heading.tabIndex = -1;
+          heading.focus({ preventScroll: true });
+        }
+        return;
+      }
+      window.scrollTo(0, 0);
       const heading = document.querySelector('main h1');
       if (!(heading instanceof HTMLElement)) return;
       heading.tabIndex = -1;
       heading.focus({ preventScroll: true });
     });
     return () => window.cancelAnimationFrame(frame);
-  }, [pathname]);
+  }, [pathname, hash]);
 
   return null;
 }

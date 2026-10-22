@@ -13,7 +13,7 @@ export function metaForPath(pathname: string): PageMeta {
   if (programMatch) {
     const program = programById(decodeURIComponent(programMatch[1]));
     if (!program) return notFoundMeta;
-    return { title: `${program.title} | ICGTMP`, description: program.aim };
+    return { title: program.seoTitle, description: program.seoDescription };
   }
 
   const newsMatch = /^\/news\/([^/]+)$/.exec(path);

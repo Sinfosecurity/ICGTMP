@@ -1,4 +1,4 @@
-import { lgaDirectory, lgaNames, lgaNotes } from '../data/locations';
+import { lgaDirectory, lgaNames, lgaNotes, lgaSectionId } from '../data/locations';
 import { PageShell } from '../components/PageShell';
 
 export function StructurePage() {
@@ -10,7 +10,7 @@ export function StructurePage() {
       </p>
       <div className="structureGrid">
         {lgaNames.map((lga) => (
-          <article key={lga}>
+          <article key={lga} id={lgaSectionId(lga)}>
             <h2>{lga}</h2>
             <p>{lgaNotes[lga]}</p>
             <ul>
