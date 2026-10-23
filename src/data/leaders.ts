@@ -77,12 +77,12 @@ export const leaders: Leader[] = [
     objectPositionMobile: '50% 50%',
   },
   {
-    slug: 'akeem-keshinro',
-    name: 'Hon. Akeem Keshinro',
+    slug: 'abiodun-keshinro',
+    name: 'Hon. Abiodun Keshinro',
     role: 'Secretary',
     group: 'leadership',
     order: 5,
-    photo: '/leaders/akeem-keshinro.webp',
+    photo: '/leaders/abiodun-keshinro.webp',
   },
   {
     slug: 'adebayo-shobaloju',
