@@ -77,7 +77,7 @@ export const leaders: Leader[] = [
   {
     slug: 'paul-sola-oginni',
     name: 'Mr. Paul Sola Oginni',
-    role: 'Conveyor',
+    role: 'Convener',
     group: 'leadership',
     order: 5,
     photo: '/leaders/paul-sola-oginni.webp',
