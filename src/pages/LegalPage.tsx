@@ -8,7 +8,7 @@ const copy: Record<Exclude<LegalSlug, 'sitemap'>, { title: string; body: string[
   privacy: {
     title: 'Privacy Policy',
     body: [
-      `Membership and contact forms on this site send your details to ${org.email}. Submissions are emailed through FormSubmit (formsubmit.co), a third-party form processor in the United States. A copy is also stored in a Google Sheet held in ICGTMP’s Google Workspace account. Google acts as a processor for that stored copy.`,
+      `Membership and contact forms on this site send your details to ${org.email}. Submissions are emailed through FormSubmit (formsubmit.co), a third-party form processor in the United States. A copy is also stored in a Google Sheet held in ICGMTP’s Google Workspace account. Google acts as a processor for that stored copy.`,
       'Fields typically include name, phone, email, LGA, LCDA, ward, trade or profession, and a short message. We use those details only to follow up on membership, volunteering or partnership interest. We do not sell this information.',
       'The first FormSubmit email may require a one-time inbox confirmation. After that, messages arrive by email and a matching row is kept in the Sheet.',
       'A fuller policy will be published if the group later expands how this information is used.',
@@ -30,7 +30,7 @@ type Props = {
 export function LegalPage({ slug }: Props) {
   if (slug === 'sitemap') {
     return (
-      <PageShell kicker="ICGTMP" title="Site Map">
+      <PageShell kicker="ICGMTP" title="Site Map">
         <ul className="plainList">
           {navigation.map((item) => (
             <li key={item.to}>
@@ -44,7 +44,7 @@ export function LegalPage({ slug }: Props) {
 
   const page = copy[slug];
   return (
-    <PageShell kicker="ICGTMP" title={page.title}>
+    <PageShell kicker="ICGMTP" title={page.title}>
       {page.body.map((paragraph) => (
         <p key={paragraph}>{paragraph}</p>
       ))}

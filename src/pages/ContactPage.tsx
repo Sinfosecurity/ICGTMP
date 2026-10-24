@@ -106,7 +106,7 @@ export function ContactPage() {
         toast.success('Message sent', {
           description: result.reference
             ? `Your reference is ${result.reference}.`
-            : `ICGTMP will reply to ${values.email}.`,
+            : `ICGMTP will reply to ${values.email}.`,
           dedupeKey: COOLDOWN_KEY,
         });
         return;
@@ -168,7 +168,7 @@ export function ContactPage() {
   };
 
   return (
-    <PageShell kicker="Contact" title="Write to ICGTMP">
+    <PageShell kicker="Contact" title="Write to ICGMTP">
       <div className="contactLayout">
         <div>
           <p>
@@ -286,7 +286,7 @@ export function ContactPage() {
           {submitError ? (
             <p className="formAlert" role="alert">
               {submitError} You can email{' '}
-              <a href={mailtoHref('ICGTMP contact form', draft)}>{org.email}</a> instead.
+              <a href={mailtoHref('ICGMTP contact form', draft)}>{org.email}</a> instead.
             </p>
           ) : null}
 

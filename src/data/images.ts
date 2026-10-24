@@ -33,14 +33,14 @@ export const sectorSrcSet = {
 } as const;
 
 export const imageAlts = {
-  logo: 'ICGTMP logo — Independent Campaign Group for Tradesmen, Markets & Professionals',
+  logo: 'ICGMTP logo — Independent Campaign Group for Tradesmen, Markets & Professionals',
   emblem: '',
   fortGroup: 'The Fort Group',
-  hero: 'A Stronger Lagos Through Its People — ICGTMP hero with the Lekki-Ikoyi Link Bridge at dusk',
-  hero05: 'A Stronger Lagos Through Its People — ICGTMP hero with the Lekki-Ikoyi Link Bridge at dusk',
+  hero: 'A Stronger Lagos Through Its People — ICGMTP hero with the Lekki-Ikoyi Link Bridge at dusk',
+  hero05: 'A Stronger Lagos Through Its People — ICGMTP hero with the Lekki-Ikoyi Link Bridge at dusk',
   hero00: 'A Brighter Lagos Tomorrow — modern infrastructure and inclusive growth',
   hero01: 'Lagos Thrives When People Prosper — supporting traders and markets',
-  hero02: 'Together for a Stronger Lagos — ICGTMP, APC and The Fort Group',
+  hero02: 'Together for a Stronger Lagos — ICGMTP, APC and The Fort Group',
   hero03: 'Lagos Rising — Dr. Kadri Obafemi Hamzat for Governor of Lagos State',
   hero04: 'Continuity 2027 — President Bola Ahmed Tinubu campaign artwork',
   markets: 'Trader with a child at a produce market in Lekki, Lagos',

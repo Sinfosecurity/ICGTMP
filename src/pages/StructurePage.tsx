@@ -5,7 +5,7 @@ export function StructurePage() {
   return (
     <PageShell kicker="Our Structure" title="Lagos East LGAs and LCDAs">
       <p>
-        ICGTMP is organized across 5 Local Government Areas and 11 LCDAs in Lagos East, with ward
+        ICGMTP is organized across 5 Local Government Areas and 11 LCDAs in Lagos East, with ward
         and community networks at the grassroots.
       </p>
       <div className="lgaRegister">

@@ -55,8 +55,8 @@ export const whereWeWorkLine = `${whereWeWorkLgas.join(' · ')}, and their LCDAs
 
 export const programMovement = {
   heading: 'Be part of the movement',
-  text: 'Whether you trade, build, practise a profession or are just starting out, there is a place for you in ICGTMP. Register your interest, and a coordinator in your LGA will reach out.',
-  joinLabel: 'Join ICGTMP',
+  text: 'Whether you trade, build, practise a profession or are just starting out, there is a place for you in ICGMTP. Register your interest, and a coordinator in your LGA will reach out.',
+  joinLabel: 'Join ICGMTP',
   whatsappLabel: 'Join the WhatsApp group',
   programmesLabel: 'Explore other programmes',
 } as const;
@@ -83,9 +83,9 @@ export const programs: Program[] = [
     cardText:
       'Markets are the heartbeat of Lagos East. We organise traders and market associations so their voice is heard on the issues that shape their daily trade.',
     eyebrow: 'Programme · Markets & Traders',
-    headline: 'Where Lagos East trades, ICGTMP stands with you',
+    headline: 'Where Lagos East trades, ICGMTP stands with you',
     intro:
-      'Every morning, long before offices open, Lagos East is already at work in its markets. Traders feed families, move goods, give credit, train apprentices and keep whole communities running. ICGTMP exists to make sure the people who carry this economy are organised, informed and represented.',
+      'Every morning, long before offices open, Lagos East is already at work in its markets. Traders feed families, move goods, give credit, train apprentices and keep whole communities running. ICGMTP exists to make sure the people who carry this economy are organised, informed and represented.',
     whyItMatters:
       'From the foodstuff trade around Mile 12 in Kosofe to the fish and produce markets of Epe, and from the busy corridors of Ikorodu to the growing Lekki corridor in Ibeju-Lekki, markets are where Lagos East earns its living. Yet traders are often the last to be consulted on the decisions that affect them most: security, sanitation, access roads, levies and trading conditions. When market associations speak together, they are heard. Our work is to help them speak together.',
     activities: [
@@ -107,7 +107,7 @@ export const programs: Program[] = [
       },
     ],
     memberExpectations: [
-      'A direct line to ICGTMP coordinators for your market or LGA',
+      'A direct line to ICGMTP coordinators for your market or LGA',
       'Regular updates on issues affecting traders in Lagos East',
       'A seat at the table when market concerns are discussed',
       'A network of fellow traders across the five LGAs',
@@ -122,7 +122,7 @@ export const programs: Program[] = [
       },
       {
         label: 'Bring your association',
-        text: 'Market leaders can request a meeting with ICGTMP coordinators.',
+        text: 'Market leaders can request a meeting with ICGMTP coordinators.',
         action: 'contact',
       },
       {
@@ -132,9 +132,9 @@ export const programs: Program[] = [
       },
     ],
     closingLine: "Strong markets build a strong Lagos. Let's build it together.",
-    seoTitle: 'Markets & Traders | ICGTMP',
+    seoTitle: 'Markets & Traders | ICGMTP',
     seoDescription:
-      'ICGTMP organises traders and market associations across Lagos East, so their priorities on welfare, security and trading conditions are heard.',
+      'ICGMTP organises traders and market associations across Lagos East, so their priorities on welfare, security and trading conditions are heard.',
   },
   {
     id: 'artisans',
@@ -159,7 +159,7 @@ export const programs: Program[] = [
     eyebrow: 'Programme · Artisans & Skilled Workers',
     headline: 'The hands that build Lagos deserve a voice',
     intro:
-      "Behind every repaired car, finished outfit, wired home and newly built house is a skilled worker. Artisans are the backbone of Lagos East's economy, and many of them train the next generation through apprenticeship. ICGTMP works to organise artisans so their skills are valued, their concerns are heard and their trades are represented.",
+      "Behind every repaired car, finished outfit, wired home and newly built house is a skilled worker. Artisans are the backbone of Lagos East's economy, and many of them train the next generation through apprenticeship. ICGMTP works to organise artisans so their skills are valued, their concerns are heard and their trades are represented.",
     whyItMatters:
       'Artisans work across every community in Lagos East: mechanic clusters along the roads into Ikorodu, tailoring and fashion workshops across the mainland, and builders and technicians serving fast-growing communities in Ibeju-Lekki. Artisans face real pressures, including the cost of tools and materials, access to workspace, and the question of how young apprentices can gain recognised skills. These concerns are rarely heard because artisans are rarely organised in one voice.',
     activities: [
@@ -173,7 +173,7 @@ export const programs: Program[] = [
       },
       {
         title: 'One clear channel',
-        text: 'We give artisan associations and guilds a direct link to the ICGTMP structure in each LGA and LCDA.',
+        text: 'We give artisan associations and guilds a direct link to the ICGMTP structure in each LGA and LCDA.',
       },
       {
         title: 'Civic participation',
@@ -185,7 +185,7 @@ export const programs: Program[] = [
       text: 'mechanics and auto-technicians, tailors and fashion designers, builders, masons and carpenters, electricians and plumbers, welders and fabricators, hairdressers and barbers, phone and electronics technicians, and other skilled crafts.',
     },
     memberExpectations: [
-      'Recognition of your trade within the ICGTMP network',
+      'Recognition of your trade within the ICGMTP network',
       'A coordinator who knows your area and your craft',
       'Updates on matters affecting artisans in Lagos East',
       'Connection with fellow artisans across the five LGAs',
@@ -210,9 +210,9 @@ export const programs: Program[] = [
       },
     ],
     closingLine: 'Skilled hands, strong communities, a greater Lagos.',
-    seoTitle: 'Artisans & Skilled Workers | ICGTMP',
+    seoTitle: 'Artisans & Skilled Workers | ICGMTP',
     seoDescription:
-      'ICGTMP brings mechanics, tailors, builders, technicians and craftspeople across Lagos East together, so skilled workers are recognised and heard.',
+      'ICGMTP brings mechanics, tailors, builders, technicians and craftspeople across Lagos East together, so skilled workers are recognised and heard.',
   },
   {
     id: 'professionals',
@@ -237,7 +237,7 @@ export const programs: Program[] = [
     eyebrow: 'Programme · Professionals & SMEs',
     headline: 'Your expertise can move a community forward',
     intro:
-      'Lagos East is home to doctors and nurses, teachers and lawyers, engineers and accountants, and thousands of small and growing businesses. ICGTMP believes these skills belong not only in offices and clinics but in the service of the communities around them. This programme connects professionals and business owners to grassroots work where their knowledge makes a real difference.',
+      'Lagos East is home to doctors and nurses, teachers and lawyers, engineers and accountants, and thousands of small and growing businesses. ICGMTP believes these skills belong not only in offices and clinics but in the service of the communities around them. This programme connects professionals and business owners to grassroots work where their knowledge makes a real difference.',
     whyItMatters:
       "Lagos East is changing fast. The Lekki corridor in Ibeju-Lekki is drawing major investment, Ikorodu and Kosofe are growing quickly, and Shomolu is known for its long-established printing and enterprise clusters. Small businesses create much of the area's work. When professionals and entrepreneurs engage at the grassroots, communities gain better information, sharper planning and stronger organisations.",
     activities: [
@@ -251,7 +251,7 @@ export const programs: Program[] = [
       },
       {
         title: 'Skills for the movement',
-        text: 'Professionals help ICGTMP with data, communications, research and programme delivery, so our work is well-organised and evidence-based.',
+        text: 'Professionals help ICGMTP with data, communications, research and programme delivery, so our work is well-organised and evidence-based.',
       },
       {
         title: 'Mentoring',
@@ -288,9 +288,9 @@ export const programs: Program[] = [
       },
     ],
     closingLine: 'Expertise shared is a community strengthened.',
-    seoTitle: 'Professionals & SMEs | ICGTMP',
+    seoTitle: 'Professionals & SMEs | ICGMTP',
     seoDescription:
-      'ICGTMP connects professionals, entrepreneurs and small-business owners in Lagos East with grassroots work through volunteering, mentoring and partnership.',
+      'ICGMTP connects professionals, entrepreneurs and small-business owners in Lagos East with grassroots work through volunteering, mentoring and partnership.',
   },
   {
     id: 'women-youth',
@@ -315,7 +315,7 @@ export const programs: Program[] = [
     eyebrow: 'Programme · Women & Youth',
     headline: 'Making room for the women and young people who power Lagos East',
     intro:
-      "Walk through any market in Lagos East and you will see women running stalls, managing credit circles and leading associations. Visit any workshop and you will find young people learning a trade and building a future. Women and youth already carry much of Lagos East's economy. ICGTMP works to make sure they also have a full voice in its direction.",
+      "Walk through any market in Lagos East and you will see women running stalls, managing credit circles and leading associations. Visit any workshop and you will find young people learning a trade and building a future. Women and youth already carry much of Lagos East's economy. ICGMTP works to make sure they also have a full voice in its direction.",
     whyItMatters:
       "Women lead many of the market networks that keep trade moving, and young people make up a large share of Lagos East's population. Yet both groups are often under-represented where decisions are made. A movement that speaks for traders, artisans and professionals must reflect the people who actually make up those groups, and that means women and young people in visible leadership.",
     activities: [
@@ -329,7 +329,7 @@ export const programs: Program[] = [
       },
       {
         title: 'Leadership pathways',
-        text: 'ICGTMP is creating dedicated leadership positions for women and youth coordinators within its structure. Names will be published when appointments are made.',
+        text: 'ICGMTP is creating dedicated leadership positions for women and youth coordinators within its structure. Names will be published when appointments are made.',
       },
       {
         title: 'Mentoring and connection',
@@ -340,7 +340,7 @@ export const programs: Program[] = [
       'A network of women and young people across all five Lagos East LGAs',
       'Opportunities to take on coordinating and leadership roles',
       'Clear civic and voter-education information',
-      'Mentoring connections within the ICGTMP network',
+      'Mentoring connections within the ICGMTP network',
     ],
     whereWeWork: whereWeWorkLine,
     getInvolved: [
@@ -363,9 +363,9 @@ export const programs: Program[] = [
       },
     ],
     closingLine: 'When women and youth lead, Lagos rises.',
-    seoTitle: 'Women & Youth | ICGTMP',
+    seoTitle: 'Women & Youth | ICGMTP',
     seoDescription:
-      "ICGTMP opens more room for women and young people in Lagos East's trade, business and leadership, through networks, civic education and leadership pathways.",
+      "ICGMTP opens more room for women and young people in Lagos East's trade, business and leadership, through networks, civic education and leadership pathways.",
   },
 ];
 

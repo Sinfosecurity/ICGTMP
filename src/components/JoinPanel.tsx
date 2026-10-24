@@ -26,7 +26,7 @@ export function JoinPanel() {
         </h2>
         <p>Join traders, artisans, professionals, women and youth building stronger communities.</p>
         <button type="button" className="goldPill" data-join-trigger onClick={() => onJoin()}>
-          Join ICGTMP Today <ArrowRight size={16} />
+          Join ICGMTP Today <ArrowRight size={16} />
         </button>
       </div>
       <div className="joinOptions">

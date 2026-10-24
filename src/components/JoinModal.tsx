@@ -256,8 +256,8 @@ export function JoinModal({ open, preset, onClose }: Props) {
             </h2>
             <p>
               {submitted === 'duplicate'
-                ? 'These details are already on the ICGTMP register, so we did not add a second entry. '
-                : 'Your details are on the ICGTMP register and a coordinator will follow up. '}
+                ? 'These details are already on the ICGMTP register, so we did not add a second entry. '
+                : 'Your details are on the ICGMTP register and a coordinator will follow up. '}
               You can also <WhatsAppJoinLink icon={false} label="join the WhatsApp group" />.
             </p>
             {reference ? (
@@ -272,10 +272,10 @@ export function JoinModal({ open, preset, onClose }: Props) {
           </div>
         ) : (
           <>
-            <p className="modalKicker">JOIN ICGTMP</p>
+            <p className="modalKicker">JOIN ICGMTP</p>
             <h2 id={titleId}>Register your interest</h2>
             <p>
-              Your details go to the ICGTMP membership register so coordinators can follow up.
+              Your details go to the ICGMTP membership register so coordinators can follow up.
               Fields marked <span aria-hidden="true">*</span>
               <span className="srOnly">with an asterisk</span> are required. Read the{' '}
               <Link to="/privacy" onClick={onClose}>Privacy Policy</Link>.
@@ -455,7 +455,7 @@ export function JoinModal({ open, preset, onClose }: Props) {
                 <p className="formAlert wideField" role="alert">
                   {submitError} You can email{' '}
                   <a
-                    href={mailtoHref('ICGTMP membership interest', {
+                    href={mailtoHref('ICGMTP membership interest', {
                       name: draft.fullName,
                       email: draft.email,
                       phone: draft.phone,
@@ -468,7 +468,7 @@ export function JoinModal({ open, preset, onClose }: Props) {
               ) : null}
 
               <p className="formPrivacy wideField">
-                By submitting, you agree that ICGTMP may contact you about membership, volunteering
+                By submitting, you agree that ICGMTP may contact you about membership, volunteering
                 or partnership. We do not sell this information.
               </p>
               <button className="goldPill" type="submit" disabled={sending}>

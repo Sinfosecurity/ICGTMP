@@ -1,5 +1,5 @@
 /**
- * Lagos State LGA boundaries for the ICGTMP presence map.
+ * Lagos State LGA boundaries for the ICGMTP presence map.
  *
  * Geographic source: geoBoundaries NGA ADM2 (GRID3 local government
  * area boundaries), CC BY 4.0.

@@ -78,7 +78,7 @@ export function Header() {
             </NavLink>
           ))}
         <button type="button" className="goldCta" data-join-trigger onClick={() => onJoin()}>
-          Join ICGTMP
+          Join ICGMTP
         </button>
       </nav>
     </header>

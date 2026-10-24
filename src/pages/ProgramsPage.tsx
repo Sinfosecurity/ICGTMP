@@ -7,7 +7,7 @@ export function ProgramsPage() {
   return (
     <PageShell kicker="Programs" title="Work across four communities">
       <p>
-        ICGTMP organises around the people who keep Lagos East moving. Each programme below is a
+        ICGMTP organises around the people who keep Lagos East moving. Each programme below is a
         live organising track, not a finished publication.
       </p>
       <div className="programPageList">

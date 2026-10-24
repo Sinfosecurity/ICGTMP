@@ -276,7 +276,7 @@ export async function submitMembership(payload: MembershipPayload): Promise<Tran
 
   const [sheet, email] = await Promise.allSettled([
     postSheet(sheetBody),
-    postEmail(emailPayload, 'ICGTMP membership interest'),
+    postEmail(emailPayload, 'ICGMTP membership interest'),
   ]);
 
   return settle(sheet, email);
@@ -308,7 +308,7 @@ export async function submitMessage(payload: MessagePayload): Promise<TransportR
     postSheet(sheetBody),
     postEmail(
       { name: payload.fullName, email: payload.email, message: payload.message },
-      'ICGTMP contact form',
+      'ICGMTP contact form',
     ),
   ]);
 

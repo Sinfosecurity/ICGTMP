@@ -7,7 +7,7 @@ export function ResourcesPage() {
     <PageShell kicker="Resources" title="How to get involved">
       <p>
         Official downloads and media notes will be added here when they are released. Until then,
-        these are the public ways to work with ICGTMP.
+        these are the public ways to work with ICGMTP.
       </p>
       <div className="resourceGrid">
         <article>
@@ -17,7 +17,7 @@ export function ResourcesPage() {
             info@icgtmp.org.
           </p>
           <p>
-            <Link to="/contact">Open the contact page</Link> or use Join ICGTMP in the header.
+            <Link to="/contact">Open the contact page</Link> or use Join ICGMTP in the header.
           </p>
         </article>
         <article>
@@ -44,7 +44,7 @@ export function ResourcesPage() {
             .
           </p>
           <p>
-            <Link to="/contact">Contact ICGTMP</Link>
+            <Link to="/contact">Contact ICGMTP</Link>
           </p>
         </article>
       </div>

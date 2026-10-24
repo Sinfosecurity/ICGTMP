@@ -70,7 +70,7 @@ export const heroSlides: HeroSlide[] = [
     subtitle:
       'Mobilizing traders, market communities, artisans, entrepreneurs and professionals across Lagos East.',
     hits: [
-      { id: 'join', label: 'Join ICGTMP', action: 'join', box: { left: '4.4%', top: '71.2%', width: '13.6%', height: '11%' } },
+      { id: 'join', label: 'Join ICGMTP', action: 'join', box: { left: '4.4%', top: '71.2%', width: '13.6%', height: '11%' } },
       { id: 'about', label: 'Learn More', action: 'hash', href: '/about', box: { left: '18.6%', top: '71.2%', width: '12.4%', height: '11%' } },
       {
         id: 'whatsapp',

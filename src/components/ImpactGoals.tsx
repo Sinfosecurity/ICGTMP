@@ -33,7 +33,7 @@ export function ImpactGoals() {
           “
         </span>
         <p>The real strength of Lagos is its people.</p>
-        <footer>ICGTMP organising principle</footer>
+        <footer>ICGMTP organising principle</footer>
       </blockquote>
     </section>
   );

@@ -25,7 +25,7 @@ function slugFromTitle(title: string): string {
 
 const drafts: Omit<NewsItem, 'slug'>[] = [
   {
-    title: 'ICGTMP Engages Market Leaders in Epe',
+    title: 'ICGMTP Engages Market Leaders in Epe',
     summary: 'Discussions with market associations on participation and community priorities.',
     image: images.markets,
     alt: imageAlts.markets,
@@ -39,7 +39,7 @@ const drafts: Omit<NewsItem, 'slug'>[] = [
     objectPosition: '70% 35%',
   },
   {
-    title: 'ICGTMP Outreach to Professionals',
+    title: 'ICGMTP Outreach to Professionals',
     summary: 'Building a stronger network of professionals for a greater Lagos.',
     image: images.professionals,
     alt: imageAlts.professionals,

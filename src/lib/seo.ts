@@ -20,7 +20,7 @@ export function metaForPath(pathname: string): PageMeta {
   if (newsMatch) {
     const article = newsArticle(decodeURIComponent(newsMatch[1]));
     if (!article) return notFoundMeta;
-    return { title: `${article.title} | ICGTMP`, description: article.summary };
+    return { title: `${article.title} | ICGMTP`, description: article.summary };
   }
 
   return notFoundMeta;
