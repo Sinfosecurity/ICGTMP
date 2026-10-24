@@ -25,7 +25,7 @@ export function leaderHasPhoto(photo: string): boolean {
 export function leaderInitials(name: string): string {
   const words = name
     .split(/\s+/)
-    .map((word) => word.replace(/\./g, ''))
+    .map((word) => word.replace(/[.“”"']/g, ''))
     .filter((word) => word && !/^(hon|engr|barr|mr|alhaji)$/i.test(word));
   const first = words[0]?.[0] ?? '';
   const last = words.length > 1 ? words[words.length - 1][0] : (words[0]?.[1] ?? '');
@@ -60,7 +60,7 @@ export const leaders: Leader[] = [
   },
   {
     slug: 'lookman-alex-adeyemi',
-    name: 'Lookman Alex Adeyemi',
+    name: 'Mr. Lookman Alex Adeyemi',
     role: 'Deputy Director-General, Finance',
     group: 'leadership',
     order: 5,
@@ -89,14 +89,22 @@ export const leaders: Leader[] = [
     name: 'Hon. Abiodun Keshinro',
     role: 'Secretary',
     group: 'leadership',
-    order: 6,
+    order: 8,
     photo: '/leaders/abiodun-keshinro.webp',
+  },
+  {
+    slug: 'aleshinloye-adele',
+    name: 'Hon. Aleshinloye Adele “Alesh”',
+    role: 'Deputy Director-General, Operations',
+    group: 'leadership',
+    order: 6,
+    photo: '/leaders/aleshinloye-adele.webp',
   },
   {
     slug: 'adebayo-shobaloju',
     name: 'Engr. Adebayo Shobaloju',
     role: 'Deputy Director-General, Diaspora',
-    group: 'diaspora',
+    group: 'leadership',
     order: 7,
     photo: '/leaders/adebayo-shobaloju.webp',
   },

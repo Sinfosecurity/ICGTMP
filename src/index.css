@@ -743,6 +743,9 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 20
 .leaderRowDiaspora { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .leaderGroup .leaderRow + .leaderRow { margin-top: var(--leader-gap); }
 .leaderRow[data-count="1"] .leaderCard { grid-column: 2; }
+.leaderRow[data-count="2"] { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.leaderRow[data-count="2"] .leaderCard:nth-child(1) { grid-column: 2 / span 2; }
+.leaderRow[data-count="2"] .leaderCard:nth-child(2) { grid-column: 4 / span 2; }
 .leaderCard {
   background: #fff;
   border-radius: 6px;
@@ -1485,8 +1488,10 @@ main h1:focus-visible {
   .brandEmblem { height: 84px; }
   .leaderSectionHead { flex-direction: column; align-items: flex-start; }
   .leaderRowLeadership,
-  .leaderRowDiaspora { grid-template-columns: 1fr; }
-  .leaderRow[data-count="1"] .leaderCard { grid-column: auto; }
+  .leaderRowDiaspora,
+  .leaderRow[data-count="2"] { grid-template-columns: 1fr; }
+  .leaderRow[data-count="1"] .leaderCard,
+  .leaderRow[data-count="2"] .leaderCard { grid-column: auto; }
   .sectorGrid { grid-template-columns: 1fr; }
   .impactStrip { grid-template-columns: 1fr 1fr; }
   .impactTitle, .impactStrip blockquote { grid-column: span 2; }
