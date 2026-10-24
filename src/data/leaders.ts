@@ -97,7 +97,7 @@ export const leaders: Leader[] = [
     name: 'Hon. Saheed Lawal',
     role: 'Diaspora Coordinator, Canada',
     group: 'diaspora',
-    order: 7,
+    order: 8,
     photo: '/leaders/saheed-lawal.webp',
     objectPosition: '50% 42%',
     objectPositionMobile: '50% 40%',
@@ -105,9 +105,9 @@ export const leaders: Leader[] = [
   {
     slug: 'bidemi-balogun',
     name: 'Hon. Barr. Bidemi Balogun',
-    role: 'Diaspora Coordinator, United Kingdom',
+    role: 'Diaspora Coordinator, Europe',
     group: 'diaspora',
-    order: 8,
+    order: 7,
     photo: '/leaders/bidemi-balogun.webp',
   },
 ];
