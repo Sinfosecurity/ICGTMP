@@ -66,7 +66,7 @@ export const navigation: NavItem[] = [
     label: 'Leadership',
     to: '/leadership',
     title: 'Leadership | ICGMTP',
-    description: 'Conveners, Director-General, Secretary, and diaspora coordinators of ICGMTP.',
+    description: 'Convener, Director-General, Deputy Directors-General, Secretary, and diaspora coordinators of ICGMTP.',
     header: true,
     footer: true,
   },

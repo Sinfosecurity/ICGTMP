@@ -739,10 +739,7 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 20
   gap: var(--leader-gap);
   align-items: stretch;
 }
-.leaderRowLeadership { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-.leaderRowLeadership .leaderCard { grid-column: span 2; }
-.leaderRowLeadership .leaderCard:nth-child(1) { grid-column: 2 / span 2; }
-.leaderRowLeadership .leaderCard:nth-child(2) { grid-column: 4 / span 2; }
+.leaderRowLeadership { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .leaderRowDiaspora { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .leaderCard {
   background: #fff;
@@ -1487,9 +1484,6 @@ main h1:focus-visible {
   .leaderSectionHead { flex-direction: column; align-items: flex-start; }
   .leaderRowLeadership,
   .leaderRowDiaspora { grid-template-columns: 1fr; }
-  .leaderRowLeadership .leaderCard,
-  .leaderRowLeadership .leaderCard:nth-child(1),
-  .leaderRowLeadership .leaderCard:nth-child(2) { grid-column: auto; }
   .sectorGrid { grid-template-columns: 1fr; }
   .impactStrip { grid-template-columns: 1fr 1fr; }
   .impactTitle, .impactStrip blockquote { grid-column: span 2; }
