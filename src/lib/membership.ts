@@ -1,5 +1,5 @@
 import type { MembershipCategory } from '../data/site';
-import { lgaDirectory, type LgaName } from '../data/locations';
+import { councilOptions, type LgaName } from '../data/locations';
 import {
   LIMITS,
   checkEmail,
@@ -81,9 +81,9 @@ export function validateField(
     case 'lga':
       return draft.lga ? undefined : 'Select your LGA.';
     case 'lcda':
-      if (!draft.lcda) return 'Select your LCDA.';
-      if (draft.lga && !lgaDirectory[draft.lga].includes(draft.lcda)) {
-        return 'That LCDA is not in the selected LGA.';
+      if (!draft.lcda) return 'Select your LCDA or LG.';
+      if (draft.lga && !councilOptions[draft.lga].includes(draft.lcda)) {
+        return 'That LCDA or LG is not in the selected LGA.';
       }
       return undefined;
     case 'category':

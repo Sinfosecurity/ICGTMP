@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import { membershipCategories, org, type MembershipCategory } from '../data/site';
-import { lgaDirectory, lgaNames, type LgaName } from '../data/locations';
+import { councilOptions, lgaNames, type LgaName } from '../data/locations';
 import { mailtoHref } from '../lib/form';
 import { focusables, lockPageScroll, trapTab } from '../lib/scrollLock';
 import { submitMembership } from '../lib/formTransport';
@@ -202,7 +202,7 @@ export function JoinModal({ open, preset, onClose }: Props) {
 
   if (!open) return null;
 
-  const lcdas = draft.lga ? lgaDirectory[draft.lga] : [];
+  const councils = draft.lga ? councilOptions[draft.lga] : [];
   const invalidFields = MEMBERSHIP_FIELD_ORDER.filter((field) => errors[field]);
   const volunteerUsed = draft.volunteerInterest.length;
   const volunteerHint =
@@ -369,7 +369,7 @@ export function JoinModal({ open, preset, onClose }: Props) {
                 </select>
               </FormField>
 
-              <FormField label="LCDA" {...fieldProps('lcda')}>
+              <FormField label="LCDA/LG" {...fieldProps('lcda')}>
                 <select
                   value={draft.lcda}
                   onChange={(e) => {
@@ -378,8 +378,8 @@ export function JoinModal({ open, preset, onClose }: Props) {
                   }}
                   disabled={!draft.lga}
                 >
-                  <option value="">{draft.lga ? 'Select LCDA' : 'Select LGA first'}</option>
-                  {lcdas.map((name) => (
+                  <option value="">{draft.lga ? 'Select LCDA/LG' : 'Select LGA first'}</option>
+                  {councils.map((name) => (
                     <option key={name} value={name}>
                       {name}
                     </option>

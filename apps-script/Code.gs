@@ -69,17 +69,18 @@ var LIMITS = {
 };
 
 var LGA_DIRECTORY = {
-  'Shomolu': ['Bariga LCDA'],
-  'Kosofe': ['Ikosi-Isheri LCDA', 'Agboyi-Ketu LCDA'],
+  'Shomolu': ['Shomolu LG', 'Bariga LCDA'],
+  'Kosofe': ['Kosofe LG', 'Agboyi-Ketu LCDA', 'Ikosi-Isheri LCDA'],
   'Ikorodu': [
+    'Ikorodu LG',
+    'Igbogbo-Baiyeku LCDA',
+    'Ijede LCDA',
     'Ikorodu North LCDA',
     'Ikorodu West LCDA',
-    'Igbogbo-Baiyeku LCDA',
-    'Imota LCDA',
-    'Ijede LCDA'
+    'Imota LCDA'
   ],
-  'Epe': ['Eredo LCDA', 'Ikosi-Ejinrin LCDA'],
-  'Ibeju-Lekki': ['Lekki LCDA'],
+  'Epe': ['Epe LG', 'Eredo LCDA', 'Ikosi-Ejinrin LCDA'],
+  'Ibeju-Lekki': ['Ibeju-Lekki LG', 'Lekki LCDA'],
 };
 
 var CATEGORIES = [
@@ -376,9 +377,9 @@ function checkLga_(lga, lcda) {
   if (!lga) return fail_('INVALID_FIELD', 'lga', 'Select your LGA.');
   var lcdas = LGA_DIRECTORY[lga];
   if (!lcdas) return fail_('INVALID_FIELD', 'lga', 'Select your LGA from the list.');
-  if (!lcda) return fail_('INVALID_FIELD', 'lcda', 'Select your LCDA.');
+  if (!lcda) return fail_('INVALID_FIELD', 'lcda', 'Select your LCDA or LG.');
   if (lcdas.indexOf(lcda) === -1) {
-    return fail_('INVALID_FIELD', 'lcda', 'That LCDA is not in the selected LGA.');
+    return fail_('INVALID_FIELD', 'lcda', 'That LCDA or LG is not in the selected LGA.');
   }
   return null;
 }
