@@ -53,7 +53,7 @@ export const leaders: Leader[] = [
     name: 'Hon. Jamiu Arowosegbe',
     role: 'Director-General',
     group: 'leadership',
-    order: 2,
+    order: 4,
     photo: '/leaders/jamiu-arowosegbe.webp',
     objectPosition: '50% 18%',
     objectPositionMobile: '50% 16%',
@@ -63,15 +63,15 @@ export const leaders: Leader[] = [
     name: 'Lookman Alex Adeyemi',
     role: 'Deputy Director-General, Finance',
     group: 'leadership',
-    order: 3,
+    order: 5,
     photo: '/leaders/lookman-alex-adeyemi.webp',
   },
   {
     slug: 'mujaid-adeyemi',
     name: 'Alhaji Mujaid Mercury Adeyemi',
-    role: 'Conveyor',
+    role: 'Convener',
     group: 'leadership',
-    order: 4,
+    order: 2,
     photo: '/leaders/mujaid-adeyemi.webp',
   },
   {
@@ -79,7 +79,7 @@ export const leaders: Leader[] = [
     name: 'Mr. Paul Sola Oginni',
     role: 'Convener',
     group: 'leadership',
-    order: 5,
+    order: 3,
     photo: '/leaders/paul-sola-oginni.webp',
     objectPosition: '50% 50%',
     objectPositionMobile: '50% 50%',
@@ -122,4 +122,23 @@ export const leaders: Leader[] = [
 
 export function leadersInGroup(group: LeaderGroup): Leader[] {
   return leaders.filter((leader) => leader.group === group).sort((a, b) => a.order - b.order);
+}
+
+function leadershipRank(role: string): number {
+  if (role === 'Convener') return 0;
+  if (role === 'Director-General') return 1;
+  if (role.startsWith('Deputy Director-General')) return 2;
+  if (role === 'Secretary') return 3;
+  return 4;
+}
+
+export function leaderRows(group: LeaderGroup): Leader[][] {
+  const people = leadersInGroup(group);
+  if (group !== 'leadership') return people.length ? [people] : [];
+  const buckets = new Map<number, Leader[]>();
+  for (const leader of people) {
+    const rank = leadershipRank(leader.role);
+    buckets.set(rank, [...(buckets.get(rank) ?? []), leader]);
+  }
+  return [...buckets.keys()].sort((a, b) => a - b).map((rank) => buckets.get(rank) ?? []);
 }

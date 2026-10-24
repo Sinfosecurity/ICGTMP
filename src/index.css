@@ -741,6 +741,8 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 20
 }
 .leaderRowLeadership { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .leaderRowDiaspora { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.leaderGroup .leaderRow + .leaderRow { margin-top: var(--leader-gap); }
+.leaderRow[data-count="1"] .leaderCard { grid-column: 2; }
 .leaderCard {
   background: #fff;
   border-radius: 6px;
@@ -1484,6 +1486,7 @@ main h1:focus-visible {
   .leaderSectionHead { flex-direction: column; align-items: flex-start; }
   .leaderRowLeadership,
   .leaderRowDiaspora { grid-template-columns: 1fr; }
+  .leaderRow[data-count="1"] .leaderCard { grid-column: auto; }
   .sectorGrid { grid-template-columns: 1fr; }
   .impactStrip { grid-template-columns: 1fr 1fr; }
   .impactTitle, .impactStrip blockquote { grid-column: span 2; }

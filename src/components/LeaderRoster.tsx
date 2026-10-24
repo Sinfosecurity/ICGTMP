@@ -3,7 +3,7 @@ import {
   leaderGroups,
   leaderHasPhoto,
   leaderInitials,
-  leadersInGroup,
+  leaderRows,
   type Leader,
   type LeaderGroup,
 } from '../data/leaders';
@@ -53,8 +53,8 @@ export function LeaderGroups({ heading }: { heading: 'h2' | 'h3' }) {
   return (
     <div className="leaderDirectory">
       {leaderGroups.map((group) => {
-        const people = leadersInGroup(group.id);
-        if (people.length === 0) return null;
+        const rows = leaderRows(group.id);
+        if (rows.length === 0) return null;
         return (
           <section
             key={group.id}
@@ -64,15 +64,21 @@ export function LeaderGroups({ heading }: { heading: 'h2' | 'h3' }) {
             <Heading id={`leaders-${group.id}`} className="leaderGroupLabel">
               {group.label}
             </Heading>
-            <div className={rowClass(group.id)}>
-              {people.map((leader) => (
-                <LeaderCard
-                  key={leader.slug}
-                  leader={leader}
-                  nameTag={heading === 'h2' ? 'h3' : 'h4'}
-                />
-              ))}
-            </div>
+            {rows.map((row) => (
+              <div
+                key={row[0].slug}
+                className={rowClass(group.id)}
+                data-count={row.length}
+              >
+                {row.map((leader) => (
+                  <LeaderCard
+                    key={leader.slug}
+                    leader={leader}
+                    nameTag={heading === 'h2' ? 'h3' : 'h4'}
+                  />
+                ))}
+              </div>
+            ))}
           </section>
         );
       })}
