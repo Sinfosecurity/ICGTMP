@@ -1,10 +1,12 @@
+import { SITE } from '../config/site';
+
 export const org = {
-  shortName: 'ICGMTP',
-  fullName: 'Independent Campaign Group for Tradesmen, Markets & Professionals',
+  shortName: SITE.name,
+  fullName: SITE.fullName,
   motto: 'Strength. Stability. Support.',
   banner: 'For a Greater Lagos and a Renewed Nigeria',
   affiliation: 'In support of APC Lagos stakeholders & leadership',
-  email: 'info@icgtmp.org',
+  email: SITE.email,
   phones: [
     { display: '0703 652 1422', tel: '+2347036521422' },
     { display: '0802 757 1429', tel: '+2348027571429' },
@@ -107,7 +109,7 @@ export const navigation: NavItem[] = [
     to: '/contact',
     title: 'Contact | ICGMTP',
     description:
-      'Write to ICGMTP at Ita’le Market, Epe Waterfront, email info@icgtmp.org, or join the WhatsApp group.',
+      `Write to ICGMTP at Ita’le Market, Epe Waterfront, email ${SITE.email}, or join the WhatsApp group.`,
     header: true,
     footer: true,
   },

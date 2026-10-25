@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom';
+import { track } from '@vercel/analytics';
 import { ArrowRight, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import { membershipCategories, org, type MembershipCategory } from '../data/site';
 import { councilOptions, lgaNames, type LgaName } from '../data/locations';
@@ -8,6 +9,7 @@ import { focusables, lockPageScroll, trapTab } from '../lib/scrollLock';
 import { submitMembership } from '../lib/formTransport';
 import { checkCooldown, clearAttempts, describeWait, recordAttempt } from '../lib/rateLimit';
 import { LIMITS, formatNgPhone, newSubmissionId, normalizeNgPhone } from '../lib/validation';
+import { ConsentField, CONSENT_ERROR } from './ConsentField';
 import { ErrorSummary } from './ErrorSummary';
 import { FormField } from './FormField';
 import { useToast } from './Toaster';
@@ -57,6 +59,9 @@ export function JoinModal({ open, preset, onClose }: Props) {
   const [submitError, setSubmitError] = useState('');
   const [sending, setSending] = useState(false);
   const [honeypot, setHoneypot] = useState('');
+  const [consent, setConsent] = useState(false);
+  const [consentError, setConsentError] = useState('');
+  const consentStamp = useRef('');
 
   useEffect(() => {
     if (!open) return;
@@ -75,6 +80,9 @@ export function JoinModal({ open, preset, onClose }: Props) {
     setSubmitError('');
     setSending(false);
     setHoneypot('');
+    setConsent(false);
+    setConsentError('');
+    consentStamp.current = '';
     submissionId.current = newSubmissionId();
     openedAt.current = Date.now();
     const t = window.setTimeout(() => {
@@ -112,6 +120,8 @@ export function JoinModal({ open, preset, onClose }: Props) {
         marketAssociation: values.marketAssociation.trim(),
         category: values.category,
         volunteerInterest: values.volunteerInterest.trim(),
+        consent: true,
+        consentAt: consentStamp.current,
         website,
         source: 'website',
         submissionId: submissionId.current,
@@ -124,6 +134,7 @@ export function JoinModal({ open, preset, onClose }: Props) {
         clearAttempts(COOLDOWN_KEY);
         setReference(result.reference ?? '');
         setSubmitted(result.code === 'DUPLICATE' ? 'duplicate' : 'sent');
+        track('registration_submitted', { category: values.category });
         toast.success(
           result.code === 'DUPLICATE' ? 'You are already registered' : 'Registration received',
           {
@@ -140,6 +151,18 @@ export function JoinModal({ open, preset, onClose }: Props) {
       }
 
       // The register rejected one field. Put the visitor on it.
+      if (result.code === 'INVALID_FIELD' && result.field === 'consent') {
+        setConsentError(result.error ?? CONSENT_ERROR);
+        setShowSummary(true);
+        document.getElementById('join-consent')?.focus();
+        toast.error('Check the highlighted field', {
+          description: result.error,
+          dedupeKey: COOLDOWN_KEY,
+          duration: 8000,
+        });
+        return;
+      }
+
       if (result.code === 'INVALID_FIELD' && result.field) {
         const field = result.field as MembershipField;
         setErrors((current) => ({ ...current, [field]: result.error }));
@@ -179,8 +202,11 @@ export function JoinModal({ open, preset, onClose }: Props) {
       }, {}),
     );
 
+    const nextConsent = consent ? '' : CONSENT_ERROR;
+    setConsentError(nextConsent);
+
     const invalid = MEMBERSHIP_FIELD_ORDER.filter((field) => nextErrors[field]);
-    if (invalid.length) {
+    if (invalid.length || nextConsent) {
       setShowSummary(true);
       // The summary is the announcement; focus it rather than a single field so
       // the visitor hears how many problems there are before jumping to one.
@@ -188,6 +214,7 @@ export function JoinModal({ open, preset, onClose }: Props) {
       return;
     }
     setShowSummary(false);
+    consentStamp.current = new Date().toISOString();
 
     const cooldown = checkCooldown(COOLDOWN_KEY, COOLDOWN_MAX, COOLDOWN_WINDOW_MS);
     if (cooldown.blocked) {
@@ -285,10 +312,13 @@ export function JoinModal({ open, preset, onClose }: Props) {
                 <ErrorSummary
                   className="wideField"
                   summaryRef={summaryRef}
-                  items={invalidFields.map((field) => ({
-                    id: fieldId(field),
-                    message: errors[field] ?? '',
-                  }))}
+                  items={[
+                    ...invalidFields.map((field) => ({
+                      id: fieldId(field),
+                      message: errors[field] ?? '',
+                    })),
+                    ...(consentError ? [{ id: 'join-consent', message: consentError }] : []),
+                  ]}
                 />
               ) : null}
 
@@ -467,10 +497,16 @@ export function JoinModal({ open, preset, onClose }: Props) {
                 </p>
               ) : null}
 
-              <p className="formPrivacy wideField">
-                By submitting, you agree that ICGMTP may contact you about membership, volunteering
-                or partnership. We do not sell this information.
-              </p>
+              <ConsentField
+                id="join-consent"
+                checked={consent}
+                error={consentError}
+                onChange={(checked) => {
+                  setConsent(checked);
+                  if (checked) setConsentError('');
+                }}
+                onNavigate={onClose}
+              />
               <button className="goldPill" type="submit" disabled={sending}>
                 {sending ? 'Sending…' : submitError ? 'Try again' : 'Submit interest'}{' '}
                 <ArrowRight size={17} />

@@ -1,5 +1,6 @@
 import { MapPin, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { SITE } from '../config/site';
 import { mapsUrl, navigation, org } from '../data/site';
 import { Brand } from './Brand';
 import { WhatsAppJoinLink } from './WhatsAppJoinLink';
@@ -63,7 +64,12 @@ export function Footer() {
         </div>
       </div>
       <div className="footerBottom">
-        <span>© 2026 {org.shortName}. All rights reserved.</span>
+        <div className="footerCredit">
+          <a href={SITE.parentOrg.url}>
+            Powered by {SITE.parentOrg.name} — everyone who joins the platform
+          </a>
+          <span>© 2026 {SITE.name} · Registered as {SITE.registeredName}</span>
+        </div>
         <nav aria-label="Legal">
           {navigation
             .filter((item) => item.legal)

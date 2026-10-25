@@ -18,7 +18,7 @@ function RouteEffects() {
   }, [hash, navigate]);
 
   useEffect(() => {
-    applyDocumentMeta(metaForPath(pathname));
+    applyDocumentMeta(metaForPath(pathname), pathname);
     const frame = window.requestAnimationFrame(() => {
       const id = hash.startsWith('#') ? decodeURIComponent(hash.slice(1)) : '';
       const target = id && id !== 'main' ? document.getElementById(id) : null;

@@ -155,11 +155,5 @@ The website adds its own transport-level codes on top: `OFFLINE`, `TIMEOUT`,
 
 ## Email notification
 
-The site also posts to FormSubmit so a coordinator gets an email. **The
-spreadsheet decides the outcome, not the email.** If the register rejects a
-submission, the visitor is told it failed even when the email went out —
-otherwise people would be told they are members when no row exists.
-
-The one exception: if `VITE_SHEET_ENDPOINT` is unset, the email is all there is
-and it decides. To drop FormSubmit entirely, set `NOTIFY_EMAIL` in `Code.gs` and
-remove the email leg from `src/lib/formTransport.ts`.
+The spreadsheet is the register. Apps Script sends the coordinator email after
+a row is written. A missing `VITE_SHEET_ENDPOINT` is a failed submission.

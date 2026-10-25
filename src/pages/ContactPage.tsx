@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { MapPin, Mail, Phone } from 'lucide-react';
 import { useCallback, useRef, useState, type FormEvent } from 'react';
 import { mapsUrl, org } from '../data/site';
@@ -6,6 +5,7 @@ import { mailtoHref } from '../lib/form';
 import { submitMessage } from '../lib/formTransport';
 import { checkCooldown, clearAttempts, describeWait, recordAttempt } from '../lib/rateLimit';
 import { LIMITS, checkEmail, checkFullName, checkLength, newSubmissionId } from '../lib/validation';
+import { ConsentField, CONSENT_ERROR } from '../components/ConsentField';
 import { ErrorSummary } from '../components/ErrorSummary';
 import { FormField } from '../components/FormField';
 import { PageShell } from '../components/PageShell';
@@ -64,6 +64,9 @@ export function ContactPage() {
   const [sent, setSent] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [honeypot, setHoneypot] = useState('');
+  const [consent, setConsent] = useState(false);
+  const [consentError, setConsentError] = useState('');
+  const consentStamp = useRef('');
 
   const invalidFields = FIELD_ORDER.filter((field) => errors[field]);
 
@@ -87,6 +90,8 @@ export function ContactPage() {
         fullName: values.name.trim(),
         email: values.email.trim().toLowerCase(),
         message: values.message.trim(),
+        consent: true,
+        consentAt: consentStamp.current,
         website,
         source: 'website',
         submissionId: submissionId.current,
@@ -108,6 +113,18 @@ export function ContactPage() {
             ? `Your reference is ${result.reference}.`
             : `ICGMTP will reply to ${values.email}.`,
           dedupeKey: COOLDOWN_KEY,
+        });
+        return;
+      }
+
+      if (result.code === 'INVALID_FIELD' && result.field === 'consent') {
+        setConsentError(result.error ?? CONSENT_ERROR);
+        setShowSummary(true);
+        document.getElementById('contact-consent')?.focus();
+        toast.error('Check the highlighted field', {
+          description: result.error,
+          dedupeKey: COOLDOWN_KEY,
+          duration: 8000,
         });
         return;
       }
@@ -148,12 +165,16 @@ export function ContactPage() {
     setErrors(nextErrors);
     setTouched({ name: true, email: true, message: true });
 
-    if (FIELD_ORDER.some((field) => nextErrors[field])) {
+    const nextConsent = consent ? '' : CONSENT_ERROR;
+    setConsentError(nextConsent);
+
+    if (FIELD_ORDER.some((field) => nextErrors[field]) || nextConsent) {
       setShowSummary(true);
       window.setTimeout(() => summaryRef.current?.focus(), 20);
       return;
     }
     setShowSummary(false);
+    consentStamp.current = new Date().toISOString();
 
     const cooldown = checkCooldown(COOLDOWN_KEY, COOLDOWN_MAX, COOLDOWN_WINDOW_MS);
     if (cooldown.blocked) {
@@ -204,10 +225,13 @@ export function ContactPage() {
           {showSummary ? (
             <ErrorSummary
               summaryRef={summaryRef}
-              items={invalidFields.map((field) => ({
-                id: fieldId(field),
-                message: errors[field] ?? '',
-              }))}
+              items={[
+                ...invalidFields.map((field) => ({
+                  id: fieldId(field),
+                  message: errors[field] ?? '',
+                })),
+                ...(consentError ? [{ id: 'contact-consent', message: consentError }] : []),
+              ]}
             />
           ) : null}
 
@@ -279,9 +303,15 @@ export function ContactPage() {
             />
           </FormField>
 
-          <p className="formPrivacy">
-            This message is sent to {org.email}. Read the <Link to="/privacy">Privacy Policy</Link>.
-          </p>
+          <ConsentField
+            id="contact-consent"
+            checked={consent}
+            error={consentError}
+            onChange={(checked) => {
+              setConsent(checked);
+              if (checked) setConsentError('');
+            }}
+          />
 
           {submitError ? (
             <p className="formAlert" role="alert">

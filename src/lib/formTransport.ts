@@ -1,5 +1,3 @@
-import { submitPublicForm, type FormPayload } from './form';
-
 /**
  * The stable contract with apps-script/Code.gs, plus the transport-level
  * outcomes the script never gets to answer.
@@ -48,6 +46,8 @@ export type MembershipPayload = {
   marketAssociation?: string;
   category: string;
   volunteerInterest?: string;
+  consent: boolean;
+  consentAt: string;
   website?: string;
   source?: string;
   submissionId: string;
@@ -58,6 +58,8 @@ export type MessagePayload = {
   fullName: string;
   email: string;
   message: string;
+  consent: boolean;
+  consentAt: string;
   website?: string;
   source?: string;
   submissionId: string;
@@ -134,7 +136,7 @@ async function fetchWithTimeout(url: string, init: RequestInit): Promise<Respons
  * redirect: 'follow' is required so script.google.com -> googleusercontent.com
  * resolves and the JSON body is readable. Do not "fix" this to application/json.
  */
-async function postSheet(body: Record<string, string | number>): Promise<SheetResponse & { code: SubmitCode }> {
+async function postSheet(body: Record<string, string | number | boolean>): Promise<SheetResponse & { code: SubmitCode }> {
   const url = sheetEndpoint();
   if (!url) return { code: 'NOT_CONFIGURED' };
   if (isOffline()) return { code: 'OFFLINE' };
@@ -170,50 +172,20 @@ async function postSheet(body: Record<string, string | number>): Promise<SheetRe
   return { ...data, code };
 }
 
-async function postEmail(payload: FormPayload, subject: string): Promise<'sent' | 'pending' | 'failed'> {
-  const result = await submitPublicForm(payload, subject);
-  if (result.status === 'sent') return 'sent';
-  if (result.status === 'pending-confirm') return 'pending';
-  return 'failed';
-}
-
-/**
- * The spreadsheet decides the outcome; the email is a notification, not a
- * second chance. Reporting success because an email went out while the register
- * rejected the row is how people end up believing they are members when no row
- * exists. The one exception is a site with no endpoint configured, where the
- * email is all there is.
- */
-function settle(
-  sheetSettled: PromiseSettledResult<SheetResponse & { code: SubmitCode }>,
-  emailSettled: PromiseSettledResult<'sent' | 'pending' | 'failed'>,
-): TransportResult {
-  const sheet =
-    sheetSettled.status === 'fulfilled'
-      ? sheetSettled.value
-      : ({ code: 'NETWORK' } as SheetResponse & { code: SubmitCode });
-  const emailState = emailSettled.status === 'fulfilled' ? emailSettled.value : 'failed';
-
-  const notified = emailState === 'sent';
-  const emailPendingConfirm = emailState === 'pending';
-  const base = { notified, emailPendingConfirm };
-
+/** The spreadsheet is the register. A missing endpoint is a failed submission. */
+function settle(sheet: SheetResponse & { code: SubmitCode }): TransportResult {
   if (sheet.code === 'NOT_CONFIGURED') {
-    return notified
-      ? { ...base, ok: true, code: 'CREATED', retryable: false }
-      : {
-          ...base,
-          ok: false,
-          code: 'NETWORK',
-          error: MESSAGES.NETWORK,
-          retryable: true,
-        };
+    return {
+      ok: false,
+      code: 'NETWORK',
+      error: MESSAGES.NETWORK,
+      retryable: true,
+      notified: false,
+    };
   }
 
   const ok = sheet.code === 'CREATED' || sheet.code === 'DUPLICATE';
-
   return {
-    ...base,
     ok,
     code: sheet.code,
     field: sheet.field,
@@ -221,6 +193,7 @@ function settle(
     retryAfter: sheet.retryAfter,
     retryable: RETRYABLE.includes(sheet.code),
     error: ok ? undefined : sheet.error?.trim() || MESSAGES[sheet.code],
+    notified: false,
   };
 }
 
@@ -246,6 +219,8 @@ export async function submitMembership(payload: MembershipPayload): Promise<Tran
     marketAssociation: payload.marketAssociation ?? '',
     category: payload.category,
     volunteerInterest: payload.volunteerInterest ?? '',
+    consent: payload.consent,
+    consentAt: payload.consentAt,
     website,
     source: payload.source ?? 'website',
     submissionId: payload.submissionId,
@@ -261,25 +236,7 @@ export async function submitMembership(payload: MembershipPayload): Promise<Tran
     return HONEYPOT_RESULT;
   }
 
-  const emailPayload: FormPayload = {
-    name: payload.fullName,
-    email: payload.email,
-    phone: payload.phone,
-    lga: payload.lga,
-    lcda: payload.lcda,
-    ward: payload.ward ?? '',
-    profession: payload.profession ?? '',
-    marketAssociation: payload.marketAssociation ?? '',
-    category: payload.category,
-    volunteerInterest: payload.volunteerInterest ?? '',
-  };
-
-  const [sheet, email] = await Promise.allSettled([
-    postSheet(sheetBody),
-    postEmail(emailPayload, 'ICGMTP membership interest'),
-  ]);
-
-  return settle(sheet, email);
+  return settle(await postSheet(sheetBody));
 }
 
 export async function submitMessage(payload: MessagePayload): Promise<TransportResult> {
@@ -289,6 +246,8 @@ export async function submitMessage(payload: MessagePayload): Promise<TransportR
     fullName: payload.fullName,
     email: payload.email,
     message: payload.message,
+    consent: payload.consent,
+    consentAt: payload.consentAt,
     website,
     source: payload.source ?? 'website',
     submissionId: payload.submissionId,
@@ -304,13 +263,5 @@ export async function submitMessage(payload: MessagePayload): Promise<TransportR
     return HONEYPOT_RESULT;
   }
 
-  const [sheet, email] = await Promise.allSettled([
-    postSheet(sheetBody),
-    postEmail(
-      { name: payload.fullName, email: payload.email, message: payload.message },
-      'ICGMTP contact form',
-    ),
-  ]);
-
-  return settle(sheet, email);
+  return settle(await postSheet(sheetBody));
 }

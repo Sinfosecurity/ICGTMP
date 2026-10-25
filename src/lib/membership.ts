@@ -2,7 +2,7 @@ import type { MembershipCategory } from '../data/site';
 import { councilOptions, type LgaName } from '../data/locations';
 import {
   LIMITS,
-  checkEmail,
+  checkOptionalEmail,
   checkFullName,
   checkLength,
   checkPhone,
@@ -44,7 +44,6 @@ export const MEMBERSHIP_FIELD_ORDER: MembershipField[] = [
 export const MEMBERSHIP_REQUIRED: MembershipField[] = [
   'fullName',
   'phone',
-  'email',
   'lga',
   'lcda',
   'category',
@@ -77,7 +76,7 @@ export function validateField(
     case 'phone':
       return checkPhone(draft.phone);
     case 'email':
-      return checkEmail(draft.email);
+      return checkOptionalEmail(draft.email);
     case 'lga':
       return draft.lga ? undefined : 'Select your LGA.';
     case 'lcda':

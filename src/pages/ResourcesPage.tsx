@@ -14,7 +14,7 @@ export function ResourcesPage() {
           <h2>Join as a member</h2>
           <p>
             Register your interest by LGA, LCDA, trade and membership category. Submissions go to
-            info@icgtmp.org.
+            {org.email}.
           </p>
           <p>
             <Link to="/contact">Open the contact page</Link> or use Join ICGMTP in the header.
@@ -37,7 +37,7 @@ export function ResourcesPage() {
         <article>
           <h2>Contact</h2>
           <p>
-            {org.addressLines.slice(0, 3).join(', ')}. Email info@icgtmp.org, or{' '}
+            {org.addressLines.slice(0, 3).join(', ')}. Email {org.email}, or{' '}
             <a href={org.whatsappGroup} target="_blank" rel="noopener noreferrer">
               join the WhatsApp group
             </a>

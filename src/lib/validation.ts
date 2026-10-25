@@ -13,6 +13,10 @@ export const LIMITS = {
   ward: 80,
   profession: 120,
   marketAssociation: 160,
+  organisation: 160,
+  contactPerson: 120,
+  supportType: 160,
+  country: 80,
   volunteerInterest: 1000,
   message: 4000,
 } as const;
@@ -73,6 +77,12 @@ export function isDisposableEmail(raw: string): boolean {
 export function checkEmail(raw: string): string | undefined {
   const value = normalizeEmail(raw);
   if (!value) return 'Enter your email address.';
+  return checkOptionalEmail(raw);
+}
+
+export function checkOptionalEmail(raw: string): string | undefined {
+  const value = normalizeEmail(raw);
+  if (!value) return undefined;
   if (!isValidEmail(value)) return 'Enter a valid email address.';
   if (isDisposableEmail(value)) return 'Use an email address you check regularly.';
   return undefined;
