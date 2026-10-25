@@ -2,12 +2,6 @@
   "redirects": [
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "icgtmp-review.vercel.app" }],
-      "destination": "https://icgmtp.thefortgroupng.com/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/:path*",
       "has": [{ "type": "host", "value": "icgmtp-site.vercel.app" }],
       "destination": "https://icgmtp.thefortgroupng.com/:path*",
       "permanent": true
