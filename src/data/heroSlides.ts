@@ -27,6 +27,8 @@ export type HeroSlide = {
   backdrop: string;
   objectFit: 'cover' | 'contain';
   objectPosition: string;
+  /** Zoom past padding embedded in an artwork file when shown on desktop. */
+  artworkScale?: number;
   /**
    * Where to anchor the crop on phones. Each slide is aimed at the
    * photographic part of the artwork, away from its densest lettering.
@@ -55,6 +57,22 @@ export const HERO_INTERVAL_MS = 5500;
 export const HERO_FADE_MS = 800;
 
 export const heroSlides: HeroSlide[] = [
+  {
+    id: 'continuity-koh',
+    src: images.hero06,
+    alt: imageAlts.hero06,
+    width: 1024,
+    height: 409,
+    backdrop: '#003321',
+    objectFit: 'cover',
+    objectPosition: '50% 50%',
+    // This file includes 148px left and 149px right blurred sidebars.
+    // Fill the hero with the 727px artwork between them instead.
+    artworkScale: 1024 / 727,
+    objectPositionMobile: '50% 50%',
+    title: 'Continuity 2027',
+    subtitle: 'Vote BAT for 2nd Term. Vote KOH as Lagos State Governor.',
+  },
   {
     id: 'people',
     src: images.hero05,

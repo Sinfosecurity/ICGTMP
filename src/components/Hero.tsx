@@ -117,6 +117,7 @@ export function Hero() {
                 {
                   background: slide.backdrop,
                   '--hero-fit': slide.objectFit,
+                  '--hero-artwork-scale': slide.artworkScale ?? 1,
                   '--photo-pos': slide.objectPosition,
                   '--photo-pos-mobile': slide.objectPositionMobile,
                   '--hero-zoom': slide.mobileZoom ?? 1,

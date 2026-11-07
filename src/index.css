@@ -316,6 +316,7 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 20
   height: 100%;
   object-fit: var(--hero-fit, cover);
   object-position: var(--photo-pos, 50% 50%);
+  transform: scale(var(--hero-artwork-scale, 1));
 }
 .heroHits {
   position: absolute;

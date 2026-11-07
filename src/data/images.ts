@@ -7,6 +7,7 @@ export const images = {
   fortGroup: '/resources/fort-group-logo.webp',
   og: '/resources/og-image.webp',
   hero: '/resources/hero-05.webp',
+  hero06: '/resources/hero-06b.webp',
   hero05: '/resources/hero-05.webp',
   hero00: '/resources/hero-00.webp',
   hero01: '/resources/hero-01.webp',
@@ -33,6 +34,7 @@ export const sectorSrcSet = {
 } as const;
 
 export const imageAlts = {
+  hero06: 'Continuity 2027 — Vote BAT for a second term and KOH as Lagos State Governor',
   logo: 'ICGMTP logo — Independent Campaign Group for Tradesmen, Markets & Professionals',
   emblem: '',
   fortGroup: 'The Fort Group',
