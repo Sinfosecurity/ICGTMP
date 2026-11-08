@@ -9,7 +9,13 @@ import {
   type PointerEvent,
 } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { HERO_FADE_MS, HERO_INTERVAL_MS, heroSlides, type HeroHit } from '../data/heroSlides';
+import {
+  HERO_FADE_MS,
+  HERO_FIRST_INTERVAL_MS,
+  HERO_INTERVAL_MS,
+  heroSlides,
+  type HeroHit,
+} from '../data/heroSlides';
 import { useJoin } from '../routes/JoinProvider';
 
 function prefersReducedMotion() {
@@ -46,11 +52,12 @@ export function Hero() {
 
   useEffect(() => {
     if (hidden || reducedMotion) return;
-    const timer = window.setInterval(() => {
+    const delay = index === 0 ? HERO_FIRST_INTERVAL_MS : HERO_INTERVAL_MS;
+    const timer = window.setTimeout(() => {
       setIndex((current) => (current + 1) % heroSlides.length);
-    }, HERO_INTERVAL_MS);
-    return () => window.clearInterval(timer);
-  }, [hidden, reducedMotion, resumeToken]);
+    }, delay);
+    return () => window.clearTimeout(timer);
+  }, [hidden, reducedMotion, resumeToken, index]);
 
   const onHit = (hit: HeroHit) => {
     if (hit.action === 'join') {
