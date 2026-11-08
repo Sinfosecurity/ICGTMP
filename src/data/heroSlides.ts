@@ -56,6 +56,20 @@ export const HERO_FADE_MS = 800;
 
 export const heroSlides: HeroSlide[] = [
   {
+    id: 'continuity-koh',
+    src: images.hero06b,
+    alt: imageAlts.hero06b,
+    width: 1024,
+    height: 409,
+    backdrop: '#003321',
+    objectFit: 'cover',
+    objectPosition: '50% 50%',
+    objectPositionMobile: '50% 50%',
+    kicker: 'Continuity 2027 · Vote BAT · Lagos Rising',
+    title: 'Vote KOH',
+    subtitle: 'Dr. Kadri Obafemi Hamzat for Governor of Lagos State.',
+  },
+  {
     id: 'people',
     src: images.hero05,
     alt: imageAlts.hero05,

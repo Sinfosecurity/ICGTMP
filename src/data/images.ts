@@ -13,6 +13,7 @@ export const images = {
   hero02: '/resources/hero-02.webp',
   hero03: '/resources/hero-03.webp',
   hero04: '/resources/hero-04.webp',
+  hero06b: '/resources/hero-06b.webp',
   markets: '/resources/sector-markets-800.webp',
   artisans: '/resources/sector-artisans-800.webp',
   professionals: '/resources/sector-professionals-800.webp',
@@ -43,6 +44,8 @@ export const imageAlts = {
   hero02: 'Together for a Stronger Lagos — ICGMTP, APC and The Fort Group',
   hero03: 'Lagos Rising — Dr. Kadri Obafemi Hamzat for Governor of Lagos State',
   hero04: 'Continuity 2027 — President Bola Ahmed Tinubu campaign artwork',
+  hero06b:
+    'Continuity 2027 campaign flyer — APC, ICGMTP and The Fort Group; Vote BAT for 2nd term; Lagos Rising Vote KOH for Dr. Kadri Obafemi Hamzat as Lagos State Governor; endorsed by former Governor Akinwunmi Ambode',
   markets: 'Trader with a child at a produce market in Lekki, Lagos',
   artisans: 'Nigerian mechanic at work',
   professionals: 'Nigerian medical professional on duty',

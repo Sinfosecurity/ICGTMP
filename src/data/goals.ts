@@ -13,8 +13,8 @@ export const goals: Goal[] = [
   {
     id: 'reach',
     icon: 'users',
-    figure: '2.6M',
-    title: 'Mobilisation target',
+    figure: '3M',
+    title: 'Mobilization Target',
     detail: 'Stated reach goal across Lagos East — not an independently verified count',
   },
   {

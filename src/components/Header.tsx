@@ -1,7 +1,7 @@
 import { Menu, X } from 'lucide-react';
 import { useEffect, useId, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { navigation, org } from '../data/site';
+import { navigation } from '../data/site';
 import { focusables, lockPageScroll, trapTab } from '../lib/scrollLock';
 import { useJoin } from '../routes/JoinProvider';
 import { Brand } from './Brand';
@@ -51,7 +51,6 @@ export function Header() {
     <header ref={headerRef} className="siteHeader">
       <div className="headerTop">
         <Brand />
-        <p className="motto">{org.motto}</p>
         <button
           ref={menuBtnRef}
           className="mobileMenu"
@@ -63,24 +62,24 @@ export function Header() {
         >
           {menuOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
         </button>
+        <nav ref={navRef} id={menuId} className={menuOpen ? 'mainNav open' : 'mainNav'} aria-label="Primary">
+          {navigation
+            .filter((item) => item.header)
+            .map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.to === '/'}
+                className={({ isActive }) => (isActive ? 'active' : undefined)}
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          <button type="button" className="goldCta" data-join-trigger onClick={() => onJoin()}>
+            Join ICGMTP
+          </button>
+        </nav>
       </div>
-      <nav ref={navRef} id={menuId} className={menuOpen ? 'mainNav open' : 'mainNav'} aria-label="Primary">
-        {navigation
-          .filter((item) => item.header)
-          .map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === '/'}
-              className={({ isActive }) => (isActive ? 'active' : undefined)}
-            >
-              {item.label}
-            </NavLink>
-          ))}
-        <button type="button" className="goldCta" data-join-trigger onClick={() => onJoin()}>
-          Join ICGMTP
-        </button>
-      </nav>
     </header>
   );
 }
