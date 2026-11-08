@@ -1392,7 +1392,7 @@ main h1:focus-visible {
   }
   /* Flyer banners stay whole on phones — match banner ratio, no crop/overlay. */
   .heroCarousel:has(.heroSlide--flyer.isActive) {
-    aspect-ratio: 1024 / 409;
+    aspect-ratio: 2560 / 1024;
     min-height: 0;
   }
   .heroSlide .heroImage {
