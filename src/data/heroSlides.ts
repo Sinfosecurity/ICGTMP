@@ -61,6 +61,8 @@ export type HeroSlide = {
 };
 
 export const HERO_INTERVAL_MS = 5500;
+/** First slide (Continuity KOH) is the lead flyer — hold it longer. */
+export const HERO_FIRST_INTERVAL_MS = 20000;
 export const HERO_FADE_MS = 800;
 
 export const heroSlides: HeroSlide[] = [
