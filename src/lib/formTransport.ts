@@ -21,7 +21,6 @@ export type SubmitCode =
 export type TransportResult = {
   ok: boolean;
   code: SubmitCode;
-  /** The field the server rejected, matching the client's field names. */
   field?: string;
   error?: string;
   /** Short receipt the visitor can quote back to a coordinator. */
