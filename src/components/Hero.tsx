@@ -104,7 +104,10 @@ export function Hero() {
       onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
     >
-      <div className="heroCarousel" style={{ '--hero-fade': `${HERO_FADE_MS}ms` } as CSSProperties}>
+      <div
+        className={heroSlides[index].showFullArtwork ? 'heroCarousel heroCarousel--fullArtwork' : 'heroCarousel'}
+        style={{ '--hero-fade': `${HERO_FADE_MS}ms` } as CSSProperties}
+      >
         {heroSlides.map((slide, slideIndex) => {
           const isActive = slideIndex === index;
           return (
@@ -112,12 +115,12 @@ export function Hero() {
               key={slide.id}
               className={isActive ? `heroSlide heroSlide--${slide.id} isActive` : `heroSlide heroSlide--${slide.id}`}
               data-hero-slide={slide.id}
+              data-full-artwork={slide.showFullArtwork || undefined}
               aria-hidden={!isActive}
               style={
                 {
                   background: slide.backdrop,
                   '--hero-fit': slide.objectFit,
-                  '--hero-artwork-scale': slide.artworkScale ?? 1,
                   '--photo-pos': slide.objectPosition,
                   '--photo-pos-mobile': slide.objectPositionMobile,
                   '--hero-zoom': slide.mobileZoom ?? 1,

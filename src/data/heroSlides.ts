@@ -27,8 +27,8 @@ export type HeroSlide = {
   backdrop: string;
   objectFit: 'cover' | 'contain';
   objectPosition: string;
-  /** Zoom past padding embedded in an artwork file when shown on desktop. */
-  artworkScale?: number;
+  /** Show the entire poster without cropping, overlays or copy over the image. */
+  showFullArtwork?: boolean;
   /**
    * Where to anchor the crop on phones. Each slide is aimed at the
    * photographic part of the artwork, away from its densest lettering.
@@ -64,11 +64,9 @@ export const heroSlides: HeroSlide[] = [
     width: 1024,
     height: 409,
     backdrop: '#003321',
-    objectFit: 'cover',
+    objectFit: 'contain',
     objectPosition: '50% 50%',
-    // This file includes 148px left and 149px right blurred sidebars.
-    // Fill the hero with the 727px artwork between them instead.
-    artworkScale: 1024 / 727,
+    showFullArtwork: true,
     objectPositionMobile: '50% 50%',
     title: 'Continuity 2027',
     subtitle: 'Vote BAT for 2nd Term. Vote KOH as Lagos State Governor.',

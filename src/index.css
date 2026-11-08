@@ -71,7 +71,7 @@ button { cursor: pointer; }
 }
 .skipLink:focus { top: 12px; }
 
-section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 200px; }
+section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 112px; }
 
 /* Header */
 .siteHeader {
@@ -82,12 +82,12 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 20
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.06);
 }
 .headerTop {
-  min-height: 148px;
+  min-height: 104px;
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  padding: 10px 4vw;
-  gap: 16px;
+  padding: 10px 3vw;
+  gap: 24px;
 }
 .brand {
   display: flex;
@@ -99,7 +99,7 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 20
 }
 .brandEmblem {
   width: auto;
-  height: 128px;
+  height: 84px;
   object-fit: contain;
   object-position: center;
   flex: 0 0 auto;
@@ -118,13 +118,15 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 20
   letter-spacing: 0.02em;
   line-height: 1.25;
   margin-top: 3px;
+  max-width: 320px;
 }
 .motto {
-  margin: 0;
-  text-align: center;
+  display: block;
+  margin: 7px 0 0;
+  text-align: left;
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 600;
   color: var(--green);
 }
@@ -209,14 +211,13 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 20
 }
 .mainNav {
   min-height: 46px;
-  border-top: 1px solid #f0f0f0;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 28px;
+  justify-content: flex-end;
+  gap: 20px;
   font-size: 12px;
   font-weight: 600;
-  padding: 0 3vw;
+  padding: 0;
 }
 .mainNav a {
   text-decoration: none;
@@ -316,8 +317,34 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 20
   height: 100%;
   object-fit: var(--hero-fit, cover);
   object-position: var(--photo-pos, 50% 50%);
-  transform: scale(var(--hero-artwork-scale, 1));
 }
+/* The first file has 148px/149px blurred side strips around a 727x409 poster.
+   Match the frame to the poster and extend only those strips outside it.
+   The full artwork keeps its proportions, including the top and footer. */
+.heroCarousel.heroCarousel--fullArtwork {
+  aspect-ratio: 727 / 409;
+  min-height: 0;
+  box-sizing: content-box;
+  padding-bottom: 48px;
+}
+.heroCarousel--fullArtwork .heroSlide { bottom: 48px; }
+.heroSlide[data-full-artwork] .heroImage {
+  width: calc(100% * 1024 / 727);
+  max-width: none;
+  left: calc(-100% * 148 / 727);
+  right: auto;
+  object-fit: fill;
+  object-position: center;
+  transform: none;
+}
+.heroSlide[data-full-artwork]::after,
+.heroSlide[data-full-artwork] .heroContent { display: none; }
+.heroCarousel--fullArtwork .heroNav {
+  top: auto;
+  bottom: 6px;
+  transform: none;
+}
+.heroCarousel--fullArtwork .heroDots { bottom: 16px; }
 .heroHits {
   position: absolute;
   inset: 0;
@@ -1320,13 +1347,30 @@ main h1:focus-visible {
 .lgaLcdas li:last-child { border-bottom: 0; padding-bottom: 0; }
 
 @media (max-width: 1280px) {
-  .mainNav { gap: 18px; }
+  .mainNav { gap: 14px; font-size: 11px; }
 }
 
 @media (max-width: 1100px) {
-  .headerTop { grid-template-columns: 1fr auto 1fr; }
-  .motto { font-size: 16px; }
-  .mainNav { gap: 14px; font-size: 11px; }
+  .headerTop { grid-template-columns: minmax(0, 1fr) auto; gap: 12px; }
+  .mobileMenu { display: block; }
+  .mainNav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    max-height: calc(100dvh - 104px);
+    overflow-y: auto;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px 5vw 16px;
+    gap: 0;
+    box-shadow: 0 10px 20px rgba(0,0,0,.08);
+  }
+  .mainNav.open { display: flex; }
+  .mainNav a { height: 44px; flex-shrink: 0; }
+  .mainNav .goldCta { margin: 8px 0 4px; flex-shrink: 0; }
   .impactStrip { grid-template-columns: 1fr 1fr 1fr; }
   .impactTitle, .impactStrip blockquote { grid-column: span 3; }
   .presenceSection { grid-template-columns: 1fr; }
@@ -1337,26 +1381,6 @@ main h1:focus-visible {
 
 @media (max-width: 860px) {
   .coverImage { object-position: var(--photo-pos-mobile, var(--photo-pos, 50% 50%)); }
-  .headerTop { grid-template-columns: 1fr auto; }
-  .motto { display: none; }
-  .mobileMenu { display: block; }
-  .mainNav {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: #fff;
-    height: auto;
-    flex-direction: column;
-    align-items: stretch;
-    padding: 10px 5vw 16px;
-    gap: 0;
-    box-shadow: 0 10px 20px rgba(0,0,0,.08);
-  }
-  .mainNav.open { display: flex; }
-  .mainNav a { height: 44px; }
-  .goldCta { margin: 8px 0 4px; }
   .sectorGrid { grid-template-columns: 1fr 1fr; }
   .presenceSection, .lowerGrid, .footerGrid { grid-template-columns: 1fr; }
   .presenceStats { grid-template-columns: 1fr; }
@@ -1488,7 +1512,10 @@ main h1:focus-visible {
 @media (max-width: 640px) {
   .brandText strong { font-size: 22px; }
   .brandText small { font-size: 7px; }
-  .brandEmblem { height: 84px; }
+  .brandEmblem { height: 64px; }
+  .headerTop { min-height: 88px; }
+  .brand { gap: 8px; }
+  .motto { font-size: 15px; margin-top: 5px; }
   .leaderSectionHead { flex-direction: column; align-items: flex-start; }
   .leaderRowLeadership,
   .leaderRowDiaspora,
@@ -1595,7 +1622,7 @@ main h1:focus-visible {
   background: #dce4df;
 }
 .programPagePhoto .coverImage { position: absolute; inset: 0; }
-.programPageCard h2 { scroll-margin-top: 200px; }
+.programPageCard h2 { scroll-margin-top: 112px; }
 .whereWeWork a {
   color: var(--green);
   font-weight: 700;

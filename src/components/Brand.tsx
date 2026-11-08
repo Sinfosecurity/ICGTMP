@@ -26,6 +26,7 @@ export function Brand({ variant = 'header' }: Props) {
       <span className="brandText">
         <strong>{org.shortName}</strong>
         <small>INDEPENDENT CAMPAIGN GROUP FOR TRADESMEN, MARKETS &amp; PROFESSIONALS</small>
+        <span className="motto">{org.motto}</span>
       </span>
     </Link>
   );
