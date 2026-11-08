@@ -14,6 +14,7 @@ export const images = {
   hero03: '/resources/hero-03.webp',
   hero04: '/resources/hero-04.webp',
   hero06b: '/resources/hero-06b.webp',
+  heroContinuityMobile: '/resources/hero-continuity-mobile.webp',
   markets: '/resources/sector-markets-800.webp',
   artisans: '/resources/sector-artisans-800.webp',
   professionals: '/resources/sector-professionals-800.webp',

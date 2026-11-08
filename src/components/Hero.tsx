@@ -111,10 +111,24 @@ export function Hero() {
             'heroSlide',
             `heroSlide--${slide.id}`,
             slide.isFlyer ? 'heroSlide--flyer' : '',
+            slide.mobileSrc ? 'heroSlide--mobileArt' : '',
             isActive ? 'isActive' : '',
           ]
             .filter(Boolean)
             .join(' ');
+          const image = (
+            <img
+              className="heroImage"
+              src={slide.src}
+              alt={isActive ? slide.alt : ''}
+              width={slide.width}
+              height={slide.height}
+              sizes="100vw"
+              loading={slideIndex === 0 ? 'eager' : 'lazy'}
+              fetchPriority={slideIndex === 0 ? 'high' : 'low'}
+              decoding={slideIndex === 0 ? 'sync' : 'async'}
+            />
+          );
           return (
             <figure
               key={slide.id}
@@ -132,17 +146,19 @@ export function Hero() {
                 } as CSSProperties
               }
             >
-              <img
-                className="heroImage"
-                src={slide.src}
-                alt={isActive ? slide.alt : ''}
-                width={slide.width}
-                height={slide.height}
-                sizes="100vw"
-                loading={slideIndex === 0 ? 'eager' : 'lazy'}
-                fetchPriority={slideIndex === 0 ? 'high' : 'low'}
-                decoding={slideIndex === 0 ? 'sync' : 'async'}
-              />
+              {slide.mobileSrc ? (
+                <picture>
+                  <source
+                    media="(max-width: 767px)"
+                    srcSet={slide.mobileSrc}
+                    width={slide.mobileWidth}
+                    height={slide.mobileHeight}
+                  />
+                  {image}
+                </picture>
+              ) : (
+                image
+              )}
               {/*
                 Phones get real text and real buttons over the photograph; the
                 artwork's own lettering is unreadable at 390px. CSS shows one or

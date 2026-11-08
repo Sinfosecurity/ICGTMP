@@ -50,10 +50,14 @@ export type HeroSlide = {
   title: string;
   subtitle?: string;
   /**
-   * Dense campaign flyer artwork. On phones we show the whole banner
-   * (object-fit: contain) instead of cropping it into a photo backdrop.
+   * Dense campaign flyer artwork. On phones: no dark overlay or caption text.
+   * Prefer a dedicated mobileSrc portrait when provided.
    */
   isFlyer?: boolean;
+  /** Portrait flyer shown under 768px via <picture>. */
+  mobileSrc?: string;
+  mobileWidth?: number;
+  mobileHeight?: number;
 };
 
 export const HERO_INTERVAL_MS = 5500;
@@ -71,6 +75,9 @@ export const heroSlides: HeroSlide[] = [
     objectPosition: '50% 50%',
     objectPositionMobile: '50% 50%',
     isFlyer: true,
+    mobileSrc: images.heroContinuityMobile,
+    mobileWidth: 1080,
+    mobileHeight: 1620,
     kicker: 'Continuity 2027 · Vote BAT · Lagos Rising',
     title: 'Vote KOH',
     subtitle: 'Dr. Kadri Obafemi Hamzat for Governor of Lagos State.',

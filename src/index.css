@@ -309,6 +309,13 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 20
   pointer-events: auto;
   z-index: 1;
 }
+.heroSlide picture {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 .heroSlide .heroImage {
   position: absolute;
   inset: 0;
@@ -1385,22 +1392,25 @@ main h1:focus-visible {
     a 40px headline to 15px. So on phones the artwork becomes a cropped
     photographic backdrop and the copy is rendered as real text over it.
   */
+  /* Fixed height for every slide so the page does not jump between flyers and photos. */
   .heroCarousel {
     aspect-ratio: auto;
     height: auto;
     min-height: clamp(440px, 74vh, 680px);
-  }
-  /* Flyer banners stay whole on phones — match banner ratio, no crop/overlay. */
-  .heroCarousel:has(.heroSlide--flyer.isActive) {
-    aspect-ratio: 2560 / 1024;
-    min-height: 0;
   }
   .heroSlide .heroImage {
     object-position: var(--photo-pos-mobile, var(--photo-pos, 50% 50%));
     transform: scale(var(--hero-zoom, 1));
     transform-origin: var(--hero-origin, 50% 50%);
   }
-  .heroSlide--flyer .heroImage {
+  /* Flyer with a dedicated phone portrait: fill the fixed hero, no crop overlay/copy. */
+  .heroSlide--flyer.heroSlide--mobileArt .heroImage {
+    object-fit: cover;
+    object-position: center;
+    transform: none;
+  }
+  /* Landscape flyers without a phone asset: show the whole banner in the fixed frame. */
+  .heroSlide--flyer:not(.heroSlide--mobileArt) .heroImage {
     object-fit: contain;
     object-position: center;
     transform: none;
@@ -1478,15 +1488,8 @@ main h1:focus-visible {
     font-size: 13px;
     text-decoration: none;
   }
-  .heroNav {
-    width: 36px;
-    height: 36px;
-    top: auto;
-    bottom: 14px;
-    transform: none;
-  }
-  .heroNavPrev { left: auto; right: 58px; }
-  .heroNavNext { right: 12px; }
+  /* Swipe and dots are enough; arrows cover flyer footer credit on phones. */
+  .heroNav { display: none; }
   /* Unreadable at 7–8px on a narrow brand stack. */
   .brandText small { display: none; }
 }
