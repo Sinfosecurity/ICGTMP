@@ -214,8 +214,8 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 11
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 20px;
-  font-size: 12px;
+  gap: 28px;
+  font-size: 15px;
   font-weight: 600;
   padding: 0;
 }
@@ -252,7 +252,7 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 11
   background: var(--gold);
   color: #171d1a;
 }
-.goldCta { padding: 10px 16px; font-size: 12px; margin-left: 6px; min-height: 44px; }
+.goldCta { padding: 10px 16px; font-size: 14px; margin-left: 6px; min-height: 44px; }
 .goldPill { padding: 12px 18px; font-size: 13px; min-height: 44px; }
 .goldSmall { padding: 10px 16px; font-size: 12px; min-height: 44px; }
 .ghostPill {
@@ -1347,7 +1347,7 @@ main h1:focus-visible {
 .lgaLcdas li:last-child { border-bottom: 0; padding-bottom: 0; }
 
 @media (max-width: 1280px) {
-  .mainNav { gap: 14px; font-size: 11px; }
+  .mainNav { gap: 20px; font-size: 14px; }
 }
 
 @media (max-width: 1100px) {
