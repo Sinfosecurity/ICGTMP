@@ -361,13 +361,13 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 20
 .heroNavPrev { left: 8px; }
 .heroNavNext { right: 8px; }
 .heroDots {
-  position: absolute;
-  left: 50%;
-  bottom: 12px;
+  position: relative;
   z-index: 3;
-  transform: translateX(-50%);
   display: flex;
+  justify-content: center;
   gap: 8px;
+  width: fit-content;
+  margin: 10px auto 14px;
   padding: 5px 9px;
   border-radius: 999px;
   background: rgba(0, 24, 16, 0.34);
@@ -1342,8 +1342,8 @@ main h1:focus-visible {
     box-shadow: 0 10px 20px rgba(0,0,0,.08);
   }
   .mainNav.open { display: flex; }
-  .mainNav a { height: 44px; flex-shrink: 0; }
-  .mainNav .goldCta { margin: 8px 0 4px; flex-shrink: 0; }
+  .mainNav a { height: 44px; flex-shrink: 0; font-size: 16px; }
+  .mainNav .goldCta { margin: 8px 0 4px; flex-shrink: 0; font-size: 16px; }
   .impactStrip { grid-template-columns: 1fr 1fr 1fr; }
   .impactTitle, .impactStrip blockquote { grid-column: span 3; }
   .presenceSection { grid-template-columns: 1fr; }
@@ -1390,10 +1390,20 @@ main h1:focus-visible {
     height: auto;
     min-height: clamp(440px, 74vh, 680px);
   }
+  /* Flyer banners stay whole on phones — match banner ratio, no crop/overlay. */
+  .heroCarousel:has(.heroSlide--flyer.isActive) {
+    aspect-ratio: 1024 / 409;
+    min-height: 0;
+  }
   .heroSlide .heroImage {
     object-position: var(--photo-pos-mobile, var(--photo-pos, 50% 50%));
     transform: scale(var(--hero-zoom, 1));
     transform-origin: var(--hero-origin, 50% 50%);
+  }
+  .heroSlide--flyer .heroImage {
+    object-fit: contain;
+    object-position: center;
+    transform: none;
   }
   /*
     Bottom-weighted so the photograph stays visible through the top two thirds
@@ -1411,6 +1421,10 @@ main h1:focus-visible {
       rgba(0, 22, 14, 0.7) 66%,
       rgba(0, 22, 14, 0.93) 100%
     );
+  }
+  .heroSlide--flyer::after,
+  .heroSlide--flyer .heroContent {
+    display: none;
   }
   /* The invisible tap targets only line up with the uncropped artwork. */
   .heroHits { display: none; }
@@ -1473,18 +1487,13 @@ main h1:focus-visible {
   }
   .heroNavPrev { left: auto; right: 58px; }
   .heroNavNext { right: 12px; }
-  .heroDots {
-    left: 20px;
-    bottom: 22px;
-    transform: none;
-    padding: 5px 8px;
-  }
+  /* Unreadable at 7–8px on a narrow brand stack. */
+  .brandText small { display: none; }
 }
 
 
 @media (max-width: 640px) {
   .brandText strong { font-size: 22px; }
-  .brandText small { font-size: 7px; }
   .brandEmblem { height: 64px; }
   .headerTop { min-height: 88px; }
   .brand { gap: 8px; }

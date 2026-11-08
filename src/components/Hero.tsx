@@ -107,10 +107,18 @@ export function Hero() {
       <div className="heroCarousel" style={{ '--hero-fade': `${HERO_FADE_MS}ms` } as CSSProperties}>
         {heroSlides.map((slide, slideIndex) => {
           const isActive = slideIndex === index;
+          const slideClass = [
+            'heroSlide',
+            `heroSlide--${slide.id}`,
+            slide.isFlyer ? 'heroSlide--flyer' : '',
+            isActive ? 'isActive' : '',
+          ]
+            .filter(Boolean)
+            .join(' ');
           return (
             <figure
               key={slide.id}
-              className={isActive ? `heroSlide heroSlide--${slide.id} isActive` : `heroSlide heroSlide--${slide.id}`}
+              className={slideClass}
               data-hero-slide={slide.id}
               aria-hidden={!isActive}
               style={
@@ -250,20 +258,20 @@ export function Hero() {
         >
           <ChevronRight size={22} aria-hidden="true" />
         </button>
+      </div>
 
-        <div className="heroDots" role="tablist" aria-label="Hero slides">
-          {heroSlides.map((slide, slideIndex) => (
-            <button
-              key={slide.id}
-              type="button"
-              role="tab"
-              aria-label={`Show slide ${slideIndex + 1}: ${slide.alt}`}
-              aria-selected={slideIndex === index}
-              className={slideIndex === index ? 'isActive' : undefined}
-              onClick={() => goTo(slideIndex)}
-            />
-          ))}
-        </div>
+      <div className="heroDots" role="tablist" aria-label="Hero slides">
+        {heroSlides.map((slide, slideIndex) => (
+          <button
+            key={slide.id}
+            type="button"
+            role="tab"
+            aria-label={`Show slide ${slideIndex + 1}: ${slide.alt}`}
+            aria-selected={slideIndex === index}
+            className={slideIndex === index ? 'isActive' : undefined}
+            onClick={() => goTo(slideIndex)}
+          />
+        ))}
       </div>
       <p className="visuallyHidden" aria-live="polite">
         Slide {index + 1} of {heroSlides.length}

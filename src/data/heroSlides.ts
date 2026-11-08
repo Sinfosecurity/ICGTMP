@@ -49,6 +49,11 @@ export type HeroSlide = {
   kicker?: string;
   title: string;
   subtitle?: string;
+  /**
+   * Dense campaign flyer artwork. On phones we show the whole banner
+   * (object-fit: contain) instead of cropping it into a photo backdrop.
+   */
+  isFlyer?: boolean;
 };
 
 export const HERO_INTERVAL_MS = 5500;
@@ -65,6 +70,7 @@ export const heroSlides: HeroSlide[] = [
     objectFit: 'cover',
     objectPosition: '50% 50%',
     objectPositionMobile: '50% 50%',
+    isFlyer: true,
     kicker: 'Continuity 2027 · Vote BAT · Lagos Rising',
     title: 'Vote KOH',
     subtitle: 'Dr. Kadri Obafemi Hamzat for Governor of Lagos State.',
@@ -182,6 +188,7 @@ export const heroSlides: HeroSlide[] = [
     objectPositionMobile: '76% 34%',
     mobileZoom: 1.5,
     mobileOrigin: '50% 10%',
+    isFlyer: true,
     kicker: 'Leadership • Service • Development',
     title: 'Lagos Rising',
     subtitle: 'Dr. Kadri Obafemi Hamzat for Governor of Lagos State.',
@@ -198,6 +205,7 @@ export const heroSlides: HeroSlide[] = [
     objectPositionMobile: '88% 36%',
     mobileZoom: 1.6,
     mobileOrigin: '50% 45%',
+    isFlyer: true,
     kicker: 'A Stronger Nigeria | A Brighter Tomorrow',
     title: 'Continuity 2027',
     subtitle: 'President Bola Ahmed Tinubu for a second term.',
