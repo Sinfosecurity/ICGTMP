@@ -20,6 +20,7 @@ export const images = {
   heroThrivesMobile: '/resources/hero-thrives-mobile.webp',
   heroPeopleMobile: '/resources/hero-people-mobile.webp',
   heroContinuityPbatMobile: '/resources/hero-continuity-pbat-mobile.webp',
+  heroBrighterMobile: '/resources/hero-brighter-mobile.webp',
   markets: '/resources/sector-markets-800.webp',
   artisans: '/resources/sector-artisans-800.webp',
   professionals: '/resources/sector-professionals-800.webp',

@@ -306,14 +306,17 @@ html.reducedMotion .cineReveal {
 .cineHome .bannerHero .heroDots {
   display: none !important;
 }
-/* Hotspots stay visible on desktop; phones hide them (portrait art differs). */
+/* Hotspots stay visible on desktop; phones use mobileHits when provided. */
 .cineHome .bannerHero .heroHits {
   display: block;
   z-index: 4;
 }
 @media (max-width: 700px) {
-  .cineHome .bannerHero .heroHits {
+  .cineHome .bannerHero .heroHits:not(.heroHits--mobile) {
     display: none !important;
+  }
+  .cineHome .bannerHero .heroHits--mobile {
+    display: block !important;
   }
 }
 .cineHome .bannerHero .heroNav {
