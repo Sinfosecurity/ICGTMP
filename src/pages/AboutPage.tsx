@@ -15,7 +15,7 @@ export function AboutPage() {
         Our motto is <em>{org.motto}</em> The work is organized around the people who keep Lagos
         moving: markets, skilled workers, professionals, women and youth.
       </p>
-      <h2>Who we are</h2>
+      <h2>Who we serve</h2>
       <ul className="plainList">
         {programs.map((sector) => (
           <li key={sector.id}>
