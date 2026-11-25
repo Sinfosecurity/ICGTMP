@@ -6,7 +6,6 @@ export function LeadershipPage() {
     <PageShell kicker="Leadership" title="Our leadership">
       <p className="leaderPageLead">Committed. Experienced. Grassroots focused.</p>
       <LeaderGroups heading="h2" />
-      <p className="quietNote">Full biographies will be published when those materials are supplied.</p>
     </PageShell>
   );
 }

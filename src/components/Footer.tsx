@@ -1,14 +1,17 @@
-import { MapPin, Phone } from 'lucide-react';
+import { Mail, MapPin, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SITE } from '../config/site';
 import { mapsUrl, navigation, org } from '../data/site';
 import { Brand } from './Brand';
 import { WhatsAppJoinLink } from './WhatsAppJoinLink';
 
-export function Footer() {
+type Props = {
+  slim?: boolean;
+};
+
+export function Footer({ slim = false }: Props) {
   return (
-    <footer className="siteFooter">
-      <div className="footerSkyline" aria-hidden="true" />
+    <footer className={slim ? 'siteFooter siteFooterSlim' : 'siteFooter'}>
       <div className="footerGrid">
         <div className="footerBrand">
           <Brand variant="footer" />
@@ -51,6 +54,7 @@ export function Footer() {
             </span>
           </p>
           <p>
+            <Mail size={15} aria-hidden="true" />
             <a href={`mailto:${org.email}`}>{org.email}</a>
           </p>
           <p>
@@ -64,21 +68,25 @@ export function Footer() {
         </div>
       </div>
       <div className="footerBottom">
-        <div className="footerCredit">
-          <a href={SITE.parentOrg.url}>
-            Powered by {SITE.parentOrg.name} — everyone who joins the platform
-          </a>
-          <span>© 2026 {SITE.name} · Registered as {SITE.registeredName}</span>
+        <div className="footerBottomInner">
+          <div className="footerCredit">
+            <a href={SITE.parentOrg.url} target="_blank" rel="noopener noreferrer">
+              Powered by {SITE.parentOrg.name} — everyone who joins the platform
+            </a>
+            <span>
+              © 2026 {SITE.name} · Registered as {SITE.registeredName}
+            </span>
+          </div>
+          <nav aria-label="Legal">
+            {navigation
+              .filter((item) => item.legal)
+              .map((item) => (
+                <Link key={item.to} to={item.to}>
+                  {item.label}
+                </Link>
+              ))}
+          </nav>
         </div>
-        <nav aria-label="Legal">
-          {navigation
-            .filter((item) => item.legal)
-            .map((item) => (
-              <Link key={item.to} to={item.to}>
-                {item.label}
-              </Link>
-            ))}
-        </nav>
       </div>
     </footer>
   );

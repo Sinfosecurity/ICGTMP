@@ -1,0 +1,1372 @@
+/* Refined cinematic homepage */
+
+html.smoothScroll {
+  scroll-behavior: auto;
+}
+
+/* Hide reveal targets before MotionProvider marks ready — no visible-then-hidden blink */
+html.smoothScroll:not(.motion-ready) .cineReveal {
+  opacity: 0;
+}
+html.reducedMotion .cineReveal {
+  opacity: 1;
+}
+
+.appCinematic {
+  overflow-x: clip;
+}
+
+:root {
+  --cine-pad: clamp(4.5rem, 9vw, 7.5rem);
+  --nav-ink: #0f2a1f;
+}
+
+/* —— Header: always solid cream —— */
+.siteHeader,
+.siteHeader.siteHeaderSolid,
+.siteHeader.isSolid,
+.siteHeader.isClear,
+.siteHeaderHome.isClear,
+.siteHeaderHome.isSolid {
+  height: 72px;
+  background: #f6f3ec !important;
+  border-bottom: 1px solid rgba(6, 40, 27, 0.08);
+  box-shadow: var(--shadow-header);
+  color: var(--nav-ink);
+}
+.siteHeader .headerTop {
+  display: flex;
+  align-items: center;
+  min-height: 72px;
+  height: 72px;
+  padding: 0 var(--gutter);
+  max-width: calc(var(--measure) + 2 * var(--gutter));
+  margin-inline: auto;
+}
+.siteHeader:has(.mainNav.open) {
+  height: auto;
+}
+.siteHeader:has(.mainNav.open) .headerTop {
+  height: auto;
+}
+.brandCompact {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-decoration: none;
+  color: var(--nav-ink);
+  transition: opacity 160ms var(--ease);
+}
+.brandCompact:hover {
+  opacity: 0.88;
+}
+.brandCompact .brandEmblem {
+  height: 48px;
+  width: auto;
+}
+.brandTextStack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  line-height: 1;
+}
+.brandName {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--green);
+}
+.brandMotto {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: -0.01em;
+  color: var(--green-mid);
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .brandMotto { display: none; }
+}
+.siteHeader .mainNav {
+  margin-left: auto;
+  position: static;
+  gap: 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+@media (min-width: 1024px) and (max-width: 1200px) {
+  .siteHeader .mainNav {
+    gap: 20px;
+    font-size: 14px;
+  }
+}
+.siteHeader .mainNav a {
+  color: var(--nav-ink);
+  text-shadow: none !important;
+  min-height: var(--touch);
+  height: var(--touch);
+  transition: color 160ms var(--ease);
+}
+.siteHeader .mainNav a:hover,
+.siteHeader .mainNav a.active {
+  color: var(--green);
+}
+.siteHeader .mainNav a.active:after {
+  height: 2px;
+  bottom: 6px;
+  background: var(--green-mid);
+}
+.siteHeader .goldCta {
+  border-radius: var(--radius-pill);
+  min-height: var(--touch);
+  padding: 0 1.25rem;
+  font-size: 0.8125rem;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25) inset;
+}
+
+/* Desktop: 40px round WhatsApp icon left of Join ICGMTP */
+.siteHeader .headerWhatsApp--desktop {
+  display: none;
+}
+.siteHeader .headerWhatsApp--mobile {
+  display: none;
+}
+@media (min-width: 1024px) {
+  .siteHeader .headerWhatsApp--desktop.whatsappJoinIcon {
+    display: inline-grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0;
+    margin-left: 0.35rem;
+    border: 1.5px solid var(--green);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--green);
+    text-decoration: none;
+    flex: 0 0 auto;
+    transition:
+      border-color 160ms var(--ease),
+      color 160ms var(--ease),
+      background 160ms var(--ease);
+  }
+  .siteHeader .headerWhatsApp--desktop.whatsappJoinIcon:hover,
+  .siteHeader .headerWhatsApp--desktop.whatsappJoinIcon:focus-visible {
+    background: rgba(6, 40, 27, 0.06);
+    border-color: var(--green-deep);
+    color: var(--green-deep);
+  }
+  .siteHeader .headerWhatsApp--desktop.whatsappJoinIcon svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+@media (max-width: 1023px) {
+  .siteHeader .headerWhatsApp--mobile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: var(--touch);
+    margin: 0.35rem 0 0.25rem;
+    padding: 0.75rem 1.25rem;
+    border: 1.5px solid var(--green);
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--green);
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .siteHeader .headerWhatsApp--mobile:hover,
+  .siteHeader .headerWhatsApp--mobile:focus-visible {
+    background: rgba(6, 40, 27, 0.06);
+    border-color: var(--green-deep);
+    color: var(--green-deep);
+  }
+}
+.siteHeader .mobileMenu {
+  display: none;
+  margin-left: auto;
+  color: var(--nav-ink);
+  width: var(--touch);
+  height: var(--touch);
+  min-width: var(--touch);
+  min-height: var(--touch);
+}
+
+/* Sentence-case buttons */
+.goldCta,
+.goldPill,
+.goldSmall,
+.greenPill,
+.goldOutline,
+.cineIntroOutline,
+.cineWhatsApp {
+  text-transform: none !important;
+  letter-spacing: 0.01em;
+}
+
+.whatsappJoin,
+.cineWhatsApp.whatsappJoin {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.whatsappJoin svg,
+.cineWhatsApp svg {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  display: block;
+}
+
+/* —— Hero —— */
+/* —— Banner carousel (first section) —— */
+.cineHome .bannerHero,
+.cineHome .hero.bannerHero {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  background: #0b231a;
+  color: #fff;
+  overflow: visible;
+}
+.cineHome .bannerHero .heroCarousel {
+  /* Native banner ratio — no fixed/max height that crops the bottom strip. */
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2560 / 1024;
+  max-height: none;
+  min-height: 0;
+  height: auto;
+  overflow: hidden;
+  background: #0b231a;
+}
+.cineHome .bannerHero .heroSlide {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  background: #0b231a;
+  opacity: 0;
+  transition: opacity var(--hero-fade, 800ms) ease;
+  pointer-events: none;
+}
+.cineHome .bannerHero .heroSlide.isActive {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 1;
+}
+.cineHome .bannerHero .heroImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  object-position: center center;
+  display: block;
+  transform: none;
+  z-index: 1;
+}
+/* Blurred cover fill behind mismatched-ratio banners (≥701px only). */
+.cineHome .bannerHero .heroImageBlur {
+  display: none;
+}
+@media (min-width: 701px) {
+  .cineHome .bannerHero .heroSlide--letterboxFill .heroImageBlur {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: cover;
+    object-position: center center;
+    filter: blur(24px) brightness(0.55);
+    transform: scale(1.1);
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+.cineHome .bannerHero .heroSlide::after,
+.cineHome .bannerHero .heroContent,
+.cineHome .bannerHero .heroFortCredit,
+.cineHome .bannerHero .heroDots {
+  display: none !important;
+}
+/* Hotspots stay visible on desktop; phones hide them (portrait art differs). */
+.cineHome .bannerHero .heroHits {
+  display: block;
+  z-index: 4;
+}
+@media (max-width: 700px) {
+  .cineHome .bannerHero .heroHits {
+    display: none !important;
+  }
+}
+.cineHome .bannerHero .heroNav {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  width: 40px;
+  height: 40px;
+  transform: translateY(-50%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  background: rgba(11, 35, 26, 0.4);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease, background 160ms ease, border-color 160ms ease;
+}
+.cineHome .bannerHero .heroCarousel:hover .heroNav,
+.cineHome .bannerHero .heroCarousel:focus-within .heroNav,
+.cineHome .bannerHero .heroNav:focus-visible {
+  opacity: 0.6;
+  pointer-events: auto;
+}
+.cineHome .bannerHero .heroNav:hover,
+.cineHome .bannerHero .heroNav:focus-visible {
+  opacity: 0.6;
+  background: rgba(11, 35, 26, 0.7);
+  border-color: var(--gold);
+}
+.cineHome .bannerHero .heroNavPrev { left: 12px; }
+.cineHome .bannerHero .heroNavNext { right: 12px; }
+
+/* Controls sit in a slim bar under the image — never overlay the artwork. */
+.cineHome .bannerHero .heroChrome {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 40px;
+  min-height: 40px;
+  padding: 0 12px;
+  margin: 0;
+  background: #0b231a;
+  border-radius: 0;
+  transform: none;
+  left: auto;
+  bottom: auto;
+  z-index: 1;
+}
+.cineHome .bannerHero .heroProgress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: min(360px, 70%);
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+}
+.cineHome .bannerHero .heroProgressTrack {
+  position: relative;
+  flex: 1;
+  height: 3px;
+  min-height: 3px;
+  padding: 12px 0;
+  border: 0;
+  border-radius: 0;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0.38)) center / 100% 3px
+    no-repeat;
+  cursor: pointer;
+  overflow: visible;
+}
+.cineHome .bannerHero .heroProgressFill {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 3px;
+  width: 0;
+  transform: translateY(-50%);
+  background: var(--gold);
+  border-radius: 2px;
+  animation-name: bannerProgressFill;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+.cineHome .bannerHero .heroProgressTrack.isPaused .heroProgressFill {
+  animation-play-state: paused;
+}
+@keyframes bannerProgressFill {
+  from { width: 0; }
+  to { width: 100%; }
+}
+.cineHome .bannerHero .heroPause {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 50%;
+  background: transparent;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+.cineHome .bannerHero .heroPause:hover,
+.cineHome .bannerHero .heroPause:focus-visible {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+@media (hover: none) {
+  .cineHome .bannerHero .heroNav {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* Match <picture> source media="(max-width: 700px)" — portrait flyers are 1080×1620. */
+@media (max-width: 700px) {
+  .cineHome .bannerHero .heroCarousel,
+  .cineHome .hero.bannerHero .heroCarousel {
+    aspect-ratio: 2 / 3 !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    height: auto !important;
+  }
+  .cineHome .bannerHero .heroSlide picture {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .cineHome .bannerHero .heroImage {
+    object-fit: cover !important;
+    object-position: center top !important;
+    transform: none !important;
+    max-height: none !important;
+  }
+  /* Landscape-only slides (no mobileSrc): show full banner until a portrait asset exists. */
+  .cineHome .bannerHero .heroSlide:not(.heroSlide--mobileArt) .heroImage {
+    object-fit: contain !important;
+    object-position: center center !important;
+  }
+  .cineHome .bannerHero .heroSlide::after {
+    display: none !important;
+  }
+  .cineHome .bannerHero .heroNav {
+    display: grid;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cineHome .bannerHero .heroSlide {
+    transition: none;
+  }
+  .cineHome .bannerHero .heroProgressFill {
+    animation: none;
+    width: 100%;
+  }
+}
+
+/* —— Cream intro (under campaign banners) —— */
+.cineIntro {
+  background: #f6f3ec;
+  color: var(--ink);
+  padding-inline: var(--gutter);
+  padding-block: clamp(64px, 8vw, 112px);
+}
+.cineIntroInner {
+  max-width: 760px;
+  margin-inline: auto;
+  text-align: center;
+}
+.cineIntroLabel {
+  margin: 0 0 1rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.cineIntroTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: var(--green);
+  text-wrap: balance;
+}
+.cineIntroSupport {
+  margin: 1.25rem auto 0;
+  max-width: 40rem;
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 1.35vw, 1.125rem);
+  line-height: 1.65;
+  color: var(--ink);
+}
+.cineIntroActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.85rem 1rem;
+  margin-top: 1.75rem;
+}
+.cineIntroActions .goldPill {
+  border-radius: var(--radius-pill);
+  padding: 0.85rem 1.4rem;
+  font-size: 0.875rem;
+}
+.cineIntroOutline,
+.cineIntroWhatsApp.whatsappJoin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--touch);
+  padding: 0.75rem 1.25rem;
+  border: 1.5px solid var(--green);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--green);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    border-color 160ms var(--ease),
+    color 160ms var(--ease),
+    background 160ms var(--ease);
+}
+.cineIntroOutline:hover,
+.cineIntroOutline:focus-visible,
+.cineIntroWhatsApp.whatsappJoin:hover,
+.cineIntroWhatsApp.whatsappJoin:focus-visible {
+  background: rgba(6, 40, 27, 0.06);
+  border-color: var(--green-deep);
+  color: var(--green-deep);
+}
+.cineIntroTextLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: var(--touch);
+  color: var(--green);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding: 0.25rem 0;
+  transition: color 160ms var(--ease), border-color 160ms var(--ease);
+}
+.cineIntroTextLink:hover,
+.cineIntroTextLink:focus-visible {
+  color: var(--gold-text);
+  border-bottom-color: var(--gold);
+}
+.cineIntroTextLink span[aria-hidden] {
+  display: inline-block;
+  transition: transform 160ms var(--ease);
+}
+.cineIntroTextLink:hover span[aria-hidden],
+.cineIntroTextLink:focus-visible span[aria-hidden] {
+  transform: translateX(2px);
+}
+@media (max-width: 700px) {
+  .cineIntroActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .cineIntroActions .goldPill,
+  .cineIntroWhatsApp.whatsappJoin {
+    width: 100%;
+    justify-content: center;
+  }
+  .cineIntroTextLink {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+/* —— Shared section pad —— */
+.cineHook,
+.cineSectors,
+.cineImpact,
+.cineLeadership,
+.cineNews,
+.cineClose {
+  padding-block: var(--cine-pad);
+}
+
+/* —— Hook —— */
+.cineHook {
+  background: var(--green-deep);
+  color: #fff;
+  padding-inline: var(--gutter);
+  padding-block: clamp(3.25rem, 7vw, 5.5rem);
+}
+.cineHookLine {
+  margin: 0 auto;
+  max-width: 22ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.65rem, 4.2vw, 2.85rem);
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+  text-wrap: balance;
+  text-align: center;
+  opacity: 1;
+}
+
+/* —— Sectors grid —— */
+.cineSectors {
+  background: #fff;
+  padding-inline: var(--gutter);
+}
+.cineSectorsInner {
+  max-width: var(--measure);
+  margin-inline: auto;
+}
+.cineSectorsHead {
+  margin-bottom: 2.5rem;
+  max-width: 36rem;
+}
+.cineSectorsHead h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.85rem, 3.5vw, 2.75rem);
+  letter-spacing: -0.03em;
+  color: var(--green);
+  line-height: 1.12;
+}
+.cineSectorGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.75rem 1.35rem;
+}
+.cineSectorCard {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.cineSectorCardPhoto {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: #d5dbd6;
+  margin-bottom: 1rem;
+}
+.cineSectorCardPhoto .coverImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 520ms var(--ease-out);
+}
+.cineSectorCard:hover .cineSectorCardPhoto .coverImage {
+  transform: scale(1.04);
+}
+.cineSectorCard h3 {
+  margin: 0 0 0.45rem;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--green);
+  line-height: 1.2;
+}
+.cineSectorCard p {
+  margin: 0 0 0.85rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  flex: 1;
+}
+.cineSectorCard a {
+  color: var(--gold-text);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: var(--touch);
+  margin-top: auto;
+  border-bottom: 1px solid transparent;
+  width: fit-content;
+  transition: color 160ms var(--ease), border-color 160ms var(--ease), gap 160ms var(--ease);
+}
+.cineSectorCard a:hover,
+.cineSectorCard a:focus-visible {
+  color: var(--green);
+  border-bottom-color: var(--gold);
+  gap: 0.5rem;
+}
+
+/* —— Impact —— */
+.cineImpact {
+  background: linear-gradient(180deg, #fbf8f1 0%, var(--paper) 100%);
+  padding-inline: var(--gutter);
+  border-block: 1px solid rgba(201, 162, 39, 0.22);
+}
+.cineImpactInner {
+  max-width: var(--measure);
+  margin-inline: auto;
+}
+.cineImpactInner > .sectionKicker {
+  margin-bottom: 0.5rem;
+}
+.cineImpactInner h2 {
+  margin: 0 0 2.25rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.85rem, 3.2vw, 2.5rem);
+  color: var(--green);
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+}
+.cineImpactStats {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1rem 1.5rem;
+}
+/* Never leave impact stats dim once revealed / when motion is reduced */
+html.reducedMotion .cineImpactStats.cineReveal,
+html.reducedMotion .cineImpactQuote.cineReveal,
+.cineImpactStats.is-revealed,
+.cineImpactQuote.is-revealed {
+  opacity: 1;
+}
+.cineImpactStat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding-right: 1rem;
+  border-right: 1px solid rgba(201, 162, 39, 0.35);
+}
+.cineImpactStat:last-child {
+  border-right: 0;
+  padding-right: 0;
+}
+.cineImpactStat b {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 2.7vw, 2.45rem);
+  color: var(--green);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-weight: 600;
+}
+.cineImpactStat .cineImpactLabel {
+  font-size: 1rem;
+  line-height: 1.25;
+}
+.cineImpactStat strong {
+  font-size: 0.875rem;
+  color: var(--ink);
+  font-weight: 700;
+  line-height: 1.3;
+}
+.cineImpactStat small {
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.cineImpactCaption {
+  margin: 1.35rem 0 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+.cineImpactQuote {
+  margin: 2.75rem 0 0;
+  max-width: none;
+  width: 100%;
+  border: 0;
+  padding: clamp(1.75rem, 3.5vw, 2.5rem) clamp(1.5rem, 3vw, 2.75rem);
+  text-align: left;
+  background: var(--green);
+  color: #fff;
+  opacity: 1;
+  position: relative;
+}
+.cineImpactQuote::before {
+  content: "“";
+  display: block;
+  font-family: var(--font-display);
+  font-size: 3rem;
+  line-height: 0.7;
+  color: var(--gold);
+  margin-bottom: 0.65rem;
+}
+.cineImpactQuote p {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.45rem, 2.8vw, 2.15rem);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: #fff;
+  opacity: 1;
+  max-width: 28ch;
+}
+.cineImpactQuote cite {
+  display: block;
+  margin-top: 1.1rem;
+  font-style: normal;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+/* —— Leadership —— */
+.cineLeadership {
+  background: var(--green-deep);
+  color: #fff;
+  padding-inline: var(--gutter);
+}
+.cineLeadershipInner {
+  max-width: var(--measure);
+  margin-inline: auto;
+}
+.cineLeadershipHead {
+  display: grid;
+  gap: 0.85rem;
+  margin-bottom: 2.5rem;
+  max-width: 38rem;
+}
+.cineLeadershipHead h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+}
+.cineLeadershipHead p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+.cineLeadershipHead .goldOutline {
+  justify-self: start;
+  border-radius: var(--radius-pill);
+  min-height: var(--touch);
+  padding: 0.7rem 1.2rem;
+  gap: 0.4rem;
+  display: inline-flex;
+  align-items: center;
+  transition: background 160ms var(--ease), color 160ms var(--ease);
+}
+.cineLeadershipHead .goldOutline:hover,
+.cineLeadershipHead .goldOutline:focus-visible {
+  background: rgba(201, 162, 39, 0.14);
+  color: var(--gold);
+}
+/* Org chart: centred tiers + gold connectors (T1–T4) */
+.cineOrgChart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.cineOrgTier {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.cineOrgTierLabel {
+  margin: 0 0 1rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+  text-align: center;
+}
+.cineOrgRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+}
+.cineOrgRow--two .cineOrgCard--ddg {
+  max-width: calc((100% - 24px) / 2);
+}
+.cineOrgConnector {
+  width: 1px;
+  height: 48px;
+  margin-block: calc((72px - 48px) / 2);
+  background: var(--gold);
+  flex-shrink: 0;
+}
+/* Subtle link between Tier-3 DDG row and Secretary */
+.cineOrgConnector--subtle {
+  height: 32px;
+  margin-block: 12px;
+  opacity: 0.85;
+}
+.cineOrgCard {
+  flex: 0 0 auto;
+}
+.cineOrgCard--convener {
+  width: 300px;
+  max-width: calc((100% - 48px) / 3);
+}
+.cineOrgCard--dg {
+  width: 340px;
+  max-width: 100%;
+}
+.cineOrgCard--ddg {
+  width: 260px;
+  max-width: calc((100% - 48px) / 3);
+}
+.cineLeaderCard {
+  background: #fff;
+  color: var(--ink);
+  min-width: 0;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 220ms var(--ease), transform 220ms var(--ease);
+}
+.cineLeaderCard:hover,
+.cineLeaderCard:focus-within {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.cineLeaderPhoto {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--green);
+}
+.cineLeaderPhoto .coverImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 480ms var(--ease-out);
+}
+.cineOrgCard .cineLeaderPhoto .coverImage {
+  object-position: center top;
+}
+.cineLeaderCard:hover .cineLeaderPhoto .coverImage,
+.cineLeaderCard:focus-within .cineLeaderPhoto .coverImage {
+  transform: scale(1.03);
+}
+.cineLeaderRole {
+  margin: 0.9rem 1rem 0;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-text);
+  font-weight: 700;
+}
+.cineLeaderName {
+  margin: 0.4rem 1rem 1.1rem;
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--green);
+  font-weight: 600;
+}
+.cineLeaderMono {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: var(--green);
+  color: #fff;
+  font-weight: 700;
+}
+.cineLeaderMono-tier {
+  font-size: 2rem;
+  aspect-ratio: 4 / 5;
+}
+/* Slightly tighter role line for longer Diaspora labels */
+.cineOrgTier--diaspora .cineLeaderRole {
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  line-height: 1.35;
+}
+
+/* —— News + close —— */
+.cineNews {
+  background: #fff;
+  padding-inline: var(--gutter);
+}
+.cineNewsInner {
+  max-width: var(--measure);
+  margin-inline: auto;
+}
+.cineNewsHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  margin-bottom: 0.65rem;
+}
+.cineNewsInner h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.65rem, 3vw, 2.25rem);
+  color: var(--green);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+.cineNewsAll {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: var(--touch);
+  color: var(--green);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 160ms var(--ease), border-color 160ms var(--ease);
+}
+.cineNewsAll:hover,
+.cineNewsAll:focus-visible {
+  color: var(--gold-text);
+  border-bottom-color: var(--gold);
+}
+.cineNewsNote {
+  margin: 0 0 1.75rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  max-width: 42rem;
+  line-height: 1.5;
+}
+.cineNewsList article {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  gap: 1.15rem;
+  padding: 1.15rem 0;
+  border-top: 1px solid var(--line);
+  transition: background 160ms var(--ease);
+}
+.cineNewsList article:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.cineNewsThumb {
+  position: relative;
+  height: 88px;
+  overflow: hidden;
+  background: #dce4df;
+}
+.cineNewsThumb .coverImage {
+  transition: transform 420ms var(--ease-out);
+}
+.cineNewsList article:hover .cineNewsThumb .coverImage {
+  transform: scale(1.04);
+}
+.cineNewsList h3 {
+  margin: 0 0 0.3rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--green);
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+.cineNewsList .newsMeta {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--gold-text);
+}
+.cineNewsList p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.cineClose {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(4, 28, 19, 0.72), rgba(4, 28, 19, 0.88)),
+    var(--green-deep);
+  padding-inline: var(--gutter);
+  /* Tighter bottom so Join → footer matches other section rhythm (both are green-deep) */
+  padding-bottom: clamp(2.25rem, 4.5vw, 3.25rem);
+  text-align: center;
+  color: #fff;
+  overflow: hidden;
+}
+.appCinematic .siteFooter .footerGrid {
+  padding-top: clamp(2.25rem, 4.5vw, 3.25rem);
+}
+.cineCloseInner {
+  position: relative;
+  z-index: 1;
+  max-width: 34rem;
+  margin-inline: auto;
+}
+.cineClose .sectionKicker {
+  color: var(--gold);
+}
+.cineClose h2 {
+  margin: 0 0 0.85rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.85rem, 3.5vw, 2.75rem);
+  color: #fff;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+}
+.cineClose p {
+  margin: 0 0 1.65rem;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.6;
+  font-size: 1.02rem;
+}
+.cineCloseActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  justify-content: center;
+  align-items: center;
+}
+.cineCloseActions .goldPill {
+  border-radius: var(--radius-pill);
+  padding: 0.85rem 1.4rem;
+  font-size: 0.875rem;
+  gap: 0.4rem;
+}
+.cineWhatsApp {
+  min-height: var(--touch);
+  padding: 0.75rem 1.25rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  border-radius: var(--radius-pill);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.16);
+  transition: border-color 160ms var(--ease), color 160ms var(--ease), background 160ms var(--ease);
+}
+.cineWhatsApp:hover,
+.cineWhatsApp:focus-visible {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(0, 0, 0, 0.28);
+}
+
+/* —— Footer logos 56px + contact rows —— */
+.siteFooter .markPlate,
+.siteFooter .footerMarks .markPlate {
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+.siteFooter .markPlate img {
+  width: 100%;
+  height: 100%;
+}
+.siteFooter .footerContact p {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: 0;
+}
+.siteFooter .footerPhones span {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  line-height: 1.6;
+}
+.siteFooter .footerPhones a {
+  min-height: 0;
+  line-height: 1.6;
+}
+.siteFooter .footerLinks a,
+.siteFooter .footerContact a {
+  transition: color 160ms var(--ease);
+}
+
+/* —— Reduced motion —— */
+@media (prefers-reduced-motion: reduce) {
+  .cineSectorCardPhoto .coverImage,
+  .cineLeaderPhoto .coverImage,
+  .cineNewsThumb .coverImage,
+  .cineLeaderCard,
+  .cineIntroOutline,
+  .cineWhatsApp,
+  .cineSectorCard a,
+  .cineNewsAll {
+    transition: none !important;
+  }
+  .cineSectorCard:hover .cineSectorCardPhoto .coverImage,
+  .cineLeaderCard:hover .cineLeaderPhoto .coverImage,
+  .cineNewsList article:hover .cineNewsThumb .coverImage,
+  .cineLeaderCard:hover {
+    transform: none !important;
+  }
+}
+
+/* —— Responsive —— */
+@media (max-width: 1023px) {
+  .siteHeader,
+  .siteHeader.siteHeaderSolid,
+  .siteHeader.isSolid {
+    height: auto;
+    min-height: 72px;
+  }
+  .siteHeader .headerTop {
+    height: auto;
+    min-height: 72px;
+  }
+  .siteHeader .mobileMenu {
+    display: inline-grid;
+  }
+  .siteHeader .mainNav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-left: 0;
+    background: #f6f3ec;
+    z-index: 40;
+  }
+  .siteHeader .mainNav.open {
+    display: flex;
+  }
+  .cineSectorGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .cineImpactStats {
+    gap: 0.85rem;
+  }
+  .cineImpactStat {
+    padding-right: 0.65rem;
+  }
+  .cineImpactStat b {
+    font-size: clamp(1.25rem, 2.2vw, 1.85rem);
+  }
+}
+
+/* Tablet: 3M hero row + 2×2 for the other four */
+@media (min-width: 701px) and (max-width: 1023px) {
+  .cineImpactStats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.15rem 1.35rem;
+  }
+  .cineImpactStat:first-child {
+    grid-column: 1 / -1;
+    border-right: 0;
+    padding-right: 0;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(201, 162, 39, 0.28);
+    text-align: center;
+    align-items: center;
+  }
+  .cineImpactStat:first-child b {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+  }
+  .cineImpactStat:nth-child(2n) {
+    border-right: 1px solid rgba(201, 162, 39, 0.35);
+    padding-right: 1rem;
+  }
+  .cineImpactStat:nth-child(2n + 1):not(:first-child) {
+    border-right: 0;
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .cineSectorGrid,
+  .cineImpactStats {
+    grid-template-columns: 1fr;
+  }
+  .cineOrgRow {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 160px));
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+  }
+  .cineOrgRow--one {
+    grid-template-columns: minmax(0, 160px);
+  }
+  .cineOrgRow--two .cineOrgCard--ddg,
+  .cineOrgRow--three .cineOrgCard--convener,
+  .cineOrgRow--three .cineOrgCard--ddg {
+    max-width: 160px;
+  }
+  .cineOrgCard--convener,
+  .cineOrgCard--dg,
+  .cineOrgCard--ddg {
+    width: 160px;
+    max-width: 160px;
+  }
+  .cineOrgCard .cineLeaderRole {
+    margin-inline: 0.65rem;
+    font-size: 0.58rem;
+  }
+  .cineOrgCard .cineLeaderName {
+    margin-inline: 0.65rem;
+    font-size: 16px;
+  }
+  .cineOrgConnector--subtle {
+    height: 28px;
+    margin-block: 10px;
+  }
+  .cineImpactStat {
+    border-right: 0;
+    border-bottom: 1px solid rgba(201, 162, 39, 0.28);
+    padding: 0 0 1rem;
+  }
+  .cineImpactStat:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .cineNewsHead {
+    align-items: flex-start;
+  }
+  .cineNewsList article {
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 0.9rem;
+  }
+  .cineCloseActions {
+    flex-direction: column;
+  }
+  .cineCloseActions .goldPill,
+  .cineWhatsApp {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 375px) {
+  .cineHome,
+  .appCinematic {
+    overflow-x: clip;
+    max-width: 100vw;
+  }
+}

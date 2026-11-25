@@ -3,21 +3,39 @@
 @tailwind utilities;
 
 :root {
-  --green: #003321;
-  --green-deep: #002418;
+  --green: #06281b;
+  --green-deep: #041c13;
   --green-mid: #0b5c40;
   --green-soft: #0e6b49;
-  --gold: #d4af37;
-  --gold-deep: #b8922a;
+  --gold: #c9a227;
+  --gold-deep: #a8841c;
   --gold-text: #6b520c;
-  --cream: #f6f1e4;
-  --paper: #faf8f3;
-  --ink: #1c241f;
+  --gold-bright: #dfc04a;
+  --cream: #f3f1eb;
+  --paper: #f7f6f2;
+  --ink: #15201a;
   --muted: #5a6560;
-  --line: #e6e8e5;
-  --font-sans: "Outfit", "Avenir Next", "Segoe UI", sans-serif;
-  --font-serif: "Cormorant Garamond", "Palatino Linotype", Georgia, serif;
-  --font-script: "Great Vibes", "Snell Roundhand", cursive;
+  --line: #e2e4e0;
+  --navy: #0b1a3a;
+  --on-gold: #0f1a14;
+  --measure: 72rem;
+  --gutter: clamp(1.25rem, 4vw, 4.5rem);
+  --section-y: clamp(3.5rem, 7vw, 6.5rem);
+  --font-sans: "Manrope", "Avenir Next", "Segoe UI", sans-serif;
+  --font-serif: "Fraunces", "Palatino Linotype", Georgia, serif;
+  --font-display: var(--font-serif);
+  --font-script: var(--font-serif);
+  --radius: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 1px 3px rgba(4, 28, 19, 0.06);
+  --shadow-md: 0 8px 24px rgba(4, 28, 19, 0.1);
+  --shadow-lg: 0 16px 40px rgba(4, 28, 19, 0.14);
+  --shadow-header: 0 4px 18px rgba(4, 28, 19, 0.06);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --touch: 44px;
 }
 
 * { box-sizing: border-box; }
@@ -71,23 +89,71 @@ button { cursor: pointer; }
 }
 .skipLink:focus { top: 12px; }
 
-section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 112px; }
+section[id],
+article[id],
+footer[id],
+#home,
+#home-lower,
+#home-story,
+[id].cineIntro,
+[id].cineHook,
+[id].cineSectors,
+[id].cineImpact,
+[id].cineLeadership,
+[id].cineNews,
+[id].cineClose,
+h1[id],
+h2[id],
+h3[id] {
+  scroll-margin-top: 88px;
+}
 
 /* Header */
 .siteHeader {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: #fff;
+  background: #f6f3ec;
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.06);
 }
 .headerTop {
-  min-height: 104px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  min-height: 72px;
+  display: flex;
   align-items: center;
-  padding: 10px 3vw;
+  padding: 0 3vw;
   gap: 24px;
+}
+.brandCluster {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+}
+.fortPoweredBy {
+  display: inline-block;
+  margin-left: 96px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--navy, #0b1a3a);
+  opacity: 0.85;
+}
+.fortPoweredBy:hover,
+.fortPoweredBy:focus-visible {
+  color: var(--gold, #d4a63a);
+  opacity: 1;
+}
+.fortMarkLink {
+  display: inline-flex;
+  line-height: 0;
+  border-radius: 10px;
+}
+.fortMarkLink:focus-visible {
+  outline: 2px solid var(--gold, #d4a63a);
+  outline-offset: 3px;
 }
 .brand {
   display: flex;
@@ -207,7 +273,9 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 11
   color: var(--green);
   width: 44px;
   height: 44px;
-  justify-self: end;
+  margin-left: auto;
+  flex-shrink: 0;
+  place-items: center;
 }
 .mainNav {
   min-height: 46px;
@@ -218,6 +286,8 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 11
   font-size: 15px;
   font-weight: 600;
   padding: 0;
+  margin-left: auto;
+  position: static;
 }
 .mainNav a {
   text-decoration: none;
@@ -239,7 +309,7 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 11
 }
 .goldCta, .goldPill, .goldSmall, .greenPill, .goldOutline {
   border: 0;
-  border-radius: 22px;
+  border-radius: var(--radius-pill);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -250,20 +320,21 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 11
 }
 .goldCta, .goldPill, .goldSmall {
   background: var(--gold);
-  color: #171d1a;
+  color: var(--on-gold);
 }
-.goldCta { padding: 10px 16px; font-size: 14px; margin-left: 6px; min-height: 44px; }
-.goldPill { padding: 12px 18px; font-size: 13px; min-height: 44px; }
-.goldSmall { padding: 10px 16px; font-size: 12px; min-height: 44px; }
+.goldCta { padding: 10px 16px; font-size: 14px; margin-left: 6px; min-height: var(--touch); }
+.goldPill { padding: 12px 18px; font-size: 13px; min-height: var(--touch); }
+.goldSmall { padding: 10px 16px; font-size: 12px; min-height: var(--touch); }
 .ghostPill {
   border: 1.5px solid var(--gold);
   color: #fff;
   background: rgba(0,0,0,.12);
-  border-radius: 22px;
+  border-radius: var(--radius-pill);
   padding: 11px 18px;
   text-decoration: none;
   font-weight: 700;
   font-size: 13px;
+  min-height: var(--touch);
 }
 .greenPill {
   background: var(--green);
@@ -287,6 +358,29 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 11
   overflow: hidden;
   color: #fff;
   background: var(--green);
+}
+.heroFortCredit {
+  position: absolute;
+  right: 3vw;
+  bottom: 18px;
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(7, 22, 51, 0.78);
+  color: #f6f0e4;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  backdrop-filter: blur(6px);
+}
+.heroFortCredit:hover,
+.heroFortCredit:focus-visible {
+  background: rgba(7, 22, 51, 0.95);
+  color: var(--gold, #d4a63a);
 }
 .heroCarousel {
   position: relative;
@@ -559,27 +653,36 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 11
   color: #f0d36a;
 }
 
-/* Presence */
+/* Presence — full-bleed cream; inner content matches other section measure */
 .presenceSection {
+  padding: clamp(2.5rem, 5vw, 3.5rem) var(--gutter, 4vw);
+  background: #fdf8f0;
+  width: 100%;
+}
+.presenceInner {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 18px;
-  padding: 28px 4vw 32px;
-  background: var(--paper);
+  gap: 22px;
+  max-width: var(--measure, 72rem);
+  margin-inline: auto;
+  width: 100%;
 }
-.presenceIntro { max-width: 640px; }
+.presenceIntro { max-width: 720px; }
 .presenceIntro h2 {
   color: var(--green);
-  font-size: 24px;
-  margin: 0 0 10px;
+  font-family: var(--font-display, inherit);
+  font-size: clamp(22px, 3.2vw, 28px);
+  margin: 0 0 12px;
   line-height: 1.15;
-  font-weight: 800;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 .presenceIntro p {
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.55;
   color: #555;
-  margin: 0 0 16px;
+  margin: 0 0 18px;
+  max-width: 58ch;
 }
 .presenceMap { min-width: 0; }
 .eastLgaList { color: var(--green); font-weight: 600; }
@@ -592,12 +695,80 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 11
   overflow: hidden;
 }
 .eastMap { width: 100%; height: auto; display: block; }
+@media (max-width: 700px) {
+  .eastMapFrame {
+    min-height: 260px;
+  }
+  .eastMap {
+    min-height: 260px;
+  }
+  /* LGA picker cards already name each area — hide redundant legend */
+  .mapLegend {
+    display: none;
+  }
+}
 .mapLga {
   outline: none;
-  cursor: pointer;
+  cursor: default;
   transition: fill 180ms ease, opacity 180ms ease, transform 180ms ease, stroke 180ms ease;
 }
-.mapLgaEast { cursor: pointer; }
+.mapLgaEast {
+  cursor: pointer;
+}
+.mapLgaEast:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+.eastLgaPicker {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px;
+}
+.eastLgaPickerBtn {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  border: 1px solid #d5ddd8;
+  border-radius: 8px;
+  background: #fff;
+  padding: 10px 11px;
+  cursor: pointer;
+  color: var(--green);
+  font: inherit;
+  transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+.eastLgaPickerBtn:hover,
+.eastLgaPickerBtn:focus-visible {
+  border-color: var(--gold);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.25);
+}
+.eastLgaPickerBtn.isSelected {
+  border-color: var(--green);
+  background: #f4faf6;
+}
+.eastLgaPickerText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.eastLgaPickerText strong {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.eastLgaPickerText small {
+  font-size: 11px;
+  color: #555;
+  line-height: 1.35;
+  font-weight: 500;
+}
 .mapLegend {
   position: absolute;
   left: 10px;
@@ -671,7 +842,10 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 11
   line-height: 1.4;
   color: #3d4541;
 }
-.mapTooltip.isIdle { display: none; }
+.mapTooltip.isIdle {
+  /* Keep idle prompt visible so users know the map is interactive */
+  opacity: 0.96;
+}
 .mapLabel {
   fill: #fff;
   font-weight: 800;
@@ -945,29 +1119,6 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 11
 .newsMeta { font-size: 12px; color: #3d4541; font-weight: 600; }
 .newsPanel p { font-size: 12px; color: #555; line-height: 1.35; margin: 4px 0 0; }
 
-.newsFilters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin: 8px 0 4px;
-}
-.newsFilters label {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-weight: 600;
-  color: var(--green);
-}
-.newsFilters select {
-  min-height: 44px;
-  min-width: 12rem;
-  font: inherit;
-  color: var(--ink);
-  background: var(--paper);
-  border: 2px solid var(--muted);
-  border-radius: 6px;
-  padding: 8px 10px;
-}
 .newsList { display: flex; flex-direction: column; }
 .newsListCard {
   display: grid;
@@ -1134,9 +1285,29 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 11
   font-size: 13px;
   line-height: 1.4;
 }
-.footerContact p { display: flex; gap: 8px; align-items: flex-start; }
-.footerPhones span { display: flex; flex-direction: column; min-width: 0; }
-.footerPhones a { justify-content: flex-start; }
+.footerContact p {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: 0;
+  margin: 0 0 0.75rem;
+}
+.footerContact p > svg {
+  flex: 0 0 auto;
+  margin-top: 0.2em;
+}
+.footerPhones span {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.6;
+  gap: 0;
+}
+.footerPhones a {
+  justify-content: flex-start;
+  min-height: 0;
+  line-height: 1.6;
+}
 .contactPhones {
   display: flex;
   flex-wrap: wrap;
@@ -1156,12 +1327,20 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 11
   z-index: 1;
   border-top: 1px solid rgba(255,255,255,.14);
   background: var(--green-deep);
-  padding: 12px 4vw;
+  padding: 12px var(--gutter, 4vw);
+  width: 100%;
+  font-size: 12px;
+  color: #c9d8d2;
+}
+.footerBottomInner {
+  max-width: var(--measure, 72rem);
+  margin-inline: auto;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   gap: 16px;
-  font-size: 12px;
-  color: #c9d8d2;
+  align-items: center;
+  flex-wrap: wrap;
 }
 .footerCredit { display: flex; flex-direction: column; justify-content: center; gap: 2px; }
 .footerCredit a { color: inherit; text-decoration: none; }
@@ -1195,10 +1374,10 @@ section[id], article[id], footer[id], #home, #home-lower { scroll-margin-top: 11
 }
 .closeModal {
   position: absolute;
-  right: 14px;
-  top: 14px;
-  width: 36px;
-  height: 36px;
+  right: 12px;
+  top: 12px;
+  width: var(--touch);
+  height: var(--touch);
   border-radius: 50%;
   border: 0;
   background: #eef2ef;
@@ -1353,34 +1532,40 @@ main h1:focus-visible {
 }
 .lgaLcdas li:last-child { border-bottom: 0; padding-bottom: 0; }
 
-@media (max-width: 1280px) {
-  .mainNav { gap: 20px; font-size: 14px; }
+@media (min-width: 1024px) and (max-width: 1200px) {
+  .mainNav,
+  .siteHeader .mainNav {
+    gap: 20px;
+    font-size: 14px;
+  }
 }
 
-@media (max-width: 1100px) {
-  .headerTop { grid-template-columns: minmax(0, 1fr) auto; gap: 12px; }
-  .mobileMenu { display: block; }
+@media (max-width: 1023px) {
+  .headerTop { gap: 12px; }
+  .mobileMenu { display: inline-grid; }
   .mainNav {
     display: none;
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
-    background: #fff;
-    max-height: calc(100dvh - 104px);
+    margin-left: 0;
+    background: #f6f3ec;
+    max-height: calc(100dvh - 72px);
     overflow-y: auto;
     flex-direction: column;
     align-items: stretch;
     padding: 10px 5vw 16px;
     gap: 0;
     box-shadow: 0 10px 20px rgba(0,0,0,.08);
+    z-index: 40;
   }
   .mainNav.open { display: flex; }
   .mainNav a { height: 44px; flex-shrink: 0; font-size: 16px; }
   .mainNav .goldCta { margin: 8px 0 4px; flex-shrink: 0; font-size: 16px; }
   .impactStrip { grid-template-columns: 1fr 1fr 1fr; }
   .impactTitle, .impactStrip blockquote { grid-column: span 3; }
-  .presenceSection { grid-template-columns: 1fr; }
+  .presenceInner { grid-template-columns: 1fr; }
   .presenceStats { grid-template-columns: repeat(3, 1fr) auto; }
   .lowerGrid { grid-template-columns: 1fr 1fr; }
   .footerGrid { grid-template-columns: 1fr max-content 1fr; gap: 24px 32px; }
@@ -1389,7 +1574,7 @@ main h1:focus-visible {
 @media (max-width: 860px) {
   .coverImage { object-position: var(--photo-pos-mobile, var(--photo-pos, 50% 50%)); }
   .sectorGrid { grid-template-columns: 1fr 1fr; }
-  .presenceSection, .lowerGrid, .footerGrid { grid-template-columns: 1fr; }
+  .presenceInner, .lowerGrid, .footerGrid { grid-template-columns: 1fr; }
   .presenceStats { grid-template-columns: 1fr; }
   .mapTooltip {
     position: static;
@@ -1419,13 +1604,22 @@ main h1:focus-visible {
     a 40px headline to 15px. So on phones the artwork becomes a cropped
     photographic backdrop and the copy is rendered as real text over it.
   */
-  /* Fixed height for every slide so the page does not jump between flyers and photos. */
+  /* Fixed height for non-banner heroes so the page does not jump between slides. */
   .heroCarousel {
     aspect-ratio: auto;
     height: auto;
     min-height: clamp(440px, 74vh, 680px);
   }
-  .heroSlide .heroImage {
+  /* Do not force the tall phone frame onto home campaign banners. */
+  .cineHome .bannerHero .heroCarousel {
+    min-height: 0;
+    max-height: none;
+    height: auto;
+  }
+  .cineHome .bannerHero .heroImage {
+    transform: none;
+  }
+  .hero:not(.bannerHero) .heroSlide .heroImage {
     object-position: var(--photo-pos-mobile, var(--photo-pos, 50% 50%));
     transform: scale(var(--hero-zoom, 1));
     transform-origin: var(--hero-origin, 50% 50%);
@@ -1518,6 +1712,7 @@ main h1:focus-visible {
   /* Swipe and dots are enough; arrows cover flyer footer credit on phones. */
   .heroNav { display: none; }
   /* Unreadable at 7–8px on a narrow brand stack. */
+  .fortPoweredBy { margin-left: 64px; font-size: 10px; }
   .brandText small { display: none; }
 }
 
@@ -1525,7 +1720,7 @@ main h1:focus-visible {
 @media (max-width: 640px) {
   .brandText strong { font-size: 22px; }
   .brandEmblem { height: 64px; }
-  .headerTop { min-height: 88px; }
+  .headerTop { min-height: 72px; }
   .brand { gap: 8px; }
   .motto { font-size: 15px; margin-top: 5px; }
   .leaderSectionHead { flex-direction: column; align-items: flex-start; }
@@ -1543,7 +1738,7 @@ main h1:focus-visible {
   .newsPanel article { grid-template-columns: 92px 1fr; }
   .newsListCard { grid-template-columns: 1fr; }
   .joinModal form { grid-template-columns: 1fr; }
-  .footerBottom { flex-direction: column; }
+  .footerBottomInner { flex-direction: column; align-items: flex-start; }
   .footerGrid { padding-bottom: 80px; }
   .lgaRegisterHead { display: none; }
   .lgaRow { grid-template-columns: 1fr; gap: 8px; }
@@ -1634,7 +1829,7 @@ main h1:focus-visible {
   background: #dce4df;
 }
 .programPagePhoto .coverImage { position: absolute; inset: 0; }
-.programPageCard h2 { scroll-margin-top: 112px; }
+.programPageCard h2 { scroll-margin-top: 88px; }
 .whereWeWork a {
   color: var(--green);
   font-weight: 700;

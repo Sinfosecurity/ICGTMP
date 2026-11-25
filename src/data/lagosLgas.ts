@@ -28,6 +28,9 @@ export type LagosLga = {
 
 export const lagosMapView = { width: 1120, height: 239 } as const;
 
+/** Tighter framing so the five Lagos East LGAs fill the map on small screens. */
+export const lagosEastMapView = { x: 430, y: 8, width: 665, height: 230 } as const;
+
 export const lagosWaterLabels = [
   { text: 'LAGOON', x: 590, y: 138 },
   { text: 'ATLANTIC OCEAN', x: 400, y: 226 },

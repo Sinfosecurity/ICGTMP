@@ -6,6 +6,8 @@ export const SITE = {
   registeredName: 'FORT-G ICG MTP CONCEPTS',
   bnNumber: '',
   parentOrg: { name: 'The Fort Group', url: 'https://thefortgroupng.com' },
+  /** Partner network featured with diaspora leadership. */
+  diasporaOrg: { name: 'Lagosians in Diaspora', shortName: 'LIDA' },
   phones: ['0703 652 1422', '0802 757 1429'],
   social: { facebook: '', x: '', instagram: '', tiktok: '', youtube: '' },
 };

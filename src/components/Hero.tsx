@@ -1,7 +1,8 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
 import {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type CSSProperties,
@@ -9,17 +10,17 @@ import {
   type PointerEvent,
 } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {
-  HERO_FADE_MS,
-  HERO_FIRST_INTERVAL_MS,
-  HERO_INTERVAL_MS,
-  heroSlides,
-  type HeroHit,
-} from '../data/heroSlides';
+import { HERO_FADE_MS, HERO_INTERVAL_MS, heroSlides, type HeroHit } from '../data/heroSlides';
 import { useJoin } from '../routes/JoinProvider';
+
+const MOBILE_HERO_MQ = '(max-width: 700px)';
 
 function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function isMobileHeroViewport() {
+  return window.matchMedia(MOBILE_HERO_MQ).matches;
 }
 
 export function Hero() {
@@ -28,36 +29,69 @@ export function Hero() {
   const [index, setIndex] = useState(0);
   const [hidden, setHidden] = useState(() => document.hidden);
   const [reducedMotion, setReducedMotion] = useState(prefersReducedMotion);
-  const [resumeToken, setResumeToken] = useState(0);
+  const [mobileHero, setMobileHero] = useState(isMobileHeroViewport);
+  const [userPaused, setUserPaused] = useState(false);
+  const [hoverPaused, setHoverPaused] = useState(false);
+  const [focusPaused, setFocusPaused] = useState(false);
+  const [progressKey, setProgressKey] = useState(0);
   const pointerStart = useRef<{ x: number; y: number } | null>(null);
   const skipClick = useRef(false);
 
-  const goTo = useCallback((next: number) => {
-    const count = heroSlides.length;
-    setIndex(((next % count) + count) % count);
-    setResumeToken((token) => token + 1);
-  }, []);
+  const slides = useMemo(
+    () => (mobileHero ? heroSlides.filter((slide) => Boolean(slide.mobileSrc)) : heroSlides),
+    [mobileHero],
+  );
+
+  const playing = !userPaused && !hoverPaused && !focusPaused && !hidden && !reducedMotion;
+  const wasPlaying = useRef(playing);
+
+  const goTo = useCallback(
+    (next: number) => {
+      const count = slides.length;
+      if (count === 0) return;
+      setIndex(((next % count) + count) % count);
+      setProgressKey((key) => key + 1);
+    },
+    [slides.length],
+  );
+
+  useEffect(() => {
+    if (index >= slides.length) {
+      setIndex(0);
+      setProgressKey((key) => key + 1);
+    }
+  }, [index, slides.length]);
 
   useEffect(() => {
     const onVisibility = () => setHidden(document.hidden);
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const onMotion = () => setReducedMotion(media.matches);
+    const motionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const heroMedia = window.matchMedia(MOBILE_HERO_MQ);
+    const onMotion = () => setReducedMotion(motionMedia.matches);
+    const onHeroViewport = () => setMobileHero(heroMedia.matches);
     document.addEventListener('visibilitychange', onVisibility);
-    media.addEventListener('change', onMotion);
+    motionMedia.addEventListener('change', onMotion);
+    heroMedia.addEventListener('change', onHeroViewport);
     return () => {
       document.removeEventListener('visibilitychange', onVisibility);
-      media.removeEventListener('change', onMotion);
+      motionMedia.removeEventListener('change', onMotion);
+      heroMedia.removeEventListener('change', onHeroViewport);
     };
   }, []);
 
   useEffect(() => {
-    if (hidden || reducedMotion) return;
-    const delay = index === 0 ? HERO_FIRST_INTERVAL_MS : HERO_INTERVAL_MS;
+    if (playing && !wasPlaying.current) {
+      setProgressKey((key) => key + 1);
+    }
+    wasPlaying.current = playing;
+  }, [playing]);
+
+  useEffect(() => {
+    if (!playing || slides.length === 0) return;
     const timer = window.setTimeout(() => {
-      setIndex((current) => (current + 1) % heroSlides.length);
-    }, delay);
+      goTo(index + 1);
+    }, HERO_INTERVAL_MS);
     return () => window.clearTimeout(timer);
-  }, [hidden, reducedMotion, resumeToken, index]);
+  }, [playing, index, goTo, slides.length]);
 
   const onHit = (hit: HeroHit) => {
     if (hit.action === 'join') {
@@ -84,7 +118,7 @@ export function Hero() {
     if (!start || event.pointerType !== 'touch') return;
     const dx = event.clientX - start.x;
     const dy = event.clientY - start.y;
-    if (Math.abs(dx) < 72 || Math.abs(dx) < Math.abs(dy) * 1.4) return;
+    if (Math.abs(dx) < 56 || Math.abs(dx) < Math.abs(dy) * 1.4) return;
     skipClick.current = true;
     goTo(index + (dx < 0 ? 1 : -1));
   };
@@ -103,30 +137,32 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="hero"
+      className="hero bannerHero"
       aria-roledescription="carousel"
-      aria-label="Featured campaign artwork"
+      aria-label="Campaign banners"
       tabIndex={0}
       onKeyDown={onKeyDown}
       onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
+      onMouseEnter={() => setHoverPaused(true)}
+      onMouseLeave={() => setHoverPaused(false)}
+      onFocusCapture={() => setFocusPaused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          setFocusPaused(false);
+        }
+      }}
+      style={
+        {
+          '--hero-fade': `${HERO_FADE_MS}ms`,
+          '--hero-interval': `${HERO_INTERVAL_MS}ms`,
+        } as CSSProperties
+      }
     >
-      <div
-        className={heroSlides[index].showFullArtwork ? 'heroCarousel heroCarousel--fullArtwork' : 'heroCarousel'}
-        style={{ '--hero-fade': `${HERO_FADE_MS}ms` } as CSSProperties}
-      >
-        {heroSlides.map((slide, slideIndex) => {
+      <div className="heroCarousel">
+        {slides.map((slide, slideIndex) => {
           const isActive = slideIndex === index;
-          const slideClass = [
-            'heroSlide',
-            `heroSlide--${slide.id}`,
-            slide.isFlyer ? 'heroSlide--flyer' : '',
-            slide.mobileSrc ? 'heroSlide--mobileArt' : '',
-            isActive ? 'isActive' : '',
-          ]
-            .filter(Boolean)
-            .join(' ');
-          const image = (
+          const img = (
             <img
               className="heroImage"
               src={slide.src}
@@ -139,91 +175,38 @@ export function Hero() {
               decoding={slideIndex === 0 ? 'sync' : 'async'}
             />
           );
+          const slideClass = [
+            'heroSlide',
+            isActive ? 'isActive' : '',
+            slide.mobileSrc ? 'heroSlide--mobileArt' : '',
+            slide.letterboxFill ? 'heroSlide--letterboxFill' : '',
+          ]
+            .filter(Boolean)
+            .join(' ');
           return (
-            <figure
-              key={slide.id}
-              className={slideClass}
-              data-hero-slide={slide.id}
-              data-full-artwork={slide.showFullArtwork || undefined}
-              aria-hidden={!isActive}
-              style={
-                {
-                  background: slide.backdrop,
-                  '--hero-fit': slide.objectFit,
-                  '--photo-pos': slide.objectPosition,
-                  '--photo-pos-mobile': slide.objectPositionMobile,
-                  '--hero-zoom': slide.mobileZoom ?? 1,
-                  '--hero-origin': slide.mobileOrigin ?? '50% 50%',
-                } as CSSProperties
-              }
-            >
+            <figure key={slide.id} className={slideClass} aria-hidden={!isActive}>
+              {slide.letterboxFill ? (
+                <img
+                  className="heroImageBlur"
+                  src={slide.src}
+                  alt=""
+                  aria-hidden="true"
+                  width={slide.width}
+                  height={slide.height}
+                  sizes="100vw"
+                  loading={slideIndex === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              ) : null}
               {slide.mobileSrc ? (
                 <picture>
-                  <source
-                    media="(max-width: 767px)"
-                    srcSet={slide.mobileSrc}
-                    width={slide.mobileWidth}
-                    height={slide.mobileHeight}
-                  />
-                  {image}
+                  <source media="(max-width: 700px)" srcSet={slide.mobileSrc} />
+                  {img}
                 </picture>
               ) : (
-                image
+                img
               )}
-              {/*
-                Phones get real text and real buttons over the photograph; the
-                artwork's own lettering is unreadable at 390px. CSS shows one or
-                the other, so neither is duplicated in the accessibility tree.
-                The copy is aria-hidden because the image alt already carries it.
-              */}
-              <div className="heroContent">
-                <div className="heroCopy" aria-hidden="true">
-                  {slide.kicker ? <p className="heroKicker">{slide.kicker}</p> : null}
-                  <p className="heroTitle">{slide.title}</p>
-                  {slide.subtitle ? <p className="heroSub">{slide.subtitle}</p> : null}
-                </div>
-                {slide.hits?.length ? (
-                  <div className="heroActions">
-                    {slide.hits.map((hit, hitIndex) =>
-                      hit.action === 'hash' && hit.href ? (
-                        <Link
-                          key={hit.id}
-                          className={hitIndex === 0 ? 'goldPill' : 'ghostPill'}
-                          to={hit.href}
-                          tabIndex={isActive ? undefined : -1}
-                          onClick={(event) => {
-                            // A swipe that began on the button is not a tap.
-                            if (skipClick.current) {
-                              event.preventDefault();
-                              skipClick.current = false;
-                            }
-                          }}
-                        >
-                          {hit.label}
-                        </Link>
-                      ) : (
-                        <button
-                          key={hit.id}
-                          type="button"
-                          className={hitIndex === 0 ? 'goldPill' : 'ghostPill'}
-                          data-join-trigger={hit.id === 'join' ? true : undefined}
-                          tabIndex={isActive ? undefined : -1}
-                          onClick={() => {
-                            if (skipClick.current) {
-                              skipClick.current = false;
-                              return;
-                            }
-                            onHit(hit);
-                          }}
-                        >
-                          {hit.label}
-                        </button>
-                      ),
-                    )}
-                  </div>
-                ) : null}
-              </div>
-              {isActive && slide.hits ? (
+              {isActive && slide.hits && !mobileHero ? (
                 <div className="heroHits">
                   {slide.hits.map((hit) =>
                     hit.action === 'hash' && hit.href ? (
@@ -272,36 +255,75 @@ export function Hero() {
         <button
           type="button"
           className="heroNav heroNavPrev"
-          aria-label="Previous slide"
+          aria-label="Previous banner"
           onClick={() => goTo(index - 1)}
         >
-          <ChevronLeft size={22} aria-hidden="true" />
+          <ChevronLeft size={20} aria-hidden="true" />
         </button>
         <button
           type="button"
           className="heroNav heroNavNext"
-          aria-label="Next slide"
+          aria-label="Next banner"
           onClick={() => goTo(index + 1)}
         >
-          <ChevronRight size={22} aria-hidden="true" />
+          <ChevronRight size={20} aria-hidden="true" />
         </button>
       </div>
 
-      <div className="heroDots" role="tablist" aria-label="Hero slides">
-        {heroSlides.map((slide, slideIndex) => (
-          <button
-            key={slide.id}
-            type="button"
-            role="tab"
-            aria-label={`Show slide ${slideIndex + 1}: ${slide.alt}`}
-            aria-selected={slideIndex === index}
-            className={slideIndex === index ? 'isActive' : undefined}
-            onClick={() => goTo(slideIndex)}
-          />
-        ))}
+      <div className="heroChrome">
+        <div className="heroProgress" role="tablist" aria-label="Banner slides">
+          {slides.map((slide, slideIndex) => {
+            const isActive = slideIndex === index;
+            return (
+              <button
+                key={slide.id}
+                type="button"
+                role="tab"
+                aria-label={`Show banner ${slideIndex + 1}: ${slide.alt}`}
+                aria-selected={isActive}
+                className={[
+                  'heroProgressTrack',
+                  isActive ? 'isActive' : '',
+                  isActive && !playing ? 'isPaused' : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+                onClick={() => goTo(slideIndex)}
+              >
+                {isActive ? (
+                  <span
+                    key={progressKey}
+                    className="heroProgressFill"
+                    style={{
+                      animationDuration: `${HERO_INTERVAL_MS}ms`,
+                      animationPlayState: playing ? 'running' : 'paused',
+                    }}
+                  />
+                ) : null}
+              </button>
+            );
+          })}
+        </div>
+
+        <button
+          type="button"
+          className="heroPause"
+          aria-controls="home"
+          aria-pressed={userPaused || reducedMotion}
+          aria-label={userPaused || reducedMotion ? 'Play banner slideshow' : 'Pause banner slideshow'}
+          onClick={() => setUserPaused((value) => !value)}
+          disabled={reducedMotion}
+        >
+          {userPaused || reducedMotion ? (
+            <Play size={14} aria-hidden="true" />
+          ) : (
+            <Pause size={14} aria-hidden="true" />
+          )}
+        </button>
       </div>
+
       <p className="visuallyHidden" aria-live="polite">
-        Slide {index + 1} of {heroSlides.length}
+        Banner {slides.length === 0 ? 0 : index + 1} of {slides.length}
       </p>
     </section>
   );

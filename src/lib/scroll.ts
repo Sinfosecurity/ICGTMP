@@ -1,7 +1,4 @@
-function headerOffset(): number {
-  const header = document.querySelector('.siteHeader');
-  return header instanceof HTMLElement ? header.getBoundingClientRect().height + 8 : 124;
-}
+import { SCROLL_HEADER_OFFSET, scrollToTarget } from './scrollToTarget';
 
 function resolveScrollId(id: string): string {
   if (id !== 'home-leadership' && id !== 'home-news') return id;
@@ -13,12 +10,12 @@ function resolveScrollId(id: string): string {
   return sameRow ? 'home-lower' : id;
 }
 
+function headerOffset(): number {
+  return SCROLL_HEADER_OFFSET;
+}
+
 export function scrollWindowToId(id: string, behavior: ScrollBehavior): boolean {
-  const el = document.getElementById(resolveScrollId(id));
-  if (!el) return false;
-  const top = window.scrollY + el.getBoundingClientRect().top - headerOffset();
-  window.scrollTo({ top: Math.max(0, top), behavior });
-  return true;
+  return scrollToTarget(resolveScrollId(id), { behavior });
 }
 
 export function scrollToIdWhenReady(id: string, behavior: ScrollBehavior): () => void {
