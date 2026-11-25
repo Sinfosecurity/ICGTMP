@@ -68,7 +68,8 @@ export const navigation: NavItem[] = [
     label: 'Leadership',
     to: '/leadership',
     title: 'Leadership | ICGMTP',
-    description: 'Conveners, Director-General, Deputy Directors-General, Secretary, and diaspora coordinators of ICGMTP.',
+    description:
+      'Conveners, Director-General, Deputy Directors-General, Secretary, and Lagosians in Diaspora coordinators of ICGMTP.',
     header: true,
     footer: true,
   },
@@ -117,7 +118,7 @@ export const navigation: NavItem[] = [
     label: 'Privacy Policy',
     to: '/privacy',
     title: 'Privacy Policy | ICGMTP',
-    description: 'How ICGMTP handles membership and contact form submissions.',
+    description: 'How ICGMTP handles membership form submissions.',
     legal: true,
   },
   {

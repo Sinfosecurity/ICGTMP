@@ -4,6 +4,9 @@ import { RouterProvider } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 import { router } from './routes/router';
 import './index.css';
+import './redesign.css';
+import './cinematic.css';
+import 'lenis/dist/lenis.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

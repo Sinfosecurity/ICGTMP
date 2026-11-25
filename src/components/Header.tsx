@@ -5,6 +5,7 @@ import { navigation } from '../data/site';
 import { focusables, lockPageScroll, trapTab } from '../lib/scrollLock';
 import { useJoin } from '../routes/JoinProvider';
 import { Brand } from './Brand';
+import { WhatsAppJoinLink } from './WhatsAppJoinLink';
 
 export function Header() {
   const onJoin = useJoin();
@@ -47,8 +48,10 @@ export function Header() {
     };
   }, [menuOpen]);
 
+  const links = navigation.filter((item) => item.header && item.to !== '/');
+
   return (
-    <header ref={headerRef} className="siteHeader">
+    <header ref={headerRef} className="siteHeader siteHeaderSolid isSolid">
       <div className="headerTop">
         <Brand />
         <button
@@ -62,22 +65,31 @@ export function Header() {
         >
           {menuOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
         </button>
-        <nav ref={navRef} id={menuId} className={menuOpen ? 'mainNav open' : 'mainNav'} aria-label="Primary">
-          {navigation
-            .filter((item) => item.header)
-            .map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.to === '/'}
-                className={({ isActive }) => (isActive ? 'active' : undefined)}
-              >
-                {item.label}
-              </NavLink>
-            ))}
+        <nav
+          ref={navRef}
+          id={menuId}
+          className={menuOpen ? 'mainNav open' : 'mainNav'}
+          aria-label="Primary"
+        >
+          {links.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === '/'}
+              className={({ isActive }) => (isActive ? 'active' : undefined)}
+            >
+              {item.label}
+            </NavLink>
+          ))}
+          <WhatsAppJoinLink
+            iconOnly
+            className="headerWhatsApp headerWhatsApp--desktop"
+            aria-label="Join our WhatsApp group"
+          />
           <button type="button" className="goldCta" data-join-trigger onClick={() => onJoin()}>
             Join ICGMTP
           </button>
+          <WhatsAppJoinLink className="headerWhatsApp headerWhatsApp--mobile" />
         </nav>
       </div>
     </header>

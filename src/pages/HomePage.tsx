@@ -1,27 +1,33 @@
-import { heroSlides } from '../data/heroSlides';
 import { Hero } from '../components/Hero';
-import { ImpactGoals } from '../components/ImpactGoals';
-import { JoinPanel } from '../components/JoinPanel';
 import { LagosEastPresence } from '../components/LagosEastPresence';
-import { LeadershipSection } from '../components/LeadershipSection';
-import { NewsSection } from '../components/NewsSection';
-import { ProgramsStrip } from '../components/ProgramsStrip';
-import { SectorCards } from '../components/SectorCards';
+import { SceneHero } from '../components/home/SceneHero';
+import { SceneHook } from '../components/home/SceneHook';
+import { SceneImpact } from '../components/home/SceneImpact';
+import { SceneLeadership } from '../components/home/SceneLeadership';
+import { SceneNewsClose } from '../components/home/SceneNewsClose';
+import { SceneSectors } from '../components/home/SceneSectors';
+import { HOME_SECTIONS } from '../data/homeSections';
+
+/** Home section order/IDs — keep in sync with the render below. */
+export { HOME_SECTIONS };
 
 export function HomePage() {
   return (
-    <main>
-      <h1 className="visuallyHidden">{heroSlides[0].title}</h1>
+    <main className="cineHome">
+      {/* HOME_SECTIONS: home */}
       <Hero />
-      <SectorCards />
-      <ImpactGoals />
+      {/* HOME_SECTIONS: home-story */}
+      <SceneHero />
+      <SceneHook />
+      {/* HOME_SECTIONS: who-we-serve */}
+      <SceneSectors />
+      <SceneImpact />
+      {/* HOME_SECTIONS: home-structure */}
       <LagosEastPresence />
-      <LeadershipSection />
-      <section id="home-lower" className="lowerGrid" aria-label="News and membership">
-        <NewsSection />
-        <JoinPanel />
-      </section>
-      <ProgramsStrip />
+      {/* HOME_SECTIONS: home-leadership */}
+      <SceneLeadership />
+      {/* HOME_SECTIONS: home-news */}
+      <SceneNewsClose />
     </main>
   );
 }

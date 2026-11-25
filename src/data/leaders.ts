@@ -34,7 +34,7 @@ export function leaderInitials(name: string): string {
 
 export const leaderGroups: { id: LeaderGroup; label: string }[] = [
   { id: 'leadership', label: 'Leadership' },
-  { id: 'diaspora', label: 'Diaspora' },
+  { id: 'diaspora', label: 'Lagosians in Diaspora' },
 ];
 
 export const leaders: Leader[] = [

@@ -31,9 +31,6 @@ export function AboutPage() {
           </li>
         ))}
       </ul>
-      <p className="quietNote">
-        Full biographies will be published when those materials are supplied.
-      </p>
     </PageShell>
   );
 }
