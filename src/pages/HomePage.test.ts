@@ -7,15 +7,15 @@ describe('HOME_SECTIONS', () => {
     expect(ids).toEqual([
       'home',
       'home-story',
-      'who-we-serve',
+      'who-we-are',
       'home-structure',
       'home-leadership',
       'home-news',
     ]);
   });
 
-  it('keeps home → story → who-we-serve → structure → leadership order', () => {
-    const required = ['home', 'home-story', 'who-we-serve', 'home-structure', 'home-leadership'];
+  it('keeps home → story → who-we-are → structure → leadership order', () => {
+    const required = ['home', 'home-story', 'who-we-are', 'home-structure', 'home-leadership'];
     const ids = HOME_SECTIONS.map((section) => section.id);
     let last = -1;
     for (const id of required) {

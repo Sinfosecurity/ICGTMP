@@ -40,14 +40,14 @@ export function SceneSectors() {
   return (
     <section
       ref={rootRef}
-      id="who-we-serve"
+      id="who-we-are"
       className="cineSectors"
       aria-labelledby="cine-sectors-title"
     >
       <div className="cineSectorsInner">
         <div className="cineSectorsHead">
           <p className="sectionKicker">Programmes</p>
-          <h2 id="cine-sectors-title">Who we serve</h2>
+          <h2 id="cine-sectors-title">Who we are</h2>
         </div>
         <div className="cineSectorGrid">
           {programs.map((sector) => (

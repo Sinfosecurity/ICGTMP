@@ -2,7 +2,7 @@
 export const HOME_SECTIONS = [
   { id: 'home', label: 'Campaign banners' },
   { id: 'home-story', label: 'Intro' },
-  { id: 'who-we-serve', label: 'Who we serve' },
+  { id: 'who-we-are', label: 'Who we are' },
   { id: 'home-structure', label: 'Lagos East presence' },
   { id: 'home-leadership', label: 'Leadership' },
   { id: 'home-news', label: 'News' },

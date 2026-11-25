@@ -19,7 +19,7 @@ export function HomePage() {
       {/* HOME_SECTIONS: home-story */}
       <SceneHero />
       <SceneHook />
-      {/* HOME_SECTIONS: who-we-serve */}
+      {/* HOME_SECTIONS: who-we-are */}
       <SceneSectors />
       <SceneImpact />
       {/* HOME_SECTIONS: home-structure */}
