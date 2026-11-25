@@ -845,25 +845,84 @@ body {
 }
 .innerBody .contactLayout {
   display: grid;
-  gap: 1.25rem;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  max-width: none;
+  width: 100%;
+  align-items: start;
 }
 .innerBody .contactCard {
   background: #fff;
   border-top: 2px solid var(--gold);
   padding: 1.35rem 1.25rem 1.5rem;
   box-shadow: var(--shadow-sm);
+  max-width: none;
+  width: 100%;
 }
 .innerBody .contactCard p {
-  margin: 0.65rem 0;
+  margin: 0.75rem 0;
+}
+.innerBody .contactCard .contactIntro {
+  margin-top: 0;
+}
+.innerBody .contactCard .contactRow {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.45rem 0.65rem;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 12px;
+}
+.innerBody .contactCard .contactRow > svg {
+  flex: 0 0 auto;
+  margin-top: 0.2em;
+  color: var(--green);
+}
+.innerBody .contactCard .contactPhones {
+  flex-wrap: nowrap;
+}
+.innerBody .contactCard .contactPhones span {
+  display: inline;
+  line-height: 1.5;
+}
+.innerBody .contactCard .contactPhones a {
+  display: inline;
+  min-height: 0;
+}
+.innerBody .contactCard .quietNote {
+  margin-bottom: 0;
+  margin-top: 1rem;
 }
 .innerBody .contactCard a {
   color: var(--green);
   font-weight: 700;
   text-underline-offset: 3px;
+}
+.innerBody .contactMapPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+.innerBody .contactMap {
+  display: block;
+  width: 100%;
+  min-height: 320px;
+  height: 320px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: #e8ebe8;
+}
+.innerBody .contactMapActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+}
+@media (min-width: 1024px) {
+  .innerBody .contactLayout {
+    grid-template-columns: minmax(0, 0.55fr) minmax(0, 0.45fr);
+    gap: 1.75rem 2rem;
+  }
 }
 .innerPage > .cineClose {
   /* Match homepage close → footer rhythm on interior routes */
@@ -965,7 +1024,7 @@ body {
   background: #e2e8e4;
   color: var(--green);
 }
-.contactLayout { display: grid; gap: 1.25rem; max-width: 36rem; }
+.contactLayout { display: grid; gap: 1.25rem; max-width: none; }
 .contactForm input,
 .contactForm select,
 .contactForm textarea {
