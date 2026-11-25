@@ -691,6 +691,9 @@ body {
 }
 
 /* —— Interior —— */
+.innerPage {
+  background: linear-gradient(180deg, #fbf8f1 0%, var(--paper) 48%, #fff 100%);
+}
 .innerHero {
   background: var(--green-deep);
   padding: clamp(3rem, 7vw, 5.5rem) var(--gutter) clamp(2.25rem, 4vw, 3.5rem);
@@ -700,18 +703,22 @@ body {
   margin-inline: auto;
 }
 .innerKicker {
+  margin: 0 0 0.65rem;
   letter-spacing: 0.18em;
+  text-transform: uppercase;
   font-size: 0.68rem;
   color: var(--gold);
   font-weight: 700;
 }
 .innerHero h1 {
+  margin: 0;
   font-family: var(--font-display);
   font-weight: 600;
   letter-spacing: -0.035em;
   font-size: clamp(2.1rem, 4.5vw, 3.25rem);
-  max-width: 14ch;
+  max-width: 16ch;
   text-wrap: balance;
+  color: #fff;
 }
 .innerBody {
   max-width: 40rem;
@@ -729,6 +736,7 @@ body {
   font-size: clamp(1.25rem, 2.2vw, 1.55rem);
   letter-spacing: -0.02em;
   margin-top: 2em;
+  color: var(--green);
 }
 .innerBody:has(.leaderDirectory),
 .innerBody:has(.lgaRegister),
@@ -736,16 +744,66 @@ body {
 .innerBody:has(.structureGrid),
 .innerBody:has(.newsList),
 .innerBody:has(.contactLayout),
-.innerBody:has(.programPageList) {
+.innerBody:has(.programPageList),
+.innerBody:has(.innerLeadershipBand) {
   max-width: var(--measure);
+}
+.innerBody:has(.innerLeadershipBand) {
+  padding-inline: 0;
+  padding-bottom: 0;
+}
+.innerBody:has(.innerLeadershipBand) > .leaderPageLead {
+  max-width: 40rem;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  margin-bottom: 0;
+}
+.innerLeadershipBand {
+  margin-top: clamp(2rem, 4vw, 3rem);
+  background: var(--green-deep);
+  color: #fff;
+  padding: clamp(2.5rem, 5vw, 4.5rem) var(--gutter);
+}
+.aboutLeadershipTiers {
+  display: grid;
+  gap: 1.35rem;
+  margin-top: 0.75rem;
+}
+.aboutTierGroup {
+  padding-top: 0.35rem;
+  border-top: 1px solid var(--line);
+}
+.aboutTierGroup:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.aboutTierLabel {
+  margin: 0 0 0.45rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-text);
+  font-weight: 700;
 }
 .resourceGrid article,
 .structureGrid article {
   border: 0;
-  border-top: 2px solid var(--green);
-  background: var(--paper);
+  border-top: 2px solid var(--gold);
+  background: #fff;
   padding: 1.35rem 1.2rem 1.5rem;
   border-radius: 0;
+  box-shadow: var(--shadow-sm);
+}
+.resourceGrid article h2,
+.structureGrid article h2 {
+  margin-top: 0;
+  color: var(--green);
+}
+.resourceGrid article a,
+.structureGrid article a {
+  color: var(--green);
+  font-weight: 700;
+  text-underline-offset: 3px;
 }
 .innerBody .leaderPageLead {
   font-family: var(--font-display);
@@ -764,6 +822,151 @@ body {
 }
 .innerBody .leaderGroupLabel {
   letter-spacing: 0.16em;
+}
+.innerBody .newsList {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+.innerBody .newsListCard {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 1.15rem 1.35rem;
+  padding: 1.35rem 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+}
+.innerBody .newsListCard h2 a {
+  color: var(--green);
+  text-decoration: none;
+}
+.innerBody .newsListCard h2 a:hover,
+.innerBody .newsListCard h2 a:focus-visible {
+  color: var(--gold-text);
+}
+.innerBody .contactLayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  max-width: none;
+  width: 100%;
+  align-items: start;
+}
+.innerBody .contactCard {
+  background: #fff;
+  border-top: 2px solid var(--gold);
+  padding: 1.35rem 1.25rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+  max-width: none;
+  width: 100%;
+}
+.innerBody .contactCard p {
+  margin: 0.75rem 0;
+}
+.innerBody .contactCard .contactIntro {
+  margin-top: 0;
+}
+.innerBody .contactCard .contactRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 12px;
+}
+.innerBody .contactCard .contactRow > svg {
+  flex: 0 0 auto;
+  margin-top: 0.2em;
+  color: var(--green);
+}
+.innerBody .contactCard .contactPhones {
+  flex-wrap: nowrap;
+}
+.innerBody .contactCard .contactPhones span {
+  display: inline;
+  line-height: 1.5;
+}
+.innerBody .contactCard .contactPhones a {
+  display: inline;
+  min-height: 0;
+}
+.innerBody .contactCard .quietNote {
+  margin-bottom: 0;
+  margin-top: 1rem;
+}
+.innerBody .contactCard a {
+  color: var(--green);
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+.innerBody .contactMapPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+.innerBody .contactMap {
+  display: block;
+  width: 100%;
+  min-height: 320px;
+  height: 320px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: #e8ebe8;
+}
+.innerBody .contactMapActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+}
+@media (min-width: 1024px) {
+  .innerBody .contactLayout {
+    grid-template-columns: minmax(0, 0.55fr) minmax(0, 0.45fr);
+    gap: 1.75rem 2rem;
+  }
+}
+.innerPage > .cineClose {
+  /* Match homepage close → footer rhythm on interior routes */
+  margin-top: 0;
+}
+.innerBody .programPageCard {
+  background: #fff;
+  border-top: 2px solid var(--gold);
+  padding: 1.35rem 1.2rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+  gap: 1.35rem 1.5rem;
+}
+.innerBody .programPageList {
+  gap: 1.25rem;
+}
+.innerBody .lgaRegister {
+  border-top-color: var(--gold);
+  background: #fff;
+  padding: 0.25rem 1.15rem 0.5rem;
+  box-shadow: var(--shadow-sm);
+}
+.innerBody .shareRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 1.75rem;
+}
+.innerTextLink {
+  color: var(--gold-text);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-bottom: 1px solid transparent;
+  min-height: var(--touch);
+}
+.innerTextLink:hover,
+.innerTextLink:focus-visible {
+  color: var(--green);
+  border-bottom-color: var(--gold);
+  gap: 0.5rem;
 }
 
 /* —— Forms —— */
@@ -821,14 +1024,7 @@ body {
   background: #e2e8e4;
   color: var(--green);
 }
-.contactLayout { display: grid; gap: 2.5rem; }
-@media (min-width: 900px) {
-  .contactLayout {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    gap: 3.5rem;
-    align-items: start;
-  }
-}
+.contactLayout { display: grid; gap: 1.25rem; max-width: none; }
 .contactForm input,
 .contactForm select,
 .contactForm textarea {
@@ -843,17 +1039,18 @@ body {
 .programPageList {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 1.25rem;
   margin-top: 1.75rem;
-  border-top: 1px solid var(--line);
 }
 .programPageCard {
   display: grid;
   grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
   gap: 1.5rem 2rem;
-  padding: 1.75rem 0;
-  border-bottom: 1px solid var(--line);
   align-items: start;
+  background: #fff;
+  border-top: 2px solid var(--gold);
+  padding: 1.35rem 1.2rem 1.5rem;
+  box-shadow: var(--shadow-sm);
 }
 .programPagePhoto {
   position: relative;
@@ -950,6 +1147,12 @@ body {
     height: 56px;
   }
   .programPageCard { grid-template-columns: 1fr; }
+  .innerBody .newsListCard {
+    grid-template-columns: 1fr;
+  }
+  .innerBody .newsListCard .newsThumb {
+    height: 160px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

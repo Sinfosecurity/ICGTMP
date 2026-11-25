@@ -3,13 +3,11 @@ import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { newsItems } from '../../data/news';
 import { fadeUpOnce } from '../../lib/fadeUp';
-import { useJoin } from '../../routes/JoinProvider';
 import { CoverImage } from '../CoverImage';
+import { JoinCloseSection } from '../JoinCloseSection';
 import { useMotion } from '../MotionProvider';
-import { WhatsAppJoinLink } from '../WhatsAppJoinLink';
 
 export function SceneNewsClose() {
-  const onJoin = useJoin();
   const { ready } = useMotion();
   const newsRef = useRef<HTMLElement>(null);
   const closeRef = useRef<HTMLElement>(null);
@@ -77,22 +75,7 @@ export function SceneNewsClose() {
         </div>
       </section>
 
-      <section ref={closeRef} className="cineClose" aria-labelledby="cine-close-title">
-        <div className="cineCloseInner cineReveal">
-          <p className="sectionKicker">Membership</p>
-          <h2 id="cine-close-title">Join ICGMTP today</h2>
-          <p>
-            Register your interest by LGA, trade and membership category — or join the public
-            WhatsApp group.
-          </p>
-          <div className="cineCloseActions">
-            <button type="button" className="goldPill" data-join-trigger onClick={() => onJoin()}>
-              Join ICGMTP <span aria-hidden="true">→</span>
-            </button>
-            <WhatsAppJoinLink className="cineWhatsApp" />
-          </div>
-        </div>
-      </section>
+      <JoinCloseSection ref={closeRef} titleId="cine-close-title" />
     </>
   );
 }

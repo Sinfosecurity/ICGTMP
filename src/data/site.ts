@@ -23,6 +23,10 @@ export const org = {
 export const mapsUrl =
   "https://www.google.com/maps/search/?api=1&query=5%20Akeusola%20Street%20Ita'le%20Market%20Epe%20Waterfront%20Lagos";
 
+/** Same query as mapsUrl, embeddable in an iframe. */
+export const mapsEmbedUrl =
+  "https://www.google.com/maps?q=5%20Akeusola%20Street%20Ita'le%20Market%20Epe%20Waterfront%20Lagos&output=embed";
+
 export const membershipCategories = [
   'Markets & Traders',
   'Artisans & Skilled Workers',

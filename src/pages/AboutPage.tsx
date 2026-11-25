@@ -1,9 +1,19 @@
-import { leaders } from '../data/leaders';
+import { leadershipTiers } from '../data/leadershipTiers';
 import { programs } from '../data/programs';
 import { org } from '../data/site';
 import { PageShell } from '../components/PageShell';
 
+const TIER_SECTIONS: { label: string; key: keyof ReturnType<typeof leadershipTiers> }[] = [
+  { label: 'Conveners', key: 'conveners' },
+  { label: 'Director-General', key: 'directorGeneral' },
+  { label: 'Deputy Directors-General', key: 'ddgs' },
+  { label: 'Secretary', key: 'secretary' },
+  { label: 'Lagosians in Diaspora', key: 'diaspora' },
+];
+
 export function AboutPage() {
+  const tiers = leadershipTiers();
+
   return (
     <PageShell kicker="About" title="Who we are">
       <p>
@@ -24,13 +34,26 @@ export function AboutPage() {
         ))}
       </ul>
       <h2>Leadership</h2>
-      <ul className="plainList">
-        {leaders.map((leader) => (
-          <li key={leader.slug}>
-            <strong>{leader.name}</strong> — {leader.role}
-          </li>
-        ))}
-      </ul>
+      <div className="aboutLeadershipTiers">
+        {TIER_SECTIONS.map(({ label, key }) => {
+          const group = tiers[key];
+          if (group.length === 0) return null;
+          return (
+            <section key={key} className="aboutTierGroup" aria-labelledby={`about-tier-${key}`}>
+              <h3 id={`about-tier-${key}`} className="aboutTierLabel">
+                {label}
+              </h3>
+              <ul className="plainList">
+                {group.map((leader) => (
+                  <li key={leader.slug}>
+                    <strong>{leader.name}</strong> — {leader.role}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          );
+        })}
+      </div>
     </PageShell>
   );
 }

@@ -31,7 +31,9 @@ export function ProgramsPage() {
               </h2>
               <p>{program.cardText}</p>
               <p>
-                <Link to={programPath(program.id)}>Learn More</Link>
+                <Link className="innerTextLink" to={programPath(program.id)}>
+                  Learn more <span aria-hidden="true">→</span>
+                </Link>
               </p>
             </div>
           </article>
