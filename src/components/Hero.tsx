@@ -208,25 +208,45 @@ export function Hero() {
               )}
               {isActive && slide.hits && !mobileHero ? (
                 <div className="heroHits">
-                  {slide.hits.map((hit) =>
-                    hit.action === 'hash' && hit.href ? (
-                      <Link
-                        key={hit.id}
-                        className="heroHit"
-                        style={hit.box}
-                        to={hit.href}
-                        aria-label={hit.label}
-                        data-join-trigger={hit.id === 'join' ? true : undefined}
-                        onClick={(event) => {
-                          if (skipClick.current) {
-                            event.preventDefault();
-                            skipClick.current = false;
-                          }
-                        }}
-                      >
-                        {hit.label}
-                      </Link>
-                    ) : (
+                  {slide.hits.map((hit) => {
+                    const skipSwipeClick = (event: { preventDefault: () => void }) => {
+                      if (skipClick.current) {
+                        event.preventDefault();
+                        skipClick.current = false;
+                      }
+                    };
+                    if (hit.action === 'hash' && hit.href) {
+                      return (
+                        <Link
+                          key={hit.id}
+                          className="heroHit"
+                          style={hit.box}
+                          to={hit.href}
+                          aria-label={hit.label}
+                          data-join-trigger={hit.id === 'join' ? true : undefined}
+                          onClick={skipSwipeClick}
+                        >
+                          {hit.label}
+                        </Link>
+                      );
+                    }
+                    if (hit.action === 'external' && hit.href) {
+                      return (
+                        <a
+                          key={hit.id}
+                          className="heroHit"
+                          style={hit.box}
+                          href={hit.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={hit.label}
+                          onClick={skipSwipeClick}
+                        >
+                          {hit.label}
+                        </a>
+                      );
+                    }
+                    return (
                       <button
                         key={hit.id}
                         type="button"
@@ -244,8 +264,8 @@ export function Hero() {
                       >
                         {hit.label}
                       </button>
-                    ),
-                  )}
+                    );
+                  })}
                 </div>
               ) : null}
             </figure>
