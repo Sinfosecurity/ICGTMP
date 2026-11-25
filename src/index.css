@@ -1657,8 +1657,9 @@ main h1:focus-visible {
   .heroSlide--flyer .heroContent {
     display: none;
   }
-  /* The invisible tap targets only line up with the uncropped artwork. */
-  .heroHits { display: none; }
+  /* Desktop hit boxes only line up with landscape artwork; mobileHits stay on. */
+  .heroHits:not(.heroHits--mobile) { display: none; }
+  .heroHits--mobile { display: block; }
   .heroContent {
     position: absolute;
     inset: 0;

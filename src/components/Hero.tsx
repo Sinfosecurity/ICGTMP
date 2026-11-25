@@ -162,6 +162,7 @@ export function Hero() {
       <div className="heroCarousel">
         {slides.map((slide, slideIndex) => {
           const isActive = slideIndex === index;
+          const activeHits = mobileHero ? slide.mobileHits : slide.hits;
           const img = (
             <img
               className="heroImage"
@@ -206,9 +207,9 @@ export function Hero() {
               ) : (
                 img
               )}
-              {isActive && slide.hits && !mobileHero ? (
-                <div className="heroHits">
-                  {slide.hits.map((hit) => {
+              {isActive && activeHits?.length ? (
+                <div className={mobileHero ? 'heroHits heroHits--mobile' : 'heroHits'}>
+                  {activeHits.map((hit) => {
                     const skipSwipeClick = (event: { preventDefault: () => void }) => {
                       if (skipClick.current) {
                         event.preventDefault();

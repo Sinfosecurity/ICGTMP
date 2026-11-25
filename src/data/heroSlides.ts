@@ -35,6 +35,8 @@ export type HeroSlide = {
   letterboxFill?: boolean;
   /** Clickable hotspot overlays on the desktop artwork. */
   hits?: HeroHit[];
+  /** Clickable hotspot overlays for the mobile portrait artwork only. */
+  mobileHits?: HeroHit[];
 };
 
 export const HERO_INTERVAL_MS = 6000;
@@ -44,7 +46,7 @@ export const HERO_FADE_MS = 800;
  * Campaign banners — landscape artwork with text baked in.
  * Desktop stage / target banner ratio: **2.5:1 (2500×1000)**.
  * Slide 1 is the Continuity lead (hero-06b). “A Brighter Lagos Tomorrow”
- * (hero-00) sits after thrives; it has no mobileSrc yet so Hero skips it on phones.
+ * (hero-00) sits after thrives and has a dedicated mobile portrait.
  */
 export const heroSlides: HeroSlide[] = [
   {
@@ -102,12 +104,23 @@ export const heroSlides: HeroSlide[] = [
     alt: imageAlts.hero00,
     width: 1024,
     height: 409,
+    mobileSrc: images.heroBrighterMobile,
+    mobileWidth: 1024,
+    mobileHeight: 1536,
     hits: [
       {
         id: 'join',
         label: 'Be Part of the Future',
         action: 'join',
         box: { left: '4.4%', top: '76%', width: '21%', height: '11%' },
+      },
+    ],
+    mobileHits: [
+      {
+        id: 'join',
+        label: 'Be Part of the Future',
+        action: 'join',
+        box: { left: '22%', top: '58.5%', width: '56%', height: '6.3%' },
       },
     ],
   },
