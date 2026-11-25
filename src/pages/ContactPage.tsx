@@ -7,7 +7,7 @@ export function ContactPage() {
   return (
     <PageShell kicker="Contact" title="Write to ICGMTP">
       <div className="contactLayout">
-        <div>
+        <div className="contactCard">
           <p>
             The working address is at Ita&apos;le Market, Epe Waterfront. Write by email, or join
             the public WhatsApp group.
